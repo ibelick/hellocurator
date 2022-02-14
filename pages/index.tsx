@@ -2,13 +2,33 @@ import type { NextPage } from "next";
 import { apolloClient } from "lib/apollo";
 import { SNAPSHOT_GET_PROPOSALS } from "lib/queries";
 import { useEffect, useState } from "react";
-import { createProposal } from "lib/snapshot";
+import { createProposal, castVote } from "lib/snapshot";
+import { Web3Provider } from "@ethersproject/providers";
 
-const Home: NextPage = (props) => {
+const Home: NextPage<any> = (props) => {
   const [NFTs, setNFTs] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  console.log("props", props);
+
+  const checkAccount = async () => {
+    const web3 = new Web3Provider(window.ethereum);
+
+    // const accounts = await web3.eth.getAccounts();
+    // setAccount(accounts[0]);
+  };
+
+  const connect = async () => {
+    const provider = new Web3Provider(window.ethereum, "any");
+
+    await provider.send("eth_requestAccounts", []);
+    const signer = provider.getSigner();
+    const userAddress = await signer.getAddress();
+  };
+
   useEffect(() => {
+    checkAccount();
+
     const fetchNftsWithOpenSea = async () => {
       const params = new URLSearchParams({});
 
@@ -32,9 +52,13 @@ const Home: NextPage = (props) => {
 
   return (
     <main>
+      <div onClick={connect}>connect account</div>
       <div>{isLoading ? <p>loading...</p> : <NFTGallery NFTs={NFTs} />}</div>
       <div>
         <SubmitNFT />
+      </div>
+      <div>
+        <Proposals proposals={props.proposals} />
       </div>
     </main>
   );
@@ -53,6 +77,32 @@ const NFTGallery: React.FC<{ NFTs: any }> = ({ NFTs }) => {
           </div>
         );
       })}
+    </div>
+  );
+};
+
+const Proposals: React.FC<any> = ({ proposals }) => {
+  return (
+    <div>
+      <ul>
+        {proposals?.map((proposal: any) => {
+          return (
+            <li key={proposal.id}>
+              {proposal.id}-{" "}
+              {proposal.choices.map((choice: any, index: number) => {
+                return (
+                  <span
+                    key={`${index}-${choice}`}
+                    onClick={() => castVote(proposal.id, index + 1)}
+                  >
+                    {choice} -{" "}
+                  </span>
+                );
+              })}
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 };
@@ -79,7 +129,7 @@ const SubmitNFT = () => {
     setIsLoading(false);
   };
 
-  https: return (
+  return (
     <div>
       <label>CONTRACT ADDRESS</label>
       <input

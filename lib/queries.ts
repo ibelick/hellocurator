@@ -5,7 +5,7 @@ export const SNAPSHOT_GET_PROPOSALS = gql`
     proposals(
       first: 20
       skip: 0
-      where: { space_in: ["gitcoindao.eth"], state: "closed" }
+      where: { space_in: ["loopclub.eth"], state: "active" }
       orderBy: "created"
       orderDirection: desc
     ) {

@@ -1,12 +1,6 @@
 import { Web3Provider } from "@ethersproject/providers";
 import snapshot from "@snapshot-labs/snapshot.js";
 
-declare global {
-  interface Window {
-    ethereum: any;
-  }
-}
-
 const hub = "https://hub.snapshot.org";
 const client = new snapshot.Client712(hub);
 
@@ -19,19 +13,37 @@ export const createProposal = async (
   const [account] = await web3.listAccounts();
 
   const receipt = await client.proposal(web3, account, {
-    space: "artinu.eth",
+    space: "loopclub.eth",
     type: "single-choice",
-    title: `PROPOSAL:ETHEREUM:${contractAddress}:${nftId}`,
+    title: `Add the NFT ETHEREUM:${contractAddress}:${nftId} to the storefront`,
     body: `link: https://rarible.com/token/${contractAddress}:${nftId}`,
     choices: ["yes", "no"],
-    start: 1636984800,
-    end: 1637244000,
-    snapshot: 13620822,
+    start: Math.floor(Date.now() / 1000),
+    end: Math.floor((Date.now() + 10000000) / 1000),
+    snapshot: 14185713,
     network: "1",
     strategies: JSON.stringify({}),
     plugins: JSON.stringify({}),
     metadata: JSON.stringify({}),
   });
+
+  return receipt;
+};
+
+export const castVote = async (proposal: string, choice: number) => {
+  const web3 = new Web3Provider(window.ethereum);
+
+  const [account] = await web3.listAccounts();
+
+  const receipt = await client.vote(web3, account, {
+    space: "loopclub.eth",
+    proposal,
+    type: "single-choice",
+    choice,
+    metadata: JSON.stringify({}),
+  });
+
+  console.log("receipt", receipt);
 
   return receipt;
 };
