@@ -3,16 +3,27 @@ import { useEffect, useState } from "react";
 import { truncateEthAddress } from "utils/ethereum";
 import NFTGallery from "./NFTGallery";
 import SubmitNFT from "./SubmitNFT";
+import Vote from "./Vote";
+import type { Proposals } from "types/snapshot";
 
-const Storefront: React.FC<{ proposals: any }> = ({ proposals }) => {
+export interface StorefrontProps {
+  proposals?: Proposals[];
+  assets?: (string | undefined)[];
+}
+
+const Storefront: React.FC<StorefrontProps> = ({ proposals, assets }) => {
   return (
     <Layout>
       <div className="mb-8">
-        <NFTGallery />
+        <NFTGallery assets={assets} />
       </div>
       <div>
         <h2 className="mb-6 text-2xl">Submit an NFT</h2>
         <SubmitNFT />
+      </div>
+      <div>
+        <h2 className="mb-6 text-2xl">Vote</h2>
+        <Vote proposals={proposals} />
       </div>
     </Layout>
   );
@@ -34,7 +45,7 @@ const Header = () => {
         <ul className="mb-4 flex md:mb-0">
           <li className="mr-8">
             <a className="text-xl font-bold" href="/">
-              storefront
+              storefront{" "}
             </a>
           </li>
         </ul>

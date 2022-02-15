@@ -1,23 +1,38 @@
 import { castVote } from "lib/snapshot";
+import { Proposals } from "types/snapshot";
 
-const Proposals: React.FC<any> = ({ proposals }) => {
+const Vote: React.FC<{ proposals?: Proposals[] }> = ({ proposals }) => {
   return (
     <div>
       <ul>
-        {proposals?.map((proposal: any) => {
+        {proposals?.map((proposal: Proposals) => {
           return (
-            <li key={proposal.id}>
-              {proposal.id}-{" "}
-              {proposal.choices.map((choice: any, index: number) => {
+            <li key={proposal.id} className="mb-4">
+              <span>{proposal.id}</span>
+              {proposal.choices.map((choice, index: number) => {
                 return (
-                  <span
-                    key={`${index}-${choice}`}
-                    onClick={() => castVote(proposal.id, index + 1)}
-                  >
-                    {choice} -{" "}
-                  </span>
+                  <div key={`${index}-${choice}`}>
+                    {" "}
+                    -{" "}
+                    <span
+                      onClick={() => castVote(proposal.id, index + 1)}
+                      className="cursor-pointer"
+                    >
+                      {choice}
+                    </span>
+                  </div>
                 );
               })}
+              <p>
+                View on{" "}
+                <a
+                  href={`https://snapshot.org/#/loopclub.eth/proposal/${proposal.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  SnapShot
+                </a>
+              </p>
             </li>
           );
         })}
@@ -26,4 +41,4 @@ const Proposals: React.FC<any> = ({ proposals }) => {
   );
 };
 
-export default Proposals;
+export default Vote;

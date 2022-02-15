@@ -43,7 +43,5 @@ export const castVote = async (proposal: string, choice: number) => {
     metadata: JSON.stringify({}),
   });
 
-  console.log("receipt", receipt);
-
   return receipt;
 };

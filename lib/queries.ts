@@ -1,11 +1,11 @@
 import { gql } from "@apollo/client";
 
 export const SNAPSHOT_GET_PROPOSALS = gql`
-  query Proposals {
+  query GetProposals($spaceIn: String!, $state: String!) {
     proposals(
-      first: 20
+      first: 100
       skip: 0
-      where: { space_in: ["loopclub.eth"], state: "active" }
+      where: { space_in: [$spaceIn], state: $state }
       orderBy: "created"
       orderDirection: desc
     ) {
