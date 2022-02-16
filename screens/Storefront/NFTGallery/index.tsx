@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
-import { getItemById } from "lib/nft";
-import type { NFT, Meta } from "types/rarible";
+import useNft from "hooks/useNft";
 
 const NFTGallery: React.FC<{ assetsIds?: (string | undefined)[] }> = ({
   assetsIds,
@@ -23,36 +21,23 @@ const NFTGallery: React.FC<{ assetsIds?: (string | undefined)[] }> = ({
 };
 
 const DisplayNFT: React.FC<{ assetId: string }> = ({ assetId }) => {
-  const [metadata, setMetadata] = useState<Meta | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { nft, isError, isLoading } = useNft(assetId);
 
-  useEffect(() => {
-    const fetchNFT = async () => {
-      const item: NFT = await getItemById(assetId);
-
-      setMetadata(item.meta);
-      setIsLoading(false);
-    };
-
-    fetchNFT();
-  }, []);
-
-  if (isLoading) {
-    return <p>loading...</p>;
-  }
+  if (isError) return <div>failed to load</div>;
+  if (isLoading) return <div>loading...</div>;
 
   return (
     <div className="flex flex-col overflow-hidden">
-      {metadata?.content?.[0]["@type"] === "IMAGE" ? (
+      {nft?.meta?.content?.[0]["@type"] === "IMAGE" ? (
         <div className="flex h-full w-full items-center justify-center">
           <img
-            src={metadata?.content[0].url}
-            alt={metadata.name}
+            src={nft?.meta?.content[0].url}
+            alt={nft?.meta.name}
             className="max-h-full max-w-full"
           />
         </div>
       ) : null}
-      <span>{metadata?.name}</span>
+      <span>{nft?.meta?.name}</span>
     </div>
   );
 };
