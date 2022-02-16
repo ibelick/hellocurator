@@ -1,7 +1,8 @@
 import NFTGallery from "./NFTGallery";
 import Link from "next/link";
-import SubmitNFT from "./SubmitNFT";
 import { useRouter } from "next/router";
+import Button from "components/Button";
+import DialogSubmitNFT from "./DialogSubmitNFT";
 
 export interface StorefrontProps {
   assetsIds?: (string | undefined)[];
@@ -12,17 +13,17 @@ const Storefront: React.FC<StorefrontProps> = ({ assetsIds }) => {
   const { uid } = router.query;
 
   return (
-    <>
-      <Link href={`/${uid}/vote`}>Vote</Link>
+    <div>
+      <div className="mb-4 flex items-center justify-between">
+        <Link href={`/${uid}/vote`}>Vote</Link>
+        <DialogSubmitNFT
+          trigger={<Button type="button">Submit a NFT</Button>}
+        />
+      </div>
       <div className="mb-8">
         <NFTGallery assetsIds={assetsIds} />
       </div>
-      {/* <div>
-        <h2 className="mb-6 text-2xl">Submit an NFT</h2>
-        <SubmitNFT />
-      </div>
-      */}
-    </>
+    </div>
   );
 };
 
