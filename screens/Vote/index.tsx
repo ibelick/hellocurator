@@ -1,9 +1,19 @@
 import { castVote } from "lib/snapshot";
 import { Proposals } from "types/snapshot";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
-const Vote: React.FC<{ proposals?: Proposals[] }> = ({ proposals }) => {
+export interface VoteProps {
+  proposals: Proposals[];
+}
+
+const Vote: React.FC<VoteProps> = ({ proposals }) => {
+  const router = useRouter();
+  const { uid } = router.query;
+
   return (
     <div>
+      <Link href={`/${uid}`}>Storefront</Link>
       <ul>
         {proposals?.map((proposal: Proposals) => {
           return (
