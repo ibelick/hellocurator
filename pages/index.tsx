@@ -1,7 +1,7 @@
-import React from "react";
+import Landing from "screens/Landing";
 
 const HomePage = () => {
-  return <div>hello</div>;
+  return <Landing />;
 };
 
 export default HomePage;

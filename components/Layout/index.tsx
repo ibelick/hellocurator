@@ -24,9 +24,7 @@ const Header = () => {
         </ul>
         <ul className="flex w-fit items-center justify-end">
           <li className="flex">
-            <div className="mr-8">
-              <ButtonConnectWallet />
-            </div>
+            <ButtonConnectWallet />
           </li>
         </ul>
       </nav>

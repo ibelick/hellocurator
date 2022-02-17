@@ -1,7 +1,11 @@
-import React from "react";
+import Link from "next/link";
 
 const Landing = () => {
-  return <div></div>;
+  return (
+    <div>
+      <Link href="/loopclub.eth">go to loopclub gallerie</Link>
+    </div>
+  );
 };
 
 export default Landing;
