@@ -1,5 +1,3 @@
-import { useForm } from "react-hook-form";
-
 interface TextInput {
   label: string;
   register: any;
@@ -10,10 +8,7 @@ interface TextInput {
 const TextInput: React.FC<TextInput> = ({ label, register, required, id }) => {
   return (
     <>
-      <label
-        className="mb-2 block text-sm font-bold text-gray-700"
-        htmlFor={id}
-      >
+      <label className="mb-1 block text-sm text-slate-500" htmlFor={id}>
         {label}
       </label>
       <input

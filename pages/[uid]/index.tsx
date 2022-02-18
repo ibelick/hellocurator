@@ -8,7 +8,7 @@ import { ParsedUrlQuery } from "querystring";
 import { WHITELISTED_STOREFRONTS } from "utils/storefront";
 
 const StorefrontPage: NextPage<StorefrontProps> = (props) => {
-  return <Storefront assetsIds={props.assetsIds} />;
+  return <Storefront assetsIds={props.assetsIds} info={props.info} />;
 };
 
 interface Params extends ParsedUrlQuery {
@@ -31,6 +31,12 @@ export const getStaticProps: GetStaticProps<StorefrontProps, Params> = async (
     },
   });
 
+  const info = {
+    name: closedProposals.proposals[0].space.name,
+    id: closedProposals.proposals[0].space.id,
+    nbAsset: closedProposals.proposals.length,
+  };
+
   const assetsIds = closedProposals.proposals
     .filter(
       (proposal) =>
@@ -43,6 +49,7 @@ export const getStaticProps: GetStaticProps<StorefrontProps, Params> = async (
 
   return {
     props: {
+      info,
       assetsIds,
     },
   };

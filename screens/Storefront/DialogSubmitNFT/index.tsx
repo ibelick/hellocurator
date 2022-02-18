@@ -6,6 +6,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { Transition } from "@headlessui/react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import * as Portal from "@radix-ui/react-portal";
+import type { NFT } from "types/rarible";
 
 interface DialogSubmitNFTProps {
   trigger: React.ReactNode;
@@ -46,17 +47,20 @@ const DialogSubmitNFT: React.FC<DialogSubmitNFTProps> = ({ trigger }) => {
           >
             <DialogPrimitive.Content
               forceMount
-              className="fixed top-[50%] left-[50%] z-50 w-[95vw] max-w-md -translate-x-[50%] -translate-y-[50%] rounded-lg bg-white p-4 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75 md:w-full"
+              className="fixed top-[50%] left-[50%] z-50 w-[95vw] max-w-md -translate-x-[50%] -translate-y-[50%] rounded-lg bg-white p-8 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75 md:w-full"
             >
               <div>
-                <div className="mb-2 flex items-center justify-between">
-                  <DialogPrimitive.Title className="text-xl font-medium text-gray-900">
-                    Submit a NFT
+                <div className="mb-6 flex flex-col items-center justify-center">
+                  <span className="mb-4 text-4xl">💾</span>
+                  <DialogPrimitive.Title className="text-lg  font-bold text-black">
+                    Submit an item
                   </DialogPrimitive.Title>
-                  <DialogPrimitive.Close>×</DialogPrimitive.Close>
                 </div>
                 <FormSubmitNFT setIsOpen={setIsOpen} />
               </div>
+              <DialogPrimitive.Close className="absolute top-3.5 right-3.5">
+                ×
+              </DialogPrimitive.Close>
             </DialogPrimitive.Content>
           </Transition.Child>
         </Transition.Root>
@@ -78,7 +82,7 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({ setIsOpen }) => {
   const { register, handleSubmit, getValues } = useForm<FormValues>();
   const [isLoading, setIsLoading] = useState(false);
   const [isNftFetched, setIsNftFetched] = useState(false);
-  const [NFT, setNFT] = useState<any>(null);
+  const [NFT, setNFT] = useState<NFT | null>(null);
 
   const fetchNftsWithRarible = async () => {
     const { contractAddress, nftId } = getValues();
@@ -110,6 +114,7 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({ setIsOpen }) => {
   };
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    setIsLoading(true);
     try {
       const receipt = await createProposal(data.contractAddress, data.nftId);
 
@@ -119,35 +124,55 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({ setIsOpen }) => {
     } catch (err) {
       console.error(err);
     }
+    setIsLoading(false);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="mb-4">
-        <TextInput
-          id="contractAddress"
-          label="CONTRACT ADDRESS"
-          register={register}
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <TextInput id="nftId" label="NFT ID" register={register} required />
-      </div>
-      <Button type="button" onClick={fetchNftsWithRarible}>
-        preview nft
-      </Button>
-      <div className="my-4">
-        {isLoading ? <p>loading...</p> : null}
-        {NFT ? (
+      {!NFT ? (
+        <>
+          <div className="mb-4">
+            <TextInput
+              id="contractAddress"
+              label="CONTRACT ADDRESS"
+              register={register}
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <TextInput id="nftId" label="NFT ID" register={register} required />
+          </div>
+          <Button
+            type="button"
+            onClick={fetchNftsWithRarible}
+            isLoading={!isNftFetched && isLoading}
+            isBlock
+          >
+            Preview
+          </Button>
+        </>
+      ) : (
+        <div className="my-4 flex">
           <img
-            className="h-full w-32"
+            className="h-full max-h-64 w-32 rounded"
             src={NFT.meta?.content[0].url}
             alt={NFT.meta.name}
           />
-        ) : null}
-      </div>
-      {isNftFetched ? <Button type="submit">propose NFT</Button> : null}
+          <div className="ml-4">
+            <p>{NFT.meta.name}</p>
+          </div>
+        </div>
+      )}
+      {isNftFetched ? (
+        <Button
+          type="submit"
+          isLoading={isNftFetched && isLoading}
+          isBlock
+          variant="secondary"
+        >
+          Submit to vote
+        </Button>
+      ) : null}
     </form>
   );
 };
