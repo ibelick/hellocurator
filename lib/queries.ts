@@ -28,3 +28,16 @@ export const SNAPSHOT_GET_PROPOSALS = gql`
     }
   }
 `;
+
+export const SNAPSHOT_GET_SPACE = gql`
+  query GetSpace($spaceIn: String!) {
+    space(id: $spaceIn) {
+      id
+      name
+      about
+      network
+      symbol
+      members
+    }
+  }
+`;

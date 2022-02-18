@@ -1,21 +1,19 @@
 import { castVote } from "lib/snapshot";
 import { Proposals } from "types/snapshot";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import useNft from "hooks/useNft";
+import HeaderStorefront from "components/HeaderStorefront";
+import type { SpaceInfo } from "components/HeaderStorefront";
 
 export interface VoteProps {
   proposals: Proposals[];
+  info: SpaceInfo;
 }
 
-const Vote: React.FC<VoteProps> = ({ proposals }) => {
-  const router = useRouter();
-  const { uid } = router.query;
-
+const Vote: React.FC<VoteProps> = ({ proposals, info }) => {
   return (
     <div>
-      <Link href={`/${uid}`}>Storefront</Link>
-      <ul>
+      <HeaderStorefront info={info} />
+      <ul className="grid grid-cols-1 gap-12 lg:grid-cols-2">
         {proposals?.map((proposal: Proposals) => {
           return <Proposal proposal={proposal} key={proposal.id} />;
         })}
@@ -25,15 +23,16 @@ const Vote: React.FC<VoteProps> = ({ proposals }) => {
 };
 
 const Proposal: React.FC<{ proposal: Proposals }> = ({ proposal }) => {
+  // @todo: choose a format for date proposal
   const voteEnd = new Date(proposal.end * 1000).toLocaleString("en-US");
 
   return (
     <li className="mb-4">
-      <div className="flex items-center justify-between rounded border bg-slate-100 p-4">
+      <div className="flex flex-col items-start justify-between">
         <div>
           <NFTInfo itemId={proposal.title} />
         </div>
-        <div>Vote ends {voteEnd}</div>
+        {/* <div>Vote ends {voteEnd}</div> */}
         <div>
           {proposal.choices.map((choice, index: number) => {
             return (
@@ -65,13 +64,13 @@ const NFTInfo: React.FC<{ itemId: string }> = ({ itemId }) => {
   }
 
   return (
-    <div className="flex">
+    <div className="flex flex-col">
+      <p className="mb-2">{nft?.meta?.name}</p>
       <img
-        className="h-full w-20 rounded"
+        className="h-full w-full rounded"
         src={nft?.meta?.content[0].url}
         alt={nft?.meta?.name}
       />
-      <p className="ml-2">{nft?.meta?.name}</p>
     </div>
   );
 };

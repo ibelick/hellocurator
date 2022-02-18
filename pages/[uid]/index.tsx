@@ -1,9 +1,9 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { apolloClient } from "lib/apollo";
-import { SNAPSHOT_GET_PROPOSALS } from "lib/queries";
+import { SNAPSHOT_GET_PROPOSALS, SNAPSHOT_GET_SPACE } from "lib/queries";
 import Storefront from "screens/Storefront";
 import type { StorefrontProps } from "screens/Storefront";
-import type { Proposals } from "types/snapshot";
+import type { Proposals, Space } from "types/snapshot";
 import { ParsedUrlQuery } from "querystring";
 import { WHITELISTED_STOREFRONTS } from "utils/storefront";
 
@@ -20,6 +20,16 @@ export const getStaticProps: GetStaticProps<StorefrontProps, Params> = async (
 ) => {
   const { uid } = context.params!;
 
+  const { data: spaceInfo } = await apolloClient.query<
+    { space: Space },
+    { spaceIn: string }
+  >({
+    query: SNAPSHOT_GET_SPACE,
+    variables: {
+      spaceIn: uid,
+    },
+  });
+
   const { data: closedProposals } = await apolloClient.query<
     { proposals: Proposals[] | [] },
     { spaceIn: string; state: string }
@@ -32,8 +42,8 @@ export const getStaticProps: GetStaticProps<StorefrontProps, Params> = async (
   });
 
   const info = {
-    name: closedProposals.proposals[0].space.name,
-    id: closedProposals.proposals[0].space.id,
+    name: spaceInfo.space.name,
+    id: spaceInfo.space.id,
     nbAsset: closedProposals.proposals.length,
   };
 

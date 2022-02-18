@@ -1,6 +1,7 @@
 import Button from "components/Button";
 import { useEffect, useState } from "react";
 import { truncateEthAddress } from "utils/ethereum";
+import Link from "next/link";
 
 const Layout: React.FC = ({ children }) => {
   return (
@@ -17,9 +18,9 @@ const Header = () => {
       <nav className="flex flex-wrap items-center justify-between">
         <ul className="mb-4 flex md:mb-0">
           <li className="mr-8">
-            <a className="text-xl font-bold" href="/">
-              storefront{" "}
-            </a>
+            <Link href="/">
+              <a className="text-xl font-bold">storefront </a>
+            </Link>
           </li>
         </ul>
         <ul className="flex w-fit items-center justify-end">
