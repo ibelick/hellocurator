@@ -1,5 +1,5 @@
 {
-  "name": "nft-curated-storefront",
+  "name": "hellocurator",
   "private": true,
   "scripts": {
     "dev": "next dev",
