@@ -48,11 +48,13 @@ export const getStaticProps: GetStaticProps<StorefrontProps, Params> = async (
   };
 
   const assetsIds = closedProposals.proposals
-    .filter(
-      (proposal) =>
+    .filter((proposal) => {
+      return (
         proposal.scores[0] > proposal.scores[1] &&
-        proposal.title.includes("Add the NFT")
-    )
+        // @todo: define title format
+        proposal.title.match(/ETHEREUM\S+/g)
+      );
+    })
     .map((proposal) => {
       return proposal.title.match(/ETHEREUM\S+/g)?.[0];
     });
@@ -62,6 +64,7 @@ export const getStaticProps: GetStaticProps<StorefrontProps, Params> = async (
       info,
       assetsIds,
     },
+    revalidate: 60,
   };
 };
 

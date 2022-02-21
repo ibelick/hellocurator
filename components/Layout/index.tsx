@@ -19,7 +19,7 @@ const Header = () => {
         <ul className="mb-4 flex md:mb-0">
           <li className="mr-8">
             <Link href="/">
-              <a className="text-xl font-bold">storefront </a>
+              <a className="text-xl font-bold">hellocurator</a>
             </Link>
           </li>
         </ul>

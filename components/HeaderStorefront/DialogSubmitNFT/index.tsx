@@ -7,6 +7,7 @@ import { Transition } from "@headlessui/react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import * as Portal from "@radix-ui/react-portal";
 import type { NFT } from "types/rarible";
+import { useRouter } from "next/router";
 
 interface DialogSubmitNFTProps {
   trigger: React.ReactNode;
@@ -50,12 +51,6 @@ const DialogSubmitNFT: React.FC<DialogSubmitNFTProps> = ({ trigger }) => {
               className="fixed top-[50%] left-[50%] z-50 w-[95vw] max-w-md -translate-x-[50%] -translate-y-[50%] rounded-lg bg-white p-8 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75 md:w-full"
             >
               <div>
-                <div className="mb-6 flex flex-col items-center justify-center">
-                  <span className="mb-4 text-4xl">💾</span>
-                  <DialogPrimitive.Title className="text-lg  font-bold text-black">
-                    Submit an item
-                  </DialogPrimitive.Title>
-                </div>
                 <FormSubmitNFT setIsOpen={setIsOpen} />
               </div>
               <DialogPrimitive.Close className="absolute top-3.5 right-3.5">
@@ -82,7 +77,10 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({ setIsOpen }) => {
   const { register, handleSubmit, getValues } = useForm<FormValues>();
   const [isLoading, setIsLoading] = useState(false);
   const [isNftFetched, setIsNftFetched] = useState(false);
+  const [isNftSubmited, setIsNftSubmited] = useState(false);
   const [NFT, setNFT] = useState<NFT | null>(null);
+  const router = useRouter();
+  const isVotePage = router.pathname === "/[uid]/vote";
 
   const fetchNftsWithRarible = async () => {
     const { contractAddress, nftId } = getValues();
@@ -119,7 +117,7 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({ setIsOpen }) => {
       const receipt = await createProposal(data.contractAddress, data.nftId);
 
       if (receipt) {
-        setIsOpen(false);
+        setIsNftSubmited(true);
       }
     } catch (err) {
       console.error(err);
@@ -127,10 +125,42 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({ setIsOpen }) => {
     setIsLoading(false);
   };
 
+  if (isNftSubmited) {
+    return (
+      <div>
+        <div className="mb-4 text-center">
+          <span className="text-4xl">🙌</span>
+          <h2 className="mt-4 text-lg font-bold text-black">
+            Item successfuly submitted
+          </h2>
+        </div>
+        <p className="mb-4 text-center">
+          People can now vote to decide if it deserve to join the official
+          curation!
+        </p>
+        <Button
+          onClick={() => {
+            router.push(`/${router.query.uid}/vote`);
+            setIsOpen(false);
+          }}
+          isBlock
+        >
+          Go to the vote
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {!NFT ? (
         <>
+          <div className="mb-6 text-center">
+            <span className="text-4xl">💾</span>
+            <h2 className="mt-4 text-lg font-bold text-black">
+              Submit an item
+            </h2>
+          </div>
           <div className="mb-4">
             <TextInput
               id="contractAddress"
@@ -152,16 +182,21 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({ setIsOpen }) => {
           </Button>
         </>
       ) : (
-        <div className="my-4 flex">
-          <img
-            className="h-full max-h-64 w-32 rounded"
-            src={NFT.meta?.content[0].url}
-            alt={NFT.meta.name}
-          />
-          <div className="ml-4">
-            <p>{NFT.meta.name}</p>
+        <>
+          <div className="mb-6 text-center">
+            <h2 className="text-lg font-bold text-black">Preview</h2>
           </div>
-        </div>
+          <div className="my-4 flex flex-col items-center">
+            <img
+              className="h-full max-h-64 w-32 rounded"
+              src={NFT.meta?.content[0].url}
+              alt={NFT.meta.name}
+            />
+            <div className="mt-4">
+              <p>{NFT.meta.name}</p>
+            </div>
+          </div>
+        </>
       )}
       {isNftFetched ? (
         <Button

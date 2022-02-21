@@ -15,12 +15,11 @@ export const createProposal = async (
   const receipt = await client.proposal(web3, account, {
     space: "loopclub.eth",
     type: "single-choice",
-    title: `ETHEREUM:${contractAddress}:${nftId}`,
-    body: `link: https://rarible.com/token/${contractAddress}:${nftId}`,
+    title: `Add the NFT ETHEREUM:${contractAddress}:${nftId} to the curation`,
+    body: `link to NFT: https://rarible.com/token/${contractAddress}:${nftId}`,
     choices: ["🔥", "👎"],
-    // @todo: choose a format for date proposal
     start: Math.floor(Date.now() / 1000),
-    end: Math.floor((Date.now() + 10000000) / 1000),
+    end: Math.floor((Date.now() + 86400000) / 1000),
     snapshot: 14185713,
     network: "1",
     strategies: JSON.stringify({}),

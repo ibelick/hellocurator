@@ -51,6 +51,7 @@ export const getStaticProps: GetStaticProps<VoteProps, Params> = async (
       info,
       proposals: activeProposals.proposals,
     },
+    revalidate: 60,
   };
 };
 
