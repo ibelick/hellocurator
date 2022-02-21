@@ -20,3 +20,12 @@ export interface Proposals {
   scores: any[];
   scores_updated: number;
 }
+
+export interface Space {
+  id: string;
+  name: string;
+  about: string;
+  network: string;
+  symbol: string;
+  members: string[];
+}

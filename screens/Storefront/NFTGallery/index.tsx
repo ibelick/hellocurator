@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
-import { getItemById } from "lib/nft";
-import type { NFT, Meta } from "types/rarible";
+import useNft from "hooks/useNft";
+import Link from "next/link";
 
-const NFTGallery: React.FC<{ assets: (string | undefined)[] }> = ({
-  assets,
+const NFTGallery: React.FC<{ assetsIds?: (string | undefined)[] }> = ({
+  assetsIds,
 }) => {
-  if (!assets) {
+  if (!assetsIds) {
     <div>
       <p>
         no gallery yet <span>😢</span>
@@ -14,39 +13,41 @@ const NFTGallery: React.FC<{ assets: (string | undefined)[] }> = ({
   }
 
   return (
-    <div className="grid grid-cols-4 gap-4">
-      {assets.map((asset) => {
-        return asset ? <DisplayNFT itemId={asset} key={asset} /> : null;
+    <div className="columns-1 sm:columns-2 md:columns-3">
+      {assetsIds?.map((assetId) => {
+        return assetId ? <DisplayNFT assetId={assetId} key={assetId} /> : null;
       })}
     </div>
   );
 };
 
-const DisplayNFT: React.FC<{ itemId: string }> = ({ itemId }) => {
-  const [metadata, setMetadata] = useState<Meta | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+const DisplayNFT: React.FC<{ assetId: string }> = ({ assetId }) => {
+  const { nft, isError, isLoading } = useNft(assetId);
 
-  useEffect(() => {
-    const fetchNFT = async () => {
-      const item: NFT = await getItemById(itemId);
-
-      setMetadata(item.meta);
-      setIsLoading(false);
-    };
-
-    fetchNFT();
-  }, []);
-
-  if (isLoading) {
-    return <p>loading...</p>;
-  }
+  if (isError) return <div>failed to load</div>;
+  if (isLoading) return <div>loading...</div>;
 
   return (
-    <div className="overflow-hidden">
-      {metadata?.content?.[0]["@type"] === "IMAGE" ? (
-        <img src={metadata?.content[0].url} alt={metadata.name} />
+    <div className="mb-6 flex break-inside-avoid flex-col overflow-hidden">
+      {nft?.meta?.content?.[0]["@type"] === "IMAGE" ? (
+        <div className="flex h-full w-full items-center justify-center">
+          <Link
+            href={`https://rarible.com/token/${assetId.replace(
+              "ETHEREUM:",
+              ""
+            )}`}
+          >
+            <a>
+              <img
+                src={nft?.meta?.content[0].url}
+                alt={nft?.meta.name}
+                className="max-h-full max-w-full"
+              />
+            </a>
+          </Link>
+        </div>
       ) : null}
-      <span>{metadata?.name}</span>
+      <span className="mt-2 font-medium">{nft?.meta?.name}</span>
     </div>
   );
 };
