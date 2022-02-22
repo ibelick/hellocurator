@@ -8,6 +8,8 @@ import { ParsedUrlQuery } from "querystring";
 import { WHITELISTED_STOREFRONTS } from "utils/storefront";
 
 const StorefrontPage: NextPage<StorefrontProps> = (props) => {
+  console.log("props", props);
+
   return <Storefront assetsIds={props.assetsIds} info={props.info} />;
 };
 
@@ -51,7 +53,6 @@ export const getStaticProps: GetStaticProps<StorefrontProps, Params> = async (
     .filter((proposal) => {
       return (
         proposal.scores[0] > proposal.scores[1] &&
-        // @todo: define title format
         proposal.title.match(/ETHEREUM\S+/g)
       );
     })
@@ -61,6 +62,12 @@ export const getStaticProps: GetStaticProps<StorefrontProps, Params> = async (
 
   return {
     props: {
+      test: closedProposals.proposals.filter((proposal) => {
+        return (
+          proposal.scores[0] > proposal.scores[1] &&
+          proposal.title.match(/ETHEREUM\S+/g)
+        );
+      }),
       info,
       assetsIds,
     },

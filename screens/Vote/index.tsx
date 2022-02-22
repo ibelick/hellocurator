@@ -5,22 +5,43 @@ import IconButton from "components/IconButton";
 import Progress from "components/Progress";
 import HeaderStorefront from "components/HeaderStorefront";
 import type { SpaceInfo } from "components/HeaderStorefront";
+import { useQuery } from "@apollo/client";
+import { SNAPSHOT_GET_PROPOSALS } from "lib/queries";
+import { useRouter } from "next/router";
 
 export interface VoteProps {
-  proposals: Proposals[];
   info: SpaceInfo;
 }
 
-const Vote: React.FC<VoteProps> = ({ proposals, info }) => {
+const Vote: React.FC<VoteProps> = ({ info }) => {
   return (
     <div className="pb-12">
       <HeaderStorefront info={info} />
-      <ul className="columns-1 gap-8 sm:columns-2 md:columns-3">
-        {proposals?.map((proposal: Proposals) => {
-          return <Proposal proposal={proposal} key={proposal.id} />;
-        })}
-      </ul>
+      <Proposals />
     </div>
+  );
+};
+
+const Proposals: React.FC = () => {
+  const router = useRouter();
+  const { uid } = router.query;
+
+  const { loading, error, data } = useQuery(SNAPSHOT_GET_PROPOSALS, {
+    variables: {
+      spaceIn: uid,
+      state: "active",
+    },
+  });
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
+
+  return (
+    <ul className="columns-1 gap-8 sm:columns-2 md:columns-3">
+      {data.proposals?.map((proposal: Proposals) => {
+        return <Proposal proposal={proposal} key={proposal.id} />;
+      })}
+    </ul>
   );
 };
 
@@ -42,9 +63,6 @@ const timeBetweenDates = (date1: Date, date2: Date) => {
 };
 
 const Proposal: React.FC<{ proposal: Proposals }> = ({ proposal }) => {
-  // @todo: choose a format for date proposal
-  // const voteEnd = new Date(proposal.end * 1000).toLocaleString("en-US");
-
   const voteEnd = new Date(proposal.end * 1000);
   const today = new Date(Date.now());
   const remainingTime = timeBetweenDates(voteEnd, today);
