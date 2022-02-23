@@ -41,3 +41,29 @@ export const SNAPSHOT_GET_SPACE = gql`
     }
   }
 `;
+
+export const SNAPSHOS_GET_VOTE = gql`
+  query Votes($proposalId: String!) {
+    votes(
+      first: 1000
+      skip: 0
+      where: { proposal: $proposalId }
+      orderBy: "created"
+      orderDirection: desc
+    ) {
+      choice
+      voter
+      space {
+        id
+      }
+      proposal {
+        created
+        strategies {
+          params
+          name
+          __typename
+        }
+      }
+    }
+  }
+`;

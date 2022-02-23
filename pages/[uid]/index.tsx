@@ -8,8 +8,6 @@ import { ParsedUrlQuery } from "querystring";
 import { WHITELISTED_STOREFRONTS } from "utils/storefront";
 
 const StorefrontPage: NextPage<StorefrontProps> = (props) => {
-  console.log("props", props);
-
   return <Storefront assetsIds={props.assetsIds} info={props.info} />;
 };
 

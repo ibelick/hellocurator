@@ -1,4 +1,4 @@
-import { castVote } from "lib/snapshot";
+import { castVote, getProposalScore } from "lib/snapshot";
 import { Proposals } from "types/snapshot";
 import useNft from "hooks/useNft";
 import IconButton from "components/IconButton";
@@ -8,6 +8,7 @@ import type { SpaceInfo } from "components/HeaderStorefront";
 import { useQuery } from "@apollo/client";
 import { SNAPSHOT_GET_PROPOSALS } from "lib/queries";
 import { useRouter } from "next/router";
+import useVote from "hooks/useVote";
 
 export interface VoteProps {
   info: SpaceInfo;
@@ -73,15 +74,7 @@ const Proposal: React.FC<{ proposal: Proposals }> = ({ proposal }) => {
         <div>
           <NFTInfo itemId={proposal.title.match(/ETHEREUM\S+/g)?.[0]} />
         </div>
-        <div className="w-full">
-          {proposal.choices.map((choice, index: number) => {
-            return (
-              <div key={`${index}-${choice}`} className="mb-4">
-                <Progress value={0} label={choice} />
-              </div>
-            );
-          })}
-        </div>
+        <Votes choices={proposal.choices} proposalId={proposal.id} />
         <div className="mb-4 flex w-full justify-center gap-4">
           {proposal.choices.map((choice, index: number) => {
             return (
@@ -109,6 +102,45 @@ const Proposal: React.FC<{ proposal: Proposals }> = ({ proposal }) => {
         </div>
       </div>
     </li>
+  );
+};
+
+const Votes: React.FC<{ choices: string[]; proposalId: string }> = ({
+  choices,
+  proposalId,
+}) => {
+  const { choiceWithVotingPower, totalVotingPower } = useVote(
+    proposalId,
+    choices
+  );
+
+  return (
+    <div className="w-full">
+      {choices?.map((choice, index: number) => {
+        const votingPower =
+          choiceWithVotingPower &&
+          Math.round(choiceWithVotingPower?.[index].votingPower * 10000) /
+            10000;
+        const label = choiceWithVotingPower
+          ? `${choiceWithVotingPower?.[index].label} ${votingPower}`
+          : undefined;
+        const value =
+          totalVotingPower && choiceWithVotingPower
+            ? (Math.round(
+                (100 * choiceWithVotingPower?.[index].votingPower) /
+                  totalVotingPower
+              ) *
+                100) /
+              100
+            : 0;
+
+        return (
+          <div key={`${index}-${choice}`} className="mb-4">
+            <Progress value={value} label={label} />
+          </div>
+        );
+      })}
+    </div>
   );
 };
 

@@ -15,6 +15,7 @@ export interface Proposals {
   snapshot: string;
   state: string;
   author: string;
+  strategies: Strategy[];
   space: Space;
   scores_state: string;
   scores: any[];
@@ -28,4 +29,27 @@ export interface Space {
   network: string;
   symbol: string;
   members: string[];
+}
+
+export interface Vote {
+  __typename: string;
+  choice: number;
+  voter: string;
+  space: Space;
+  proposal: Proposal;
+}
+
+interface Params {
+  symbol: string;
+}
+
+interface Strategy {
+  __typename: string;
+  params: Params;
+  name: string;
+}
+
+interface Proposal {
+  __typename: string;
+  created: number;
 }
