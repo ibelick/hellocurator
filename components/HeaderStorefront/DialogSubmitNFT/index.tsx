@@ -34,7 +34,7 @@ const DialogSubmitNFT: React.FC<DialogSubmitNFTProps> = ({ trigger }) => {
           >
             <DialogPrimitive.Overlay
               forceMount
-              className="fixed inset-0 z-20 bg-black/50"
+              className="fixed inset-0 z-20 bg-white/80"
             />
           </Transition.Child>
           <Transition.Child
@@ -48,13 +48,13 @@ const DialogSubmitNFT: React.FC<DialogSubmitNFTProps> = ({ trigger }) => {
           >
             <DialogPrimitive.Content
               forceMount
-              className="fixed top-[50%] left-[50%] z-50 w-[95vw] max-w-md -translate-x-[50%] -translate-y-[50%] rounded-lg bg-white p-8 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75 md:w-full"
+              className="fixed top-[50%] left-[50%] z-50 w-[95vw] max-w-md -translate-x-[50%] -translate-y-[50%] rounded-lg border border-gray-200 bg-white p-10 shadow-xl focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75 md:w-full"
             >
               <div>
                 <FormSubmitNFT setIsOpen={setIsOpen} />
               </div>
-              <DialogPrimitive.Close className="absolute top-3.5 right-3.5">
-                ×
+              <DialogPrimitive.Close className="absolute top-5 right-5">
+                <span className="text-2xl">×</span>
               </DialogPrimitive.Close>
             </DialogPrimitive.Content>
           </Transition.Child>
@@ -162,17 +162,25 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({ setIsOpen }) => {
             <h2 className="mt-4 text-lg font-bold text-black">
               Submit an item
             </h2>
+            <p className="mt-2">lorem lorem lorem lorem lorem</p>
           </div>
           <div className="mb-4">
             <TextInput
               id="contractAddress"
               label="CONTRACT ADDRESS"
+              placeholder="Enter the contract address"
               register={register}
               required
             />
           </div>
           <div className="mb-4">
-            <TextInput id="nftId" label="NFT ID" register={register} required />
+            <TextInput
+              id="nftId"
+              label="NFT ID"
+              register={register}
+              placeholder="Enter the NFT id"
+              required
+            />
           </div>
           <Button
             type="button"
@@ -195,11 +203,11 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({ setIsOpen }) => {
           </div>
           <div className="my-4 flex flex-col items-center">
             <img
-              className="h-full max-h-64 w-32 rounded"
+              className="h-full max-h-96 rounded"
               src={NFT.meta?.content[0].url}
               alt={NFT.meta.name}
             />
-            <div className="mt-4">
+            <div className="mt-2 mb-4">
               <p>{NFT.meta.name}</p>
             </div>
           </div>

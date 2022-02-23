@@ -25,7 +25,7 @@ const DisplayNFT: React.FC<{ assetId: string }> = ({ assetId }) => {
   const { nft, isError, isLoading } = useNft(assetId);
 
   if (isError) return <div>failed to load</div>;
-  if (isLoading) return <div>loading...</div>;
+  if (isLoading) return null;
 
   return (
     <div className="mb-6 flex break-inside-avoid flex-col overflow-hidden">
@@ -47,7 +47,7 @@ const DisplayNFT: React.FC<{ assetId: string }> = ({ assetId }) => {
           </Link>
         </div>
       ) : null}
-      <span className="mt-2 font-medium">{nft?.meta?.name}</span>
+      <span className="mt-2">{nft?.meta?.name}</span>
     </div>
   );
 };

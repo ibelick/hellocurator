@@ -6,6 +6,7 @@ module.exports = {
   ],
   theme: {
     extend: {},
+    fontFamily: { display: "DM Sans" },
   },
   plugins: [],
 };

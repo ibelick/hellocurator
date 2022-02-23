@@ -34,7 +34,7 @@ const Proposals: React.FC = () => {
     },
   });
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return null;
   if (error) return <p>Error :(</p>;
 
   return (
@@ -83,11 +83,11 @@ const Proposal: React.FC<{ proposal: Proposals }> = ({ proposal }) => {
                 icon={
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="48"
-                    height="48"
-                    viewBox="0 0 48 48"
+                    width="56"
+                    height="56"
+                    viewBox="0 0 56 56"
                   >
-                    <text y="30" x="14">
+                    <text y="34" x="19">
                       {choice}
                     </text>
                   </svg>
@@ -117,12 +117,8 @@ const Votes: React.FC<{ choices: string[]; proposalId: string }> = ({
   return (
     <div className="w-full">
       {choices?.map((choice, index: number) => {
-        const votingPower =
-          choiceWithVotingPower &&
-          Math.round(choiceWithVotingPower?.[index].votingPower * 10000) /
-            10000;
         const label = choiceWithVotingPower
-          ? `${choiceWithVotingPower?.[index].label} ${votingPower}`
+          ? `${choiceWithVotingPower?.[index].label}`
           : undefined;
         const value =
           totalVotingPower && choiceWithVotingPower
@@ -152,7 +148,7 @@ const NFTInfo: React.FC<{ itemId?: string }> = ({ itemId }) => {
   const { nft, isError, isLoading } = useNft(itemId);
 
   if (isLoading) {
-    return <p>loading...</p>;
+    return null;
   }
 
   if (isError) {
@@ -166,7 +162,7 @@ const NFTInfo: React.FC<{ itemId?: string }> = ({ itemId }) => {
         src={nft?.meta?.content[0].url}
         alt={nft?.meta?.name}
       />
-      <p className="my-2 text-xl">{nft?.meta?.name}</p>
+      <p className="my-2 font-medium">{nft?.meta?.name}</p>
     </div>
   );
 };

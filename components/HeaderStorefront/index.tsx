@@ -13,7 +13,7 @@ const HeaderStorefront: React.FC<{ info: SpaceInfo }> = ({ info }) => {
   const router = useRouter();
   const { uid } = router.query;
   const [isWalletConnected, setIsWalletConnected] = useState(true);
-  const linkSelectedCn = `text-pink-400 underline decoration-pink-400 decoration-4 underline-offset-2`;
+  const linkSelectedCn = `font-bold text-pink-400 underline decoration-pink-400 decoration-2 decoration-4 underline-offset-4`;
 
   useEffect(() => {
     if (
@@ -29,7 +29,7 @@ const HeaderStorefront: React.FC<{ info: SpaceInfo }> = ({ info }) => {
       <div className="mb-4 flex items-center justify-between">
         <div className="flex flex-col">
           <h1 className="mb-2 text-3xl  font-bold text-black">{info.name}</h1>
-          <h2 className="text-base text-black">{info.id}</h2>
+          <h2 className="text-base text-gray-400">{info.id}</h2>
         </div>
         <div className="flex items-center">
           <DialogSubmitNFT

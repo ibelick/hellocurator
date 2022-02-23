@@ -7,8 +7,9 @@ interface ButtonProps extends React.ComponentPropsWithoutRef<"button"> {
 }
 
 const VARIANT_ENUM: { [key: string]: string } = {
-  primary: "bg-black text-white hover:bg-gray-900",
+  primary: "bg-black text-white hover:bg-gray-800",
   secondary: "bg-pink-400 text-white",
+  tertiary: "bg-white border border-gray-200 hover:bg-gray-100",
 };
 
 const Button: React.FC<ButtonProps> = ({
@@ -22,7 +23,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       type={type ? type : "submit"}
-      className={`flex items-center rounded-full px-5 py-2.5 text-sm font-medium focus:ring-4 focus:ring-gray-300 ${
+      className={`flex items-center rounded-full px-6 py-3 text-sm font-medium drop-shadow-sm transition focus:ring-4 focus:ring-gray-300 ${
         isBlock ? `w-full justify-center` : null
       } ${VARIANT_ENUM[variant]} ${
         props.disabled ? `bg-gray-400 hover:bg-gray-400` : null

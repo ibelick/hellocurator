@@ -5,25 +5,31 @@ import Link from "next/link";
 
 const Layout: React.FC = ({ children }) => {
   return (
-    <div>
+    <div className="font-display">
       <Header />
-      <main className="mx-auto max-w-screen-2xl px-24">{children}</main>
+      <main className="mx-auto max-w-screen-2xl px-6 md:px-24">{children}</main>
     </div>
   );
 };
 
 const Header = () => {
   return (
-    <header className="mx-auto max-w-screen-2xl px-24 py-8">
+    <header className="mx-auto max-w-screen-2xl px-6 pt-4 pb-16 md:px-24">
       <nav className="flex flex-wrap items-center justify-between">
-        <ul className="mb-4 flex md:mb-0">
-          <li className="mr-8">
+        <ul>
+          <li className="mr-4">
             <Link href="/">
-              <a className="text-xl font-bold">hellocurator</a>
+              <a className="inline-flex items-center font-bold">
+                <img src="/logo.svg" className="mr-2 h-6 w-6" />
+                hellocurator
+              </a>
             </Link>
           </li>
         </ul>
         <ul className="flex w-fit items-center justify-end">
+          <li className="mr-6">
+            <a className="text-gray-400">About</a>
+          </li>
           <li className="flex">
             <ButtonConnectWallet />
           </li>
@@ -83,8 +89,15 @@ const ButtonConnectWallet: React.FC = () => {
   }, []);
 
   return (
-    <Button onClick={connectWallet}>
-      {address ? truncateEthAddress(address) : `Connect Wallet`}
+    <Button onClick={connectWallet} variant="tertiary">
+      {address ? (
+        <>
+          <span className="mr-2 h-2 w-2 rounded-full border border-emerald-200 bg-emerald-500" />
+          {truncateEthAddress(address)}
+        </>
+      ) : (
+        `Connect Wallet`
+      )}
     </Button>
   );
 };
