@@ -1,7 +1,7 @@
 import { Transition } from "@headlessui/react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import * as Portal from "@radix-ui/react-portal";
-import { useState, Fragment, ReactNode } from "react";
+import { Fragment, ReactNode } from "react";
 
 interface DialogProps {
   trigger: ReactNode;

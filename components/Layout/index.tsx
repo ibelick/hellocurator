@@ -19,7 +19,7 @@ const Header = () => {
             <Link href="/">
               <a className="inline-flex items-center font-bold">
                 <img src="/logo.svg" className="mr-2 h-6 w-6" />
-                hellocurator
+                <span className="hidden sm:block">hellocurator</span>
               </a>
             </Link>
           </li>

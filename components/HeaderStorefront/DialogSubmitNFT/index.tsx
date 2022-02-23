@@ -1,13 +1,12 @@
-import { useState, Fragment } from "react";
+import { useState } from "react";
 import { createProposal } from "lib/snapshot";
 import TextInput from "components/TextInput";
 import Button from "components/Button";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Transition } from "@headlessui/react";
-import * as DialogPrimitive from "@radix-ui/react-dialog";
-import * as Portal from "@radix-ui/react-portal";
+import Dialog from "components/Dialog";
 import type { NFT } from "types/rarible";
 import { useRouter } from "next/router";
+import { useAccount } from "wagmi";
 
 interface DialogSubmitNFTProps {
   trigger: React.ReactNode;
@@ -15,52 +14,20 @@ interface DialogSubmitNFTProps {
 
 const DialogSubmitNFT: React.FC<DialogSubmitNFTProps> = ({ trigger }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [{ data: accountData }] = useAccount();
 
   return (
-    <DialogPrimitive.Root open={isOpen} onOpenChange={setIsOpen}>
-      <DialogPrimitive.Trigger asChild>
-        <div>{trigger}</div>
-      </DialogPrimitive.Trigger>
-      <Portal.Root>
-        <Transition.Root show={isOpen}>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <DialogPrimitive.Overlay
-              forceMount
-              className="fixed inset-0 z-20 bg-white/80"
-            />
-          </Transition.Child>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0 scale-95"
-            enterTo="opacity-100 scale-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
-          >
-            <DialogPrimitive.Content
-              forceMount
-              className="fixed top-[50%] left-[50%] z-50 w-[95vw] max-w-md -translate-x-[50%] -translate-y-[50%] rounded-lg border border-gray-200 bg-white p-10 shadow-xl focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75 md:w-full"
-            >
-              <div>
-                <FormSubmitNFT setIsOpen={setIsOpen} />
-              </div>
-              <DialogPrimitive.Close className="absolute top-5 right-5">
-                <span className="text-2xl">×</span>
-              </DialogPrimitive.Close>
-            </DialogPrimitive.Content>
-          </Transition.Child>
-        </Transition.Root>
-      </Portal.Root>
-    </DialogPrimitive.Root>
+    <Dialog
+      setIsOpen={setIsOpen}
+      isOpen={isOpen}
+      trigger={
+        <Button type="button" disabled={!Boolean(accountData?.address)}>
+          Submit a NFT
+        </Button>
+      }
+    >
+      <FormSubmitNFT setIsOpen={setIsOpen} />
+    </Dialog>
   );
 };
 
@@ -104,7 +71,7 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({ setIsOpen }) => {
 
       const data = await response.json();
 
-      // setError(null);
+      setError(null);
       setIsNftFetched(true);
       setNFT(data);
     } catch (error) {
