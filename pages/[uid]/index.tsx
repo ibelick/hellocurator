@@ -60,12 +60,6 @@ export const getStaticProps: GetStaticProps<StorefrontProps, Params> = async (
 
   return {
     props: {
-      test: closedProposals.proposals.filter((proposal) => {
-        return (
-          proposal.scores[0] > proposal.scores[1] &&
-          proposal.title.match(/ETHEREUM\S+/g)
-        );
-      }),
       info,
       assetsIds,
     },

@@ -2,6 +2,7 @@ export interface Space {
   __typename: string;
   id: string;
   name: string;
+  avatar: string;
 }
 
 export interface Proposals {
