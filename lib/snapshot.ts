@@ -8,6 +8,7 @@ export const createProposal = async (
   contractAddress: string,
   nftId: string
 ) => {
+  // @ts-ignore
   const web3 = new Web3Provider(window.ethereum);
 
   const [account] = await web3.listAccounts();
@@ -31,6 +32,7 @@ export const createProposal = async (
 };
 
 export const castVote = async (proposal: string, choice: number) => {
+  // @ts-ignore
   const web3 = new Web3Provider(window.ethereum);
 
   const [account] = await web3.listAccounts();

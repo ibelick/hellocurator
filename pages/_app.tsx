@@ -3,25 +3,28 @@ import type { AppProps } from "next/app";
 import Layout from "components/Layout";
 import { ApolloProvider } from "@apollo/client";
 import { apolloClient } from "lib/apollo";
+import { WagmiProvider } from "wagmi";
 
-declare global {
-  interface Window {
-    ethereum: {
-      request<T>(params: { method: string }): Promise<T>;
-      on<T>(event: string, cb: (params: T) => void): void;
-      removeListener<T>(event: string, cb: (params: T) => void): void;
-      selectedAddress: string | undefined;
-    };
-  }
-}
+// const connectors = ({ chainId }: { chainId?: number }) => {
+//   return [
+//     new InjectedConnector({
+//       chains: defaultChains,
+//       options: {
+//         shimDisconnect: true,
+//       },
+//     }),
+//   ];
+// };
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ApolloProvider client={apolloClient}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </ApolloProvider>
+    <WagmiProvider autoConnect>
+      <ApolloProvider client={apolloClient}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ApolloProvider>
+    </WagmiProvider>
   );
 }
 
