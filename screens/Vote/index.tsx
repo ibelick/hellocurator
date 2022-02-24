@@ -149,12 +149,9 @@ const Proposal: React.FC<{ proposal: Proposals; balance?: string }> = ({
           {proposal.choices.map((choice, index: number) => {
             return (
               <IconButton
+                // @todo: update with strategies
+                disabled={balance === "0.0"}
                 onClick={async () => {
-                  // @todo: update with strategies
-                  if (balance !== "0.0") {
-                    return;
-                  }
-
                   const receipt = await castVote(proposal.id, index + 1);
                   // @ts-ignore
                   setVoteReceiptId(receipt.id as string);
