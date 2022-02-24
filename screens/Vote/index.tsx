@@ -10,6 +10,7 @@ import { SNAPSHOT_GET_PROPOSALS } from "lib/queries";
 import { useRouter } from "next/router";
 import useVote from "hooks/useVote";
 import { useEffect, useState } from "react";
+import { useBalance, useAccount } from "wagmi";
 
 export interface VoteProps {
   info: SpaceInfo;
@@ -36,12 +37,15 @@ const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
 }) => {
   const router = useRouter();
   const { uid } = router.query;
-
   const { loading, error, data, refetch } = useQuery(SNAPSHOT_GET_PROPOSALS, {
     variables: {
       spaceIn: uid,
       state: "active",
     },
+  });
+  const [{ data: accountData }] = useAccount();
+  const [{ data: dataBalance }] = useBalance({
+    addressOrName: accountData?.address,
   });
 
   // refetch proposals data when user submit NFT
@@ -57,11 +61,42 @@ const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
   if (error) return <p>Error :(</p>;
 
   return (
-    <ul className="columns-1 gap-8 sm:columns-2 md:columns-3">
-      {data.proposals?.map((proposal: Proposals) => {
-        return <Proposal proposal={proposal} key={proposal.id} />;
-      })}
-    </ul>
+    <div>
+      <div className="mb-4 flex-none items-center justify-between rounded-xl bg-gray-50 p-8 md:flex">
+        <div className="flex items-center">
+          <span>🔥</span>
+          <div className="ml-4">
+            <h3 className="font-medium">
+              Vote for the NFTs to join the curated gallery
+            </h3>
+            <p className="text-gray-400">Use your MORPHS to vote</p>
+          </div>
+        </div>
+        <div>
+          {accountData && (
+            <p className="mt-4 ml-8 md:ml-0 md:mt-0 ">
+              Your voting power :{" "}
+              <span className="font-bold text-pink-400">
+                {Number(dataBalance?.formatted).toFixed(3)} ETH
+              </span>
+            </p>
+          )}
+          {!accountData && (
+            <p className="mt-4 ml-8 md:ml-0 md:mt-0 ">
+              Your voting power :{" "}
+              <span className="font-bold text-pink-400">
+                Connect your wallet
+              </span>
+            </p>
+          )}
+        </div>
+      </div>
+      <ul className="columns-1 gap-8 sm:columns-2 md:columns-3">
+        {data.proposals?.map((proposal: Proposals) => {
+          return <Proposal proposal={proposal} key={proposal.id} />;
+        })}
+      </ul>
+    </div>
   );
 };
 
