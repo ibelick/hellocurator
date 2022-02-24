@@ -9,7 +9,7 @@ export interface SpaceInfo {
 
 interface HeaderStorefrontProps {
   info: SpaceInfo;
-  setCreateProposalReceiptId: (createProposalReceiptId: string) => void;
+  setCreateProposalReceiptId?: (createProposalReceiptId: string) => void;
 }
 
 const HeaderStorefront: React.FC<HeaderStorefrontProps> = ({
@@ -18,7 +18,7 @@ const HeaderStorefront: React.FC<HeaderStorefrontProps> = ({
 }) => {
   const router = useRouter();
   const { uid } = router.query;
-  const linkSelectedCn = `font-bold text-pink-400 underline decoration-pink-400 decoration-2 decoration-4 underline-offset-4`;
+  const linkSelectedCn = `font-bold text-primary-800 underline decoration-primary-800 decoration-2 decoration-4 underline-offset-4`;
 
   return (
     <>
@@ -29,7 +29,7 @@ const HeaderStorefront: React.FC<HeaderStorefrontProps> = ({
         </div>
         <div className="flex items-center">
           <DialogSubmitNFT
-            setCreateProposalReceiptId={setCreateProposalReceiptId}
+            setCreateProposalReceiptId={setCreateProposalReceiptId!}
           />
         </div>
       </div>

@@ -60,12 +60,12 @@ const Landing: React.FC<LandingProps> = ({ spaces }) => {
           <a
             href="https://playgrounds.wtf/"
             target="_blank"
-            rel="noopener"
+            rel="noopener noreferrer"
             className="mb-4 mr-2 sm:mb-0"
           >
             <Button variant="tertiary">Visit website</Button>
           </a>
-          <a href={DISCORD_LINK} target="_blank" rel="noopener">
+          <a href={DISCORD_LINK} target="_blank" rel="noopener noreferrer">
             <Button variant="tertiary">Join Discord</Button>
           </a>
         </div>
@@ -126,7 +126,7 @@ const DialogCreateSpace = () => {
           join our Discord and #loopclub channel to engage with us!
         </p>
         <div className="mt-4 flex justify-center">
-          <a href={DISCORD_LINK} target="_blank" rel="noopener">
+          <a href={DISCORD_LINK} target="_blank" rel="noopener noreferrer">
             <Button>Join Discord</Button>
           </a>
         </div>

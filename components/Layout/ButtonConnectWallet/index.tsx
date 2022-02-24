@@ -49,17 +49,17 @@ const DialogConnectWallet: React.FC<{
 
   return (
     <Dialog
-      trigger={<Button variant="tertiary">Connect Wallet</Button>}
+      trigger={<Button variant="secondary">Connect Wallet</Button>}
       isOpen={isOpen}
       setIsOpen={setIsOpen}
     >
-      <h2 className="mb-4 text-xl">Select a wallet</h2>
+      <h2 className="mb-4 text-xl font-medium">Select a wallet</h2>
       <div>
         {connectors.map((connector) => {
           return (
             <div
               key={connector.id}
-              className="flex cursor-pointer items-center justify-between rounded-sm border border-gray-300 p-4"
+              className="flex cursor-pointer items-center  justify-between rounded-full border border-gray-200 bg-white px-8 py-4 drop-shadow-sm hover:bg-gray-100"
               onClick={async () => {
                 const receipt = await connect(connector);
 

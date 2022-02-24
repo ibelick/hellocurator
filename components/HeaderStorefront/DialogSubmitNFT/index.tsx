@@ -97,6 +97,7 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({
       if (receipt) {
         setIsNftSubmited(true);
 
+        // @ts-ignore
         setCreateProposalReceiptId(receipt.id as string);
       }
     } catch (err) {
