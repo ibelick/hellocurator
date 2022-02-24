@@ -76,7 +76,7 @@ const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
           {accountData && (
             <p className="mt-4 ml-8 md:ml-0 md:mt-0 ">
               Your voting power :{" "}
-              <span className="text-primaryColor font-bold">
+              <span className="text-primary-800 font-bold">
                 {Number(dataBalance?.formatted).toFixed(3)} ETH
               </span>
             </p>
@@ -84,7 +84,7 @@ const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
           {!accountData && (
             <p className="mt-4 ml-8 md:ml-0 md:mt-0 ">
               Your voting power :{" "}
-              <span className="text-primaryColor font-bold">
+              <span className="text-primary-800 font-bold">
                 Connect your wallet
               </span>
             </p>

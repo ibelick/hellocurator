@@ -14,7 +14,7 @@ const Progress: React.FC<ProgressProps> = ({ label, value }) => {
       ) : null}
       <div className="h-1.5 w-full rounded-full bg-gray-200">
         <div
-          className="bg-primaryColor h-1.5 rounded-full"
+          className="bg-primary-800 h-1.5 rounded-full"
           style={{ width: `${value}%` }}
         ></div>
       </div>

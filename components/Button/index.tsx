@@ -8,8 +8,8 @@ interface ButtonProps extends React.ComponentPropsWithoutRef<"button"> {
 
 const VARIANT_ENUM: { [key: string]: string } = {
   primary: "bg-black text-white hover:bg-gray-800",
-  secondary: "bg-primaryColor text-white",
-  tertiary: "bg-white border border-gray-200 hover:bg-gray-100",
+  secondary: "bg-primary-800 hover:bg-primary-900 text-white",
+  tertiary: "bg-white border border-gray-200 hover:bg-gray-50",
 };
 
 const Button: React.FC<ButtonProps> = ({

@@ -18,7 +18,7 @@ const HeaderStorefront: React.FC<HeaderStorefrontProps> = ({
 }) => {
   const router = useRouter();
   const { uid } = router.query;
-  const linkSelectedCn = `font-bold text-primaryColor underline decoration-primaryColor decoration-2 decoration-4 underline-offset-4`;
+  const linkSelectedCn = `font-bold text-primary-800 underline decoration-primary-800 decoration-2 decoration-4 underline-offset-4`;
 
   return (
     <>
