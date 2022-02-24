@@ -24,7 +24,11 @@ const HeaderStorefront: React.FC<HeaderStorefrontProps> = ({
     <>
       <div className="mb-4 flex items-center justify-between">
         <div className="flex flex-col">
-          <h1 className="mb-2 text-3xl  font-bold text-black">{info.name}</h1>
+          <h1 className="mb-2 text-3xl  font-bold text-black">
+            <Link href={`/${uid}`}>
+              <a>{info.name}</a>
+            </Link>
+          </h1>
           <h2 className="text-base text-gray-400">{info.id}</h2>
         </div>
         <div className="flex items-center">

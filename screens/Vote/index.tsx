@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import useVote from "hooks/useVote";
 import { useEffect, useState } from "react";
 import { useBalance, useAccount } from "wagmi";
+import Link from "next/link";
 
 export interface VoteProps {
   info: SpaceInfo;
@@ -37,14 +38,19 @@ const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
 }) => {
   const router = useRouter();
   const { uid } = router.query;
-  const { loading, error, data, refetch } = useQuery(SNAPSHOT_GET_PROPOSALS, {
+  const {
+    loading: isProposalsLoading,
+    error,
+    data,
+    refetch,
+  } = useQuery(SNAPSHOT_GET_PROPOSALS, {
     variables: {
       spaceIn: uid,
       state: "active",
     },
   });
   const [{ data: accountData }] = useAccount();
-  const [{ data: dataBalance }] = useBalance({
+  const [{ data: dataBalance, loading: isDataBalandeLoading }] = useBalance({
     addressOrName: accountData?.address,
   });
 
@@ -57,10 +63,8 @@ const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
     refetch();
   }, [createProposalReceiptId]);
 
-  if (loading) return null;
+  if (isProposalsLoading) return null;
   if (error) return <p>Error :(</p>;
-
-  console.log(dataBalance);
 
   return (
     <div>
@@ -75,25 +79,23 @@ const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
           </div>
         </div>
         <div>
-          {accountData && (
+          {!isDataBalandeLoading && accountData && (
             <p className="mt-4 ml-8 md:ml-0 md:mt-0 ">
               Your voting power :{" "}
-              <span className="text-primary-800 font-bold">
-                {Number(dataBalance?.formatted).toFixed(3)} ETH
-              </span>
-            </p>
-          )}
-          {!accountData && (
-            <p className="mt-4 ml-8 md:ml-0 md:mt-0 ">
-              Your voting power :{" "}
-              <span className="text-primary-800 font-bold">
-                Connect your wallet
-              </span>
+              {accountData ? (
+                <span className="text-primary-800 font-bold">
+                  {Number(dataBalance?.formatted).toFixed(3)} ETH
+                </span>
+              ) : (
+                <span className="text-primary-800 font-bold">
+                  Connect your wallet
+                </span>
+              )}
             </p>
           )}
         </div>
       </div>
-      <ul className="columns-1 gap-8 sm:columns-2 md:columns-3">
+      <ul className="columns-1 sm:columns-2 md:columns-3">
         {data.proposals?.map((proposal: Proposals) => {
           return (
             <Proposal
@@ -229,18 +231,24 @@ const NFTInfo: React.FC<{ itemId?: string }> = ({ itemId }) => {
     return null;
   }
 
-  if (isError) {
+  if (isError || !nft) {
     return null;
   }
 
   return (
     <div className="flex flex-col">
-      <img
-        className="h-full w-full rounded"
-        src={nft?.meta?.content[0].url}
-        alt={nft?.meta?.name}
-      />
-      <p className="my-2 font-medium">{nft?.meta?.name}</p>
+      <Link
+        href={`https://rarible.com/token/${nft.id.replace("ETHEREUM:", "")}`}
+      >
+        <a target="_blank" rel="noopener noreferrer">
+          <img
+            className="h-full w-full rounded"
+            src={nft.meta.content[0].url}
+            alt={nft.meta.name}
+          />
+        </a>
+      </Link>
+      <p className="my-2 font-medium">{nft.meta.name}</p>
     </div>
   );
 };

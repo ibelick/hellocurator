@@ -91,7 +91,7 @@ const CardSpace: React.FC<CardSpaceProps> = ({
 }) => {
   return (
     <Link href={`/${href}`}>
-      <a className="block">
+      <a className={`block ${isSoon ? `cursor-wait` : ``}`}>
         <div className="relative w-full rounded-xl border border-gray-200 bg-white p-8 shadow transition hover:bg-gray-100 md:w-72">
           {isSoon ? (
             <span className="absolute top-4 right-4 rounded-full bg-gray-100 px-4 py-2 text-sm font-bold text-gray-400">

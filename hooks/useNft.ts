@@ -11,7 +11,7 @@ const useNft = (assetId: string) => {
   return {
     nft: data,
     isLoading: !error && !data,
-    isError: error,
+    isError: !data?.id,
   };
 };
 

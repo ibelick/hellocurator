@@ -24,7 +24,7 @@ const NFTGallery: React.FC<{ assetsIds?: (string | undefined)[] }> = ({
 const DisplayNFT: React.FC<{ assetId: string }> = ({ assetId }) => {
   const { nft, isError, isLoading } = useNft(assetId);
 
-  if (isError) return <div>failed to load</div>;
+  if (isError) return null;
   if (isLoading) return null;
 
   return (
@@ -37,7 +37,7 @@ const DisplayNFT: React.FC<{ assetId: string }> = ({ assetId }) => {
               ""
             )}`}
           >
-            <a>
+            <a target="_blank" rel="noopener noreferrer">
               <img
                 src={nft?.meta?.content[0].url}
                 alt={nft?.meta.name}
