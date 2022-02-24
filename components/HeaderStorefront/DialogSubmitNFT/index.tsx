@@ -9,10 +9,12 @@ import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
 
 interface DialogSubmitNFTProps {
-  trigger: React.ReactNode;
+  setCreateProposalReceiptId: (createProposalReceiptId: string) => void;
 }
 
-const DialogSubmitNFT: React.FC<DialogSubmitNFTProps> = ({ trigger }) => {
+const DialogSubmitNFT: React.FC<DialogSubmitNFTProps> = ({
+  setCreateProposalReceiptId,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [{ data: accountData }] = useAccount();
 
@@ -26,13 +28,17 @@ const DialogSubmitNFT: React.FC<DialogSubmitNFTProps> = ({ trigger }) => {
         </Button>
       }
     >
-      <FormSubmitNFT setIsOpen={setIsOpen} />
+      <FormSubmitNFT
+        setIsOpen={setIsOpen}
+        setCreateProposalReceiptId={setCreateProposalReceiptId}
+      />
     </Dialog>
   );
 };
 
 interface FormSubmitNFTProps {
   setIsOpen: (isOpen: boolean) => void;
+  setCreateProposalReceiptId: (createProposalReceiptId: string) => void;
 }
 
 type FormValues = {
@@ -40,7 +46,10 @@ type FormValues = {
   nftId: string;
 };
 
-const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({ setIsOpen }) => {
+const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({
+  setIsOpen,
+  setCreateProposalReceiptId,
+}) => {
   const { register, handleSubmit, getValues } = useForm<FormValues>();
   const [isLoading, setIsLoading] = useState(false);
   const [isNftFetched, setIsNftFetched] = useState(false);
@@ -87,6 +96,8 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({ setIsOpen }) => {
 
       if (receipt) {
         setIsNftSubmited(true);
+
+        setCreateProposalReceiptId(receipt.id as string);
       }
     } catch (err) {
       console.error(err);

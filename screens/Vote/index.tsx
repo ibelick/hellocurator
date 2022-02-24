@@ -9,31 +9,49 @@ import { useQuery } from "@apollo/client";
 import { SNAPSHOT_GET_PROPOSALS } from "lib/queries";
 import { useRouter } from "next/router";
 import useVote from "hooks/useVote";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export interface VoteProps {
   info: SpaceInfo;
 }
 
 const Vote: React.FC<VoteProps> = ({ info }) => {
+  const [createProposalReceiptId, setCreateProposalReceiptId] = useState<
+    string | null
+  >(null);
+
   return (
     <div className="pb-12">
-      <HeaderStorefront info={info} />
-      <Proposals />
+      <HeaderStorefront
+        info={info}
+        setCreateProposalReceiptId={setCreateProposalReceiptId}
+      />
+      <Proposals createProposalReceiptId={createProposalReceiptId} />
     </div>
   );
 };
 
-const Proposals: React.FC = () => {
+const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
+  createProposalReceiptId,
+}) => {
   const router = useRouter();
   const { uid } = router.query;
 
-  const { loading, error, data } = useQuery(SNAPSHOT_GET_PROPOSALS, {
+  const { loading, error, data, refetch } = useQuery(SNAPSHOT_GET_PROPOSALS, {
     variables: {
       spaceIn: uid,
       state: "active",
     },
   });
+
+  // refetch proposals data when user submit NFT
+  useEffect(() => {
+    if (!createProposalReceiptId) {
+      return;
+    }
+
+    refetch();
+  }, [createProposalReceiptId]);
 
   if (loading) return null;
   if (error) return <p>Error :(</p>;
@@ -68,7 +86,7 @@ const Proposal: React.FC<{ proposal: Proposals }> = ({ proposal }) => {
   const voteEnd = new Date(proposal.end * 1000);
   const today = new Date(Date.now());
   const remainingTime = timeBetweenDates(voteEnd, today);
-  const [receiptId, setReceiptId] = useState<string | null>(null);
+  const [voteReceiptId, setVoteReceiptId] = useState<string | null>(null);
 
   return (
     <li className="mb-6 break-inside-avoid">
@@ -79,7 +97,7 @@ const Proposal: React.FC<{ proposal: Proposals }> = ({ proposal }) => {
         <Votes
           choices={proposal.choices}
           proposalId={proposal.id}
-          receiptId={receiptId}
+          voteReceiptId={voteReceiptId}
         />
         <div className="mb-4 flex w-full justify-center gap-4">
           {proposal.choices.map((choice, index: number) => {
@@ -88,7 +106,7 @@ const Proposal: React.FC<{ proposal: Proposals }> = ({ proposal }) => {
                 onClick={async () => {
                   const receipt = await castVote(proposal.id, index + 1);
                   // @ts-ignore
-                  setReceiptId(receipt.id as string);
+                  setVoteReceiptId(receipt.id as string);
                 }}
                 icon={
                   <svg
@@ -118,12 +136,12 @@ const Proposal: React.FC<{ proposal: Proposals }> = ({ proposal }) => {
 const Votes: React.FC<{
   choices: string[];
   proposalId: string;
-  receiptId?: string | null;
-}> = ({ choices, proposalId, receiptId }) => {
+  voteReceiptId?: string | null;
+}> = ({ choices, proposalId, voteReceiptId }) => {
   const { choiceWithVotingPower, totalVotingPower } = useVote(
     proposalId,
     choices,
-    receiptId
+    voteReceiptId
   );
 
   return (

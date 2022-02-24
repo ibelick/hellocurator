@@ -17,7 +17,7 @@ interface ChoiceWithVotingPower {
 const useVote = (
   proposalId: string,
   availableChoices: string[],
-  receiptId?: string | null
+  voteReceiptId?: string | null
 ) => {
   const { error, data, refetch } = useQuery<VoteData, { proposalId: string }>(
     SNAPSHOS_GET_VOTE,
@@ -31,7 +31,7 @@ const useVote = (
   // refetch votes data when user cast a vote
   useEffect(() => {
     refetch();
-  }, [receiptId]);
+  }, [voteReceiptId]);
 
   const [choiceWithVotingPower, setChoiceWithVotingPower] = useState<
     ChoiceWithVotingPower[] | null
