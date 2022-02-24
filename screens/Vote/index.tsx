@@ -60,6 +60,8 @@ const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
   if (loading) return null;
   if (error) return <p>Error :(</p>;
 
+  console.log(dataBalance);
+
   return (
     <div>
       <div className="mb-4 flex-none items-center justify-between rounded-xl bg-gray-50 p-8 md:flex">
@@ -93,7 +95,13 @@ const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
       </div>
       <ul className="columns-1 gap-8 sm:columns-2 md:columns-3">
         {data.proposals?.map((proposal: Proposals) => {
-          return <Proposal proposal={proposal} key={proposal.id} />;
+          return (
+            <Proposal
+              proposal={proposal}
+              key={proposal.id}
+              balance={dataBalance?.formatted}
+            />
+          );
         })}
       </ul>
     </div>
@@ -117,7 +125,10 @@ const timeBetweenDates = (date1: Date, date2: Date) => {
   return `${days} days`;
 };
 
-const Proposal: React.FC<{ proposal: Proposals }> = ({ proposal }) => {
+const Proposal: React.FC<{ proposal: Proposals; balance?: string }> = ({
+  proposal,
+  balance,
+}) => {
   const voteEnd = new Date(proposal.end * 1000);
   const today = new Date(Date.now());
   const remainingTime = timeBetweenDates(voteEnd, today);
@@ -139,6 +150,11 @@ const Proposal: React.FC<{ proposal: Proposals }> = ({ proposal }) => {
             return (
               <IconButton
                 onClick={async () => {
+                  // @todo: update with strategies
+                  if (balance !== "0.0") {
+                    return;
+                  }
+
                   const receipt = await castVote(proposal.id, index + 1);
                   // @ts-ignore
                   setVoteReceiptId(receipt.id as string);
