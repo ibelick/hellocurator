@@ -5,7 +5,11 @@ module.exports = {
     "./screens/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primaryColor: "#1A24D4",
+      },
+    },
     fontFamily: { display: "DM Sans" },
   },
   plugins: [],

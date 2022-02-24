@@ -53,7 +53,7 @@ const DialogConnectWallet: React.FC<{
       isOpen={isOpen}
       setIsOpen={setIsOpen}
     >
-      <h2 className="mb-4 text-xl">Select a wallet</h2>
+      <h2 className="mb-4 text-xl font-medium">Select a wallet</h2>
       <div>
         {connectors.map((connector) => {
           return (

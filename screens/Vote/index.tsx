@@ -69,14 +69,14 @@ const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
             <h3 className="font-medium">
               Vote for the NFTs to join the curated gallery
             </h3>
-            <p className="text-gray-400">Use your MORPHS to vote</p>
+            <p className="text-gray-400">Use your ETH to vote</p>
           </div>
         </div>
         <div>
           {accountData && (
             <p className="mt-4 ml-8 md:ml-0 md:mt-0 ">
               Your voting power :{" "}
-              <span className="font-bold text-pink-400">
+              <span className="text-primaryColor font-bold">
                 {Number(dataBalance?.formatted).toFixed(3)} ETH
               </span>
             </p>
@@ -84,7 +84,7 @@ const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
           {!accountData && (
             <p className="mt-4 ml-8 md:ml-0 md:mt-0 ">
               Your voting power :{" "}
-              <span className="font-bold text-pink-400">
+              <span className="text-primaryColor font-bold">
                 Connect your wallet
               </span>
             </p>
