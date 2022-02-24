@@ -14,8 +14,12 @@ interface ChoiceWithVotingPower {
   votingPower: number;
 }
 
-const useVote = (proposalId: string, availableChoices: string[]) => {
-  const { error, data } = useQuery<VoteData, { proposalId: string }>(
+const useVote = (
+  proposalId: string,
+  availableChoices: string[],
+  receiptId?: string | null
+) => {
+  const { error, data, refetch } = useQuery<VoteData, { proposalId: string }>(
     SNAPSHOS_GET_VOTE,
     {
       variables: {
@@ -23,6 +27,11 @@ const useVote = (proposalId: string, availableChoices: string[]) => {
       },
     }
   );
+
+  // refetch votes data when user cast a vote
+  useEffect(() => {
+    refetch();
+  }, [receiptId]);
 
   const [choiceWithVotingPower, setChoiceWithVotingPower] = useState<
     ChoiceWithVotingPower[] | null

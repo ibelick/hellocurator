@@ -41,7 +41,7 @@ const Spinner: React.FC<{ variant: string }> = ({ variant }) => {
   return (
     <svg
       className={`ml-4 h-5 w-5 animate-spin ${
-        variant === "primary" ? `text-white` : `text-black`
+        variant === "secondary" ? `text-white` : `text-black`
       }`}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"

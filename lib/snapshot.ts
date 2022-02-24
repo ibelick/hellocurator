@@ -31,6 +31,17 @@ export const createProposal = async (
   return receipt;
 };
 
+interface Relayer {
+  address: string;
+  receipt: string;
+}
+
+export interface Receipt {
+  id: string;
+  ipfs: string;
+  relayer: Relayer;
+}
+
 export const castVote = async (proposal: string, choice: number) => {
   // @ts-ignore
   const web3 = new Web3Provider(window.ethereum);

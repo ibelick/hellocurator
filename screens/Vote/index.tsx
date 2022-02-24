@@ -1,4 +1,4 @@
-import { castVote, getProposalScore } from "lib/snapshot";
+import { castVote } from "lib/snapshot";
 import { Proposals } from "types/snapshot";
 import useNft from "hooks/useNft";
 import IconButton from "components/IconButton";
@@ -9,6 +9,7 @@ import { useQuery } from "@apollo/client";
 import { SNAPSHOT_GET_PROPOSALS } from "lib/queries";
 import { useRouter } from "next/router";
 import useVote from "hooks/useVote";
+import { useState } from "react";
 
 export interface VoteProps {
   info: SpaceInfo;
@@ -67,6 +68,7 @@ const Proposal: React.FC<{ proposal: Proposals }> = ({ proposal }) => {
   const voteEnd = new Date(proposal.end * 1000);
   const today = new Date(Date.now());
   const remainingTime = timeBetweenDates(voteEnd, today);
+  const [receiptId, setReceiptId] = useState<string | null>(null);
 
   return (
     <li className="mb-6 break-inside-avoid">
@@ -74,12 +76,20 @@ const Proposal: React.FC<{ proposal: Proposals }> = ({ proposal }) => {
         <div>
           <NFTInfo itemId={proposal.title.match(/ETHEREUM\S+/g)?.[0]} />
         </div>
-        <Votes choices={proposal.choices} proposalId={proposal.id} />
+        <Votes
+          choices={proposal.choices}
+          proposalId={proposal.id}
+          receiptId={receiptId}
+        />
         <div className="mb-4 flex w-full justify-center gap-4">
           {proposal.choices.map((choice, index: number) => {
             return (
               <IconButton
-                onClick={() => castVote(proposal.id, index + 1)}
+                onClick={async () => {
+                  const receipt = await castVote(proposal.id, index + 1);
+                  // @ts-ignore
+                  setReceiptId(receipt.id as string);
+                }}
                 icon={
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -105,13 +115,15 @@ const Proposal: React.FC<{ proposal: Proposals }> = ({ proposal }) => {
   );
 };
 
-const Votes: React.FC<{ choices: string[]; proposalId: string }> = ({
-  choices,
-  proposalId,
-}) => {
+const Votes: React.FC<{
+  choices: string[];
+  proposalId: string;
+  receiptId?: string | null;
+}> = ({ choices, proposalId, receiptId }) => {
   const { choiceWithVotingPower, totalVotingPower } = useVote(
     proposalId,
-    choices
+    choices,
+    receiptId
   );
 
   return (
