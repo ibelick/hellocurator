@@ -3,7 +3,11 @@ import type { AppProps } from "next/app";
 import Layout from "components/Layout";
 import { ApolloProvider } from "@apollo/client";
 import { apolloClient } from "lib/apollo";
-import { WagmiProvider } from "wagmi";
+import {
+  // defaultChains,
+  // InjectedConnector,
+  Provider as WagmiProvider,
+} from "wagmi";
 
 // const connectors = ({ chainId }: { chainId?: number }) => {
 //   return [
