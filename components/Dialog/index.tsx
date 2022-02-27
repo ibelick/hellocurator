@@ -18,7 +18,7 @@ const Dialog: React.FC<DialogProps> = ({
   return (
     <DialogPrimitive.Root open={isOpen} onOpenChange={setIsOpen}>
       <DialogPrimitive.Trigger asChild>
-        <div>{trigger}</div>
+        <div className="appearance-none">{trigger}</div>
       </DialogPrimitive.Trigger>
       <Portal.Root>
         <Transition.Root show={isOpen}>

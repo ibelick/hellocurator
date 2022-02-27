@@ -26,22 +26,26 @@ const Landing: React.FC<LandingProps> = ({ spaces }) => {
         </div>
         <DialogCreateSpace />
       </div>
-      <div className="flex flex-col gap-4 md:flex-row">
-        <CardSpace
-          href="loopclub.eth"
-          name={spaces.space.name}
-          id={spaces.space.id}
-          imgSrc={spaces.space.avatar.replace(
-            "ipfs://",
-            "https://ipfs.io/ipfs/"
-          )}
-        />
-        <CardSpace
-          name="Playgrounds"
-          id="playgrounds.wtf"
-          imgSrc="https://pbs.twimg.com/profile_images/1490688819900919815/mSx79mUo_400x400.jpg"
-          isSoon
-        />
+      <div className="flex flex-col md:flex-row">
+        <div className="mb-4 mr-0 md:mb-0 md:mr-4">
+          <CardSpace
+            href="loopclub.eth"
+            name={spaces.space.name}
+            id={spaces.space.id}
+            imgSrc={spaces.space.avatar.replace(
+              "ipfs://",
+              "https://ipfs.io/ipfs/"
+            )}
+          />
+        </div>
+        <div>
+          <CardSpace
+            name="Playgrounds"
+            id="playgrounds.wtf"
+            imgSrc="https://pbs.twimg.com/profile_images/1490688819900919815/mSx79mUo_400x400.jpg"
+            isSoon
+          />
+        </div>
       </div>
       <div className="mt-8 h-0.5 w-full bg-gray-100"></div>
       <div className="mt-8 rounded-xl bg-gray-100 p-10">
