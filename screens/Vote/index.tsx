@@ -93,7 +93,7 @@ const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
           <span>🔥</span>
           <div className="ml-4">
             <h3 className="font-medium">
-              Vote for the NFTs to join the curated gallery
+              Vote for which NFTs should join the gallery
             </h3>
             <p className="text-gray-400">
               Use your {loopclubStrategies[0].params.symbol} to vote
@@ -105,7 +105,7 @@ const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
             Your voting power :{" "}
             {accountData ? (
               <span className="font-bold text-primary-800">
-                {userVotingPower}
+                {userVotingPower} {loopclubStrategies[0].params.symbol}
               </span>
             ) : (
               <span className="font-bold text-primary-800">
