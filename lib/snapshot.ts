@@ -4,6 +4,17 @@ import snapshot from "@snapshot-labs/snapshot.js";
 const hub = "https://hub.snapshot.org";
 const client = new snapshot.Client712(hub);
 
+// @todo: replace when onboard more spaces
+export const loopclubStrategies = [
+  {
+    name: "erc721",
+    params: {
+      symbol: "Morphs",
+      address: "0x480894ceedc8ff63b6db624568f666e634dc8623",
+    },
+  },
+];
+
 export const createProposal = async (
   contractAddress: string,
   nftId: string
@@ -21,9 +32,10 @@ export const createProposal = async (
     choices: ["🔥", "👎"],
     start: Math.floor(Date.now() / 1000),
     end: Math.floor((Date.now() + 86400000) / 1000),
-    snapshot: 14185713,
+    snapshot: 14300331,
     network: "1",
-    strategies: JSON.stringify({}),
+    // @todo: params
+    strategies: JSON.stringify(loopclubStrategies),
     plugins: JSON.stringify({}),
     metadata: JSON.stringify({}),
   });
@@ -63,22 +75,14 @@ interface Score {
   [key: string]: number;
 }
 
-export const getProposalScore = async (voters: string[]) => {
+export const getVotingPower = async (voters: string[]) => {
   const space = "loopclub.eth";
-  const strategies = [
-    {
-      name: "eth-balance",
-      params: {
-        symbol: "ETH",
-      },
-    },
-  ];
   const network = "1";
 
   try {
     const score: Score[] = await snapshot.utils.getScores(
       space,
-      strategies,
+      loopclubStrategies,
       network,
       voters
     );

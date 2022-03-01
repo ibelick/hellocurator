@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { SNAPSHOS_GET_VOTE } from "lib/queries";
-import { getProposalScore } from "lib/snapshot";
+import { getVotingPower } from "lib/snapshot";
 import { useEffect, useState } from "react";
 import type { Vote } from "types/snapshot";
 
@@ -59,7 +59,7 @@ const useVote = (
       }
 
       const voters = data.votes.map((vote) => vote.voter);
-      const score = await getProposalScore(voters);
+      const score = await getVotingPower(voters);
 
       const totalVotingPower = Object.values(score![0]).reduce(
         (partialSum, a) => partialSum + a,

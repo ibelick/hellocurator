@@ -141,7 +141,6 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({
             <h2 className="mt-4 text-lg font-bold text-black">
               Submit an item
             </h2>
-            <p className="mt-2">lorem lorem lorem lorem lorem</p>
           </div>
           <div className="mb-4">
             <TextInput

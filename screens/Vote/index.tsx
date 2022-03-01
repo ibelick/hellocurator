@@ -1,4 +1,4 @@
-import { castVote } from "lib/snapshot";
+import { castVote, getVotingPower, loopclubStrategies } from "lib/snapshot";
 import { Proposals } from "types/snapshot";
 import useNft from "hooks/useNft";
 import IconButton from "components/IconButton";
@@ -10,7 +10,7 @@ import { SNAPSHOT_GET_PROPOSALS } from "lib/queries";
 import { useRouter } from "next/router";
 import useVote from "hooks/useVote";
 import { useEffect, useState } from "react";
-import { useBalance, useAccount } from "wagmi";
+import { useAccount } from "wagmi";
 import Link from "next/link";
 
 export interface VoteProps {
@@ -50,9 +50,7 @@ const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
     },
   });
   const [{ data: accountData }] = useAccount();
-  const [{ data: dataBalance, loading: isDataBalandeLoading }] = useBalance({
-    addressOrName: accountData?.address,
-  });
+  const [userVotingPower, setUserVotingPower] = useState<number | null>(null);
 
   // refetch proposals data when user submit NFT
   useEffect(() => {
@@ -62,6 +60,28 @@ const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
 
     refetch();
   }, [createProposalReceiptId]);
+
+  useEffect(() => {
+    if (!accountData?.address) {
+      setUserVotingPower(0);
+      return;
+    }
+
+    const fetchVotingPower = async () => {
+      const votingPower = await getVotingPower([accountData.address]);
+
+      const userVotingPower = votingPower?.[0][accountData.address];
+
+      if (!userVotingPower) {
+        setUserVotingPower(0);
+        return;
+      }
+
+      setUserVotingPower(userVotingPower);
+    };
+
+    fetchVotingPower();
+  }, [accountData?.address]);
 
   if (isProposalsLoading) return null;
   if (error) return <p>Error :(</p>;
@@ -75,35 +95,29 @@ const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
             <h3 className="font-medium">
               Vote for the NFTs to join the curated gallery
             </h3>
-            <p className="text-gray-400">Use your ETH to vote</p>
+            <p className="text-gray-400">
+              Use your {loopclubStrategies[0].params.symbol} to vote
+            </p>
           </div>
         </div>
         <div>
-          {!isDataBalandeLoading && accountData && (
-            <p className="mt-4 ml-8 md:ml-0 md:mt-0 ">
-              Your voting power :{" "}
-              {accountData ? (
-                <span className="text-primary-800 font-bold">
-                  {Number(dataBalance?.formatted).toFixed(3)} ETH
-                </span>
-              ) : (
-                <span className="text-primary-800 font-bold">
-                  Connect your wallet
-                </span>
-              )}
-            </p>
-          )}
+          <p className="mt-4 ml-8 md:ml-0 md:mt-0 ">
+            Your voting power :{" "}
+            {accountData ? (
+              <span className="font-bold text-primary-800">
+                {userVotingPower}
+              </span>
+            ) : (
+              <span className="font-bold text-primary-800">
+                Connect your wallet
+              </span>
+            )}
+          </p>
         </div>
       </div>
       <ul className="columns-1 sm:columns-2 md:columns-3">
         {data.proposals?.map((proposal: Proposals) => {
-          return (
-            <Proposal
-              proposal={proposal}
-              key={proposal.id}
-              balance={dataBalance?.formatted}
-            />
-          );
+          return <Proposal proposal={proposal} key={proposal.id} />;
         })}
       </ul>
     </div>
@@ -127,10 +141,7 @@ const timeBetweenDates = (date1: Date, date2: Date) => {
   return `${days} days`;
 };
 
-const Proposal: React.FC<{ proposal: Proposals; balance?: string }> = ({
-  proposal,
-  balance,
-}) => {
+const Proposal: React.FC<{ proposal: Proposals }> = ({ proposal }) => {
   const voteEnd = new Date(proposal.end * 1000);
   const today = new Date(Date.now());
   const remainingTime = timeBetweenDates(voteEnd, today);
@@ -151,8 +162,6 @@ const Proposal: React.FC<{ proposal: Proposals; balance?: string }> = ({
           {proposal.choices.map((choice, index: number) => {
             return (
               <IconButton
-                // @todo: update with strategies
-                disabled={balance === "0.0"}
                 onClick={async () => {
                   const receipt = await castVote(proposal.id, index + 1);
                   // @ts-ignore
