@@ -117,7 +117,13 @@ const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
       </div>
       <ul className="columns-1 sm:columns-2 md:columns-3">
         {data.proposals?.map((proposal: Proposals) => {
-          return <Proposal proposal={proposal} key={proposal.id} />;
+          return (
+            <Proposal
+              key={proposal.id}
+              proposal={proposal}
+              userVotingPower={userVotingPower!}
+            />
+          );
         })}
       </ul>
     </div>
@@ -141,7 +147,10 @@ const timeBetweenDates = (date1: Date, date2: Date) => {
   return `${days} days`;
 };
 
-const Proposal: React.FC<{ proposal: Proposals }> = ({ proposal }) => {
+const Proposal: React.FC<{ proposal: Proposals; userVotingPower: number }> = ({
+  proposal,
+  userVotingPower,
+}) => {
   const voteEnd = new Date(proposal.end * 1000);
   const today = new Date(Date.now());
   const remainingTime = timeBetweenDates(voteEnd, today);
@@ -162,6 +171,7 @@ const Proposal: React.FC<{ proposal: Proposals }> = ({ proposal }) => {
           {proposal.choices.map((choice, index: number) => {
             return (
               <IconButton
+                disabled={userVotingPower === 0}
                 onClick={async () => {
                   const receipt = await castVote(proposal.id, index + 1);
                   // @ts-ignore
@@ -206,8 +216,12 @@ const Votes: React.FC<{
   return (
     <div className="w-full">
       {choices?.map((choice, index: number) => {
+        const votingPower =
+          choiceWithVotingPower &&
+          Math.round(choiceWithVotingPower?.[index].votingPower * 10000) /
+            10000;
         const label = choiceWithVotingPower
-          ? `${choiceWithVotingPower?.[index].label}`
+          ? `${choiceWithVotingPower?.[index].label} ${votingPower} ${loopclubStrategies[0].params.symbol}`
           : undefined;
         const value =
           totalVotingPower && choiceWithVotingPower
