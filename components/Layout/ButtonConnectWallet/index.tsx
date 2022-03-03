@@ -39,17 +39,10 @@ const ButtonConnectWallet: React.FC = () => {
 
 const DialogConnectWallet: React.FC<{
   connectors: Connector<any, any>[];
-  connect: (connector: Connector<any, any>) => Promise<
-    | {
-        data: Data<any>;
-        error: undefined;
-      }
-    | {
-        data: undefined;
-        error: Error;
-      }
-    | undefined
-  >;
+  connect: (connector: Connector<any, any>) => Promise<{
+    data?: Data<any> | undefined;
+    error?: Error | undefined;
+  }>;
 }> = ({ connectors, connect }) => {
   const [isOpen, setIsOpen] = useState(false);
 

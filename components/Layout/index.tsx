@@ -12,7 +12,7 @@ const Layout: React.FC = ({ children }) => {
 
 const Header = () => {
   return (
-    <header className="mx-auto max-w-screen-2xl px-6 pt-4 pb-16 md:px-24">
+    <header className="mx-auto max-w-screen-2xl px-6 pt-4 pb-8 md:px-24 lg:pb-16">
       <nav className="flex flex-wrap items-center justify-between">
         <ul>
           <li className="mr-4">
