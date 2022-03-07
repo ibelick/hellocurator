@@ -7,6 +7,7 @@ import Dialog from "components/Dialog";
 import type { NFT } from "types/rarible";
 import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
+import toast from "react-hot-toast";
 
 interface DialogSubmitNFTProps {
   setCreateProposalReceiptId: (createProposalReceiptId: string) => void;
@@ -134,6 +135,7 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({
         setCreateProposalReceiptId(receipt.id as string);
       }
     } catch (err) {
+      toast.error("You need to sign to submit item.");
       console.error(err);
     }
     setIsLoading(false);

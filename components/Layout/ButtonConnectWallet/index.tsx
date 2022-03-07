@@ -1,8 +1,9 @@
 import Button from "components/Button";
-import { useConnect, useAccount, Connector, Data } from "wagmi";
+import { useConnect, useAccount, Connector, ConnectorData } from "wagmi";
 import { truncateEthAddress } from "utils/ethereum";
 import Dialog from "components/Dialog";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const ButtonConnectWallet: React.FC = () => {
   const [{ data: connectData, loading: isLoadingConnectData }, connect] =
@@ -39,17 +40,10 @@ const ButtonConnectWallet: React.FC = () => {
 
 const DialogConnectWallet: React.FC<{
   connectors: Connector<any, any>[];
-  connect: (connector: Connector<any, any>) => Promise<
-    | {
-        data: Data<any>;
-        error: undefined;
-      }
-    | {
-        data: undefined;
-        error: Error;
-      }
-    | undefined
-  >;
+  connect: (connector: Connector<any, any>) => Promise<{
+    data?: ConnectorData<any> | undefined;
+    error?: Error | undefined;
+  }>;
 }> = ({ connectors, connect }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -69,9 +63,11 @@ const DialogConnectWallet: React.FC<{
               onClick={async () => {
                 const receipt = await connect(connector);
 
-                if (receipt) {
-                  setIsOpen(false);
+                if (receipt.error) {
+                  toast.error("Error when connecting the wallet.");
                 }
+
+                setIsOpen(false);
               }}
             >
               <span>{connector.name}</span>
