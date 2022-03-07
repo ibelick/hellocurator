@@ -15,7 +15,10 @@ const TextInput: React.FC<TextInput> = ({
 }) => {
   return (
     <>
-      <label className="mb-1 block text-sm text-gray-500" htmlFor={id}>
+      <label
+        className="mb-1 block text-sm uppercase text-gray-500"
+        htmlFor={id}
+      >
         {label}
       </label>
       <input

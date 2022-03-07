@@ -42,8 +42,26 @@ interface FormSubmitNFTProps {
 }
 
 type FormValues = {
-  contractAddress: string;
-  nftId: string;
+  nftLink: string;
+};
+
+const extractItemIdFromLink = (nftLink: string) => {
+  if (nftLink.includes("rarible.com")) {
+    const stringFrom = "token/";
+    return nftLink
+      .substring(nftLink.indexOf(stringFrom) + stringFrom.length)
+      .split("?")[0];
+  }
+
+  if (nftLink.includes("opensea.io")) {
+    const stringFrom = "assets/";
+
+    return nftLink
+      .substring(nftLink.indexOf(stringFrom) + stringFrom.length)
+      .replace("/", ":");
+  }
+
+  return null;
 };
 
 const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({
@@ -59,9 +77,16 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({
   const router = useRouter();
 
   const fetchNftsWithRarible = async () => {
-    const { contractAddress, nftId } = getValues();
+    const { nftLink } = getValues();
 
-    const params = `ETHEREUM:${contractAddress}:${nftId}`;
+    const itemId = extractItemIdFromLink(nftLink);
+
+    if (!itemId) {
+      setError("Bad link format");
+      return;
+    }
+
+    const params = `ETHEREUM:${itemId}`;
 
     setIsLoading(true);
     setIsNftFetched(false);
@@ -91,8 +116,16 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     setIsLoading(true);
+
+    const itemId = extractItemIdFromLink(data.nftLink);
+
+    if (!itemId) {
+      setError("Something went wrong");
+      throw new Error("Something went wrong");
+    }
+
     try {
-      const receipt = await createProposal(data.contractAddress, data.nftId);
+      const receipt = await createProposal(itemId);
 
       if (receipt) {
         setIsNftSubmited(true);
@@ -144,14 +177,14 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({
           </div>
           <div className="mb-4">
             <TextInput
-              id="contractAddress"
-              label="CONTRACT ADDRESS"
-              placeholder="Enter the contract address"
+              id="nftLink"
+              label="Link from Rarible or OpenSea"
+              placeholder="ex: https://rarible.com/token/0x480894ceedc8ff63b6db624568f666e634dc8623:1"
               register={register}
               required
             />
           </div>
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <TextInput
               id="nftId"
               label="NFT ID"
@@ -159,7 +192,7 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({
               placeholder="Enter the NFT id"
               required
             />
-          </div>
+          </div> */}
           <Button
             type="button"
             onClick={fetchNftsWithRarible}

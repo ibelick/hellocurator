@@ -15,10 +15,7 @@ export const loopclubStrategies = [
   },
 ];
 
-export const createProposal = async (
-  contractAddress: string,
-  nftId: string
-) => {
+export const createProposal = async (itemId: string) => {
   // @ts-ignore
   const web3 = new Web3Provider(window.ethereum);
 
@@ -27,8 +24,8 @@ export const createProposal = async (
   const receipt = await client.proposal(web3, account, {
     space: "loopclub.eth",
     type: "single-choice",
-    title: `Add the NFT ETHEREUM:${contractAddress}:${nftId} to the curation`,
-    body: `link to NFT: https://rarible.com/token/${contractAddress}:${nftId}`,
+    title: `Add the NFT ETHEREUM:${itemId} to the curation`,
+    body: `link to NFT: https://rarible.com/token/${itemId}`,
     choices: ["🔥", "👎"],
     start: Math.floor(Date.now() / 1000),
     end: Math.floor((Date.now() + 86400000) / 1000),
