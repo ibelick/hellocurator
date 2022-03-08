@@ -15,5 +15,5 @@ module.exports = {
     },
     fontFamily: { display: "DM Sans" },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/typography")],
 };

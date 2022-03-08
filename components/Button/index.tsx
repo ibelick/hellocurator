@@ -26,7 +26,9 @@ const Button: React.FC<ButtonProps> = ({
       className={`inline-flex appearance-none items-center rounded-full px-6 py-3 text-sm font-medium drop-shadow-sm transition focus:ring-4 focus:ring-gray-300 ${
         isBlock ? `w-full justify-center` : null
       } ${VARIANT_ENUM[variant]} ${
-        props.disabled ? `bg-gray-400 hover:bg-gray-400` : null
+        props.disabled
+          ? `cursor-not-allowed bg-gray-400 text-gray-100 hover:bg-gray-400`
+          : null
       }`}
       {...props}
     >

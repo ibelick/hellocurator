@@ -1,5 +1,6 @@
 import useNft from "hooks/useNft";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const NFTGallery: React.FC<{ assetsIds?: (string | undefined)[] }> = ({
   assetsIds,
@@ -23,6 +24,8 @@ const NFTGallery: React.FC<{ assetsIds?: (string | undefined)[] }> = ({
 
 const DisplayNFT: React.FC<{ assetId: string }> = ({ assetId }) => {
   const { nft, isError, isLoading } = useNft(assetId);
+  const router = useRouter();
+  const { uid } = router.query;
 
   if (isError) return null;
   if (isLoading) return null;
@@ -31,13 +34,8 @@ const DisplayNFT: React.FC<{ assetId: string }> = ({ assetId }) => {
     <div className="mb-6 flex break-inside-avoid flex-col overflow-hidden">
       {nft?.meta?.content?.[0]["@type"] === "IMAGE" ? (
         <div className="flex h-full w-full items-center justify-center">
-          <Link
-            href={`https://rarible.com/token/${assetId.replace(
-              "ETHEREUM:",
-              ""
-            )}`}
-          >
-            <a target="_blank" rel="noopener noreferrer">
+          <Link href={`/${uid}/${assetId.replace("ETHEREUM:", "")}`}>
+            <a>
               <img
                 src={nft?.meta?.content[0].url}
                 alt={nft?.meta.name}

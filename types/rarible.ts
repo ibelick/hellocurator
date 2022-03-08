@@ -98,6 +98,29 @@ export interface BestBidOrder {
   data: Data;
 }
 
+interface BestSellOrder {
+  id: string;
+  fill: string;
+  platform: string;
+  status: string;
+  startedAt: Date;
+  endedAt: Date;
+  makeStock: string;
+  cancelled: boolean;
+  createdAt: Date;
+  lastUpdatedAt: Date;
+  makePrice: string;
+  makePriceUsd: string;
+  priceHistory: PriceHistory[];
+  maker: string;
+  make: Make;
+  take: Take;
+  salt: string;
+  signature: string;
+  pending: any[];
+  data: Data;
+}
+
 export interface NFT {
   id: string;
   blockchain: string;
@@ -113,6 +136,7 @@ export interface NFT {
   supply: string;
   meta: Meta;
   deleted: boolean;
+  bestSellOrder?: BestSellOrder;
   bestBidOrder: BestBidOrder;
   auctions: any[];
   totalStock: string;
