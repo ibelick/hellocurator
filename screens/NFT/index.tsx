@@ -14,6 +14,11 @@ const NFT = () => {
 
   const [showMore, setShowMore] = useState(false);
 
+  const [{ data: dataEns, error, loading }, lookupAddress] = useEnsLookup({
+    address:
+      !isLoading && nft && nft.creators[0].account.replace("ETHEREUM:", ""),
+  });
+
   if (isLoading) {
     return <p>loading...</p>;
   }
@@ -21,14 +26,6 @@ const NFT = () => {
   if (!nft || isError) {
     return <p>failed to fetch</p>;
   }
-  const [{ data: dataEns, error, loading }, lookupAddress] = useEnsLookup({
-    address:
-      !isLoading && nft && nft.creators[0].account.replace("ETHEREUM:", ""),
-  });
-
-  console.log(dataEns);
-
-  console.log(nft);
 
   return (
     <div>
@@ -81,25 +78,25 @@ const NFT = () => {
               <div>
                 <p className="text-gray-400">PRICE</p>
                 <p className="text-2xl">
-                  {!nft.bestSellOrder && "Not listed yet"}
-                  {nft.bestSellOrder &&
-                    Number(nft.bestSellOrder.makePrice).toLocaleString(
-                      "en-US",
-                      {
-                        minimumFractionDigits: 0,
-                      }
-                    ) &&
-                    " ETH"}
+                  {!nft.bestSellOrder
+                    ? "Not listed yet"
+                    : Number(nft.bestSellOrder.makePrice).toLocaleString(
+                        "en-US",
+                        {
+                          minimumFractionDigits: 0,
+                        }
+                      ) + " ETH"}
                 </p>
                 <p className="text-gray-400">
-                  {!nft.bestSellOrder ? "Come back soon" : " $"}
-                  {nft.bestSellOrder &&
-                    Number(nft.bestSellOrder.makePriceUsd).toLocaleString(
-                      "en-US",
-                      {
-                        minimumFractionDigits: 0,
-                      }
-                    )}
+                  {!nft.bestSellOrder
+                    ? "Come back soon"
+                    : "= $" +
+                      Number(nft.bestSellOrder.makePriceUsd).toLocaleString(
+                        "en-US",
+                        {
+                          minimumFractionDigits: 0,
+                        }
+                      )}
                 </p>
               </div>
               <div className="h-auto">
