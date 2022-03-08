@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { truncateEthAddress } from "utils/ethereum";
 import ReactMarkdown from "react-markdown";
 import Button from "components/Button";
-import { useEnsLookup } from "wagmi";
+import { useEnsLookup, useEnsAvatar } from "wagmi";
 import React, { useState } from "react";
 
 const NFT = () => {
@@ -22,7 +22,8 @@ const NFT = () => {
     return <p>failed to fetch</p>;
   }
   const [{ data: dataEns, error, loading }, lookupAddress] = useEnsLookup({
-    address: nft && nft.creators[0].account.replace("ETHEREUM:", ""),
+    address:
+      !isLoading && nft && nft.creators[0].account.replace("ETHEREUM:", ""),
   });
 
   console.log(dataEns);
@@ -50,14 +51,17 @@ const NFT = () => {
             <div className="prose mb-4 mt-4">
               {showMore
                 ? nft.meta.description
-                : `${nft.meta.description.substring(0, 250) + "..."}`}
+                : `${nft.meta.description.substring(0, 250)}`}
               {nft.meta.description.length > 250 && (
-                <button
-                  className="text-gray-400"
-                  onClick={() => setShowMore(!showMore)}
-                >
-                  &nbsp; {showMore ? "Show less" : "Show more"}
-                </button>
+                <div className="inline">
+                  <span>...</span>
+                  <button
+                    className="text-gray-400"
+                    onClick={() => setShowMore(!showMore)}
+                  >
+                    &nbsp; {showMore ? "Show less" : "Show more"}
+                  </button>
+                </div>
               )}
             </div>
             <div>
@@ -76,8 +80,27 @@ const NFT = () => {
             <div className="mt-8 flex items-center justify-between rounded-xl border border-gray-200 bg-white p-8 shadow-lg">
               <div>
                 <p className="text-gray-400">PRICE</p>
-                <p className="text-2xl">Not listed yet</p>
-                <p className="text-gray-400">Feature coming soon</p>
+                <p className="text-2xl">
+                  {!nft.bestSellOrder && "Not listed yet"}
+                  {nft.bestSellOrder &&
+                    Number(nft.bestSellOrder.makePrice).toLocaleString(
+                      "en-US",
+                      {
+                        minimumFractionDigits: 0,
+                      }
+                    ) &&
+                    " ETH"}
+                </p>
+                <p className="text-gray-400">
+                  {!nft.bestSellOrder ? "Come back soon" : " $"}
+                  {nft.bestSellOrder &&
+                    Number(nft.bestSellOrder.makePriceUsd).toLocaleString(
+                      "en-US",
+                      {
+                        minimumFractionDigits: 0,
+                      }
+                    )}
+                </p>
               </div>
               <div className="h-auto">
                 <Button variant="primary" disabled>
