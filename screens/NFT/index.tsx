@@ -4,11 +4,15 @@ import { useRouter } from "next/router";
 import { truncateEthAddress } from "utils/ethereum";
 import ReactMarkdown from "react-markdown";
 import Button from "components/Button";
+import { useEnsLookup } from "wagmi";
+import React, { useState } from "react";
 
 const NFT = () => {
   const router = useRouter();
   const { itemId, uid } = router.query;
   const { nft, isError, isLoading } = useNft(`ETHEREUM:${itemId}`);
+
+  const [showMore, setShowMore] = useState(false);
 
   if (isLoading) {
     return <p>loading...</p>;
@@ -17,12 +21,17 @@ const NFT = () => {
   if (!nft || isError) {
     return <p>failed to fetch</p>;
   }
+  const [{ data: dataEns, error, loading }, lookupAddress] = useEnsLookup({
+    address: nft && nft.creators[0].account.replace("ETHEREUM:", ""),
+  });
+
+  console.log(dataEns);
 
   console.log(nft);
 
   return (
     <div>
-      <div className="mb-6 inline-block rounded-full  text-gray-400 lg:mb-12">
+      <div className="mb-6 inline-block rounded-full bg-white px-4 py-2 text-gray-400 transition hover:bg-gray-100 lg:mb-12">
         <Link href={`/${uid}`}>
           <a>← Back to gallery</a>
         </Link>
@@ -37,9 +46,19 @@ const NFT = () => {
         </div>
         <div className="mt-12 w-full flex-1 pl-0 lg:mt-0 lg:max-w-lg lg:pl-12">
           <div className="mb-4">
-            <h2 className="mb-2 text-3xl">{nft.meta.name}</h2>
+            <h2 className="mb-2 text-4xl">{nft.meta.name}</h2>
             <div className="prose mb-4 mt-4">
-              <ReactMarkdown>{nft.meta.description}</ReactMarkdown>
+              {showMore
+                ? nft.meta.description
+                : `${nft.meta.description.substring(0, 250) + "..."}`}
+              {nft.meta.description.length > 250 && (
+                <button
+                  className="text-gray-400"
+                  onClick={() => setShowMore(!showMore)}
+                >
+                  &nbsp; {showMore ? "Show less" : "Show more"}
+                </button>
+              )}
             </div>
             <div>
               <a
@@ -57,18 +76,20 @@ const NFT = () => {
             <div className="mt-8 flex items-center justify-between rounded-xl border border-gray-200 bg-white p-8 shadow-lg">
               <div>
                 <p className="text-gray-400">PRICE</p>
-                <p className="text-3xl">3.00 ETH</p>
-                <p className="text-gray-400">= $3,500</p>
+                <p className="text-2xl">Not listed yet</p>
+                <p className="text-gray-400">Feature coming soon</p>
               </div>
               <div className="h-auto">
-                <Button variant="primary">Buy now</Button>
+                <Button variant="primary" disabled>
+                  Buy now
+                </Button>
               </div>
             </div>
           </div>
           <div className="mt-12">
             <p className="font-medium">Created by</p>
-            <div className="mt-2 flex">
-              <div className="h-8 w-8 items-center rounded-full bg-blue-700"></div>
+            <div className="mt-2 flex items-center">
+              <div className="h-8 w-8 rounded-full bg-gradient-to-r from-blue-700 to-red-200"></div>
               <a
                 href={`https://rarible.com/user/${nft.creators[0].account.replace(
                   "ETHEREUM:",
@@ -78,9 +99,11 @@ const NFT = () => {
                 rel="noopener noreferrer"
                 className="ml-2"
               >
-                {truncateEthAddress(
-                  nft.creators[0].account.replace("ETHEREUM:", "")
-                )}
+                {!dataEns &&
+                  truncateEthAddress(
+                    nft.creators[0].account.replace("ETHEREUM:", "")
+                  )}
+                {dataEns}
               </a>
             </div>
           </div>
@@ -108,12 +131,20 @@ const NFT = () => {
             <ul>
               <li className="mb-6 flex justify-between">
                 <p className="font-medium">Contract address</p>
-                <div className="flex">
+
+                <a
+                  className="flex"
+                  href={`https://etherscan.io/address/${nft.contract.replace(
+                    "ETHEREUM:",
+                    ""
+                  )}`}
+                  target="_blank"
+                >
                   <p>
                     {truncateEthAddress(nft.contract.replace("ETHEREUM:", ""))}
                   </p>
                   <img src="/arrow-up-right.svg" className="ml-2 h-6 w-6"></img>
-                </div>
+                </a>
               </li>
               <li className="mb-6 flex justify-between">
                 <p className="font-medium">Token ID</p>
