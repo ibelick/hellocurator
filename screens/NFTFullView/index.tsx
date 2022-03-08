@@ -1,31 +1,23 @@
-import useNft from "hooks/useNft";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { truncateEthAddress } from "utils/ethereum";
 import ReactMarkdown from "react-markdown";
 import Button from "components/Button";
-import { useEnsLookup, useEnsAvatar } from "wagmi";
+import { useEnsLookup } from "wagmi";
 import React, { useState } from "react";
+import type { NFT } from "types/rarible";
 
-const NFT = () => {
+export interface NFTFullViewProps {
+  nft: NFT;
+}
+
+const NFTFullView: React.FC<NFTFullViewProps> = ({ nft }) => {
   const router = useRouter();
-  const { itemId, uid } = router.query;
-  const { nft, isError, isLoading } = useNft(`ETHEREUM:${itemId}`);
-
+  const { uid } = router.query;
   const [showMore, setShowMore] = useState(false);
-
-  const [{ data: dataEns, error, loading }, lookupAddress] = useEnsLookup({
-    address:
-      !isLoading && nft && nft.creators[0].account.replace("ETHEREUM:", ""),
+  const [{ data: dataEns }] = useEnsLookup({
+    address: nft ? nft.creators[0].account.replace("ETHEREUM:", "") : undefined,
   });
-
-  if (isLoading) {
-    return <p>loading...</p>;
-  }
-
-  if (!nft || isError) {
-    return <p>failed to fetch</p>;
-  }
 
   return (
     <div>
@@ -35,9 +27,9 @@ const NFT = () => {
         </Link>
       </div>
       <div className="flex flex-col pb-12 lg:flex-row">
-        <div className="flex flex-1 justify-center">
+        <div className="flex flex-1 items-start justify-center">
           <img
-            className="max-h-screen w-full object-contain"
+            className="max-h-screen w-full max-w-xl object-contain"
             src={nft.meta?.content[0].url}
             alt={nft.meta.name}
           />
@@ -46,17 +38,18 @@ const NFT = () => {
           <div className="mb-4">
             <h2 className="mb-2 text-4xl">{nft.meta.name}</h2>
             <div className="prose mb-4 mt-4">
-              {showMore
-                ? nft.meta.description
-                : `${nft.meta.description.substring(0, 250)}`}
+              {showMore ? (
+                <ReactMarkdown>{nft.meta.description}</ReactMarkdown>
+              ) : (
+                `${nft.meta.description.substring(0, 250)}... ${" "}`
+              )}
               {nft.meta.description.length > 250 && (
                 <div className="inline">
-                  <span>...</span>
                   <button
                     className="text-gray-400"
                     onClick={() => setShowMore(!showMore)}
                   >
-                    &nbsp; {showMore ? "Show less" : "Show more"}
+                    {showMore ? "Show less" : "Show more"}
                   </button>
                 </div>
               )}
@@ -90,20 +83,24 @@ const NFT = () => {
                 <p className="text-gray-400">
                   {!nft.bestSellOrder
                     ? "Come back soon"
-                    : "= $" +
+                    : "= " +
                       Number(nft.bestSellOrder.makePriceUsd).toLocaleString(
                         "en-US",
                         {
+                          style: "currency",
+                          currency: "USD",
                           minimumFractionDigits: 0,
                         }
                       )}
                 </p>
               </div>
-              <div className="h-auto">
-                <Button variant="primary" disabled>
-                  Buy now
-                </Button>
-              </div>
+              {nft.bestSellOrder ? (
+                <div className="h-auto">
+                  <Button variant="primary" disabled>
+                    Buy now
+                  </Button>
+                </div>
+              ) : null}
             </div>
           </div>
           <div className="mt-12">
@@ -119,11 +116,11 @@ const NFT = () => {
                 rel="noopener noreferrer"
                 className="ml-2"
               >
-                {!dataEns &&
-                  truncateEthAddress(
-                    nft.creators[0].account.replace("ETHEREUM:", "")
-                  )}
-                {dataEns}
+                {!dataEns
+                  ? truncateEthAddress(
+                      nft.creators[0].account.replace("ETHEREUM:", "")
+                    )
+                  : dataEns}
               </a>
             </div>
           </div>
@@ -184,11 +181,11 @@ const NFT = () => {
                 PROPERTIES
               </p>
               <div className="mb-4 flex flex-wrap gap-4">
-                {nft.meta.attributes.map((attribute) => {
+                {nft.meta.attributes.map((attribute, index) => {
                   return (
                     <div
                       className="flex flex-col rounded bg-gray-100 p-4 "
-                      key={attribute.key}
+                      key={`${attribute.key}-${index}`}
                     >
                       <span className="font-medium text-gray-400">
                         {attribute.key}
@@ -206,4 +203,4 @@ const NFT = () => {
   );
 };
 
-export default NFT;
+export default NFTFullView;
