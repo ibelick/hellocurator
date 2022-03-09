@@ -4,9 +4,13 @@ import { SellRequest } from "@rarible/protocol-ethereum-sdk/build/order/sell";
 import { Order } from "@rarible/ethereum-api-client";
 
 export const getItemById = async (itemId: string) => {
-  const response = await fetch(`https://api.rarible.org/v0.1/items/${itemId}`, {
-    method: "GET",
-  });
+  // staging     `https://api.rarible.org/v0.1/items/${params}`,
+  const response = await fetch(
+    `https://api-staging.rarible.org/v0.1/items/${itemId}`,
+    {
+      method: "GET",
+    }
+  );
   const nft = await response.json();
 
   return nft;

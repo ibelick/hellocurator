@@ -7,7 +7,6 @@ import Dialog from "components/Dialog";
 import type { NFT } from "types/rarible";
 import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
-import useRarible from "hooks/useRarible";
 
 interface DialogSubmitNFTProps {
   setCreateProposalReceiptId: (createProposalReceiptId: string) => void;
@@ -18,24 +17,6 @@ const DialogSubmitNFT: React.FC<DialogSubmitNFTProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [{ data: accountData }] = useAccount();
-  const { sellOrder } = useRarible();
-
-  // return (
-  //   <Button
-  //     type="button"
-  //     disabled={!Boolean(accountData?.address)}
-  //     onClick={() =>
-  //       sellOrder(
-  //         "0xa857abd882d4f4a5f2e2a7e23c2ab5c34637012a",
-  //         "314",
-  //         "0xcE9798d145cA63B5FdE24f651cC29B1C4fa07744",
-  //         "10000000000000000"
-  //       )
-  //     }
-  //   >
-  //     Submit a NFT
-  //   </Button>
-  // );
 
   return (
     <Dialog
@@ -111,7 +92,7 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({
     setIsNftFetched(false);
     try {
       const response = await fetch(
-        // staging
+        // staging     `https://api.rarible.org/v0.1/items/${params}`,
         `https://api-staging.rarible.org/v0.1/items/${params}`,
         {
           method: "GET",
