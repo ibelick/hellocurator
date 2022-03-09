@@ -3,7 +3,8 @@ import Button from "components/Button";
 import Dialog from "components/Dialog";
 import useRarible from "hooks/useRarible";
 import NumberInput from "components/NumberInput";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
+import usePrice from "hooks/usePrice";
 
 interface DialogSellNFTProps {
   contractAddress: string;
@@ -12,7 +13,7 @@ interface DialogSellNFTProps {
 }
 
 type FormValues = {
-  nftLink: string;
+  price: string;
 };
 
 const DialogSellNFT: React.FC<DialogSellNFTProps> = ({
@@ -22,31 +23,26 @@ const DialogSellNFT: React.FC<DialogSellNFTProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { sellOrder } = useRarible();
-  const { register, handleSubmit } = useForm<FormValues>();
+  const { register, handleSubmit, watch } = useForm<FormValues>();
+  const { data: priceEth, isLoading: isPriceEthLoading } = usePrice(
+    "ethereum",
+    "usd"
+  );
+  const { price } = watch();
+  const priceInUsd =
+    isPriceEthLoading && !price ? 0 : Number(price) * priceEth?.ethereum?.usd;
 
-  useEffect(() => {
-    const fetchEthPrice = async () => {
-      const response = await fetch(
-        `https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd`,
-        {
-          method: "GET",
-        }
-      );
+  const putOnSale: SubmitHandler<FormValues> = (data) => {
+    console.log("data", data);
 
-      if (!response.ok) {
-        throw new Error("Something went wrong");
-      }
+    const order = sellOrder(
+      contractAddress,
+      tokenId,
+      sellerAddress,
+      "10000000000000000"
+    );
 
-      const data = await response.json();
-
-      console.log("data", data);
-    };
-
-    fetchEthPrice();
-  }, []);
-
-  const putOnSale = () => {
-    sellOrder(contractAddress, tokenId, sellerAddress, "10000000000000000");
+    console.log("order", order);
   };
 
   return (
@@ -72,11 +68,18 @@ const DialogSellNFT: React.FC<DialogSellNFTProps> = ({
               label="Enter ETH price"
               placeholder="0.1 Ξ"
               register={register}
-              min={0.00001}
-              step={0.00001}
+              min={"0.00001"}
+              step={"0.00001"}
               required
             />
-            <div className="text-right">Total = $</div>
+            <div className="text-right">
+              Total ={" "}
+              {Number(priceInUsd).toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+                minimumFractionDigits: 0,
+              })}
+            </div>
             <div className="mt-2">
               <span className="text-gray-600">
                 Service fee <span className="font-medium text-black">2.5%</span>

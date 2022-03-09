@@ -4,9 +4,9 @@ interface TextInput {
   required: boolean;
   placeholder?: string;
   id?: string;
-  min?: number;
-  max?: number;
-  step?: number;
+  min?: string | number;
+  max?: string | number;
+  step?: string | number;
 }
 
 const TextInput: React.FC<TextInput> = ({
