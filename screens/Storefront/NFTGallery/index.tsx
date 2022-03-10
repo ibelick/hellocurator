@@ -1,6 +1,7 @@
 import useNft from "hooks/useNft";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Button from "components/Button";
 
 const NFTGallery: React.FC<{ assetsIds?: (string | undefined)[] }> = ({
   assetsIds,
@@ -31,21 +32,42 @@ const DisplayNFT: React.FC<{ assetId: string }> = ({ assetId }) => {
   if (isLoading) return null;
 
   return (
-    <div className="mb-6 flex break-inside-avoid flex-col overflow-hidden">
+    <div className="mb-6 flex break-inside-avoid flex-col overflow-hidden rounded-xl border border-gray-200 shadow-lg">
       {nft?.meta?.content?.[0]["@type"] === "IMAGE" ? (
         <div className="flex h-full w-full items-center justify-center">
           <Link href={`/${uid}/${assetId.replace("ETHEREUM:", "")}`}>
-            <a>
+            <a className="">
               <img
                 src={nft?.meta?.content[0].url}
                 alt={nft?.meta.name}
-                className="max-h-full max-w-full"
+                className="h-64 object-contain"
               />
             </a>
           </Link>
         </div>
       ) : null}
-      <span className="mt-2">{nft?.meta?.name}</span>
+      <div className="flex items-center justify-between px-6 py-4">
+        <div className="">
+          <span className="font-medium">
+            {nft?.meta?.name.substring(0, 20) + "..."}
+          </span>
+          <p className="text-gray-400">Curated by john.eth</p>
+        </div>
+        <div className="">
+          {!nft?.bestSellOrder ? (
+            <Button variant="primary" disabled>
+              Not listed
+            </Button>
+          ) : (
+            <Button variant="primary">
+              Buy for{" "}
+              {Number(nft?.bestSellOrder.makePrice).toLocaleString("en-US", {
+                minimumFractionDigits: 0,
+              }) + " ETH"}
+            </Button>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
