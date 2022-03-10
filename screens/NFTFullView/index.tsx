@@ -222,6 +222,7 @@ const CardCTA: React.FC<CardCTAProps> = ({
           </>
         ) : (
           <>
+            {/* @todo: remove from sale */}
             <DialogSellNFT
               contractAddress={contractAddress}
               tokenId={tokenId}

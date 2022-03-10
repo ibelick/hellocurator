@@ -46,14 +46,6 @@ export const createSellOrder = async (
         value: number;
       }[]
 ): Promise<Order> => {
-  // const contractErc721Address: Address = toAddress(
-  //   "0xa857abd882d4f4a5f2e2a7e23c2ab5c34637012a"
-  // ); // your ERC721 contract address
-  // const tokenId = toBigNumber("314"); // the ERC721 Id of the token on which we want to place a bid
-  // const sellerAddress: Address = toAddress(
-  //   "0xcE9798d145cA63B5FdE24f651cC29B1C4fa07744"
-  // ); // Owner of ERC721 token
-
   const request: SellRequest = {
     makeAssetType: {
       assetClass: "ERC721",
@@ -82,7 +74,6 @@ export const createSellOrder = async (
     //   },
     // ],
     payouts: [],
-    // price: 10000000000000000,
     price,
     takeAssetType: {
       assetClass: "ETH",

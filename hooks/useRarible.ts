@@ -13,6 +13,7 @@ const useRarible = () => {
     const web3Ethereum = new Web3Ethereum({
       web3: web3,
     });
+    // staging
     const env = "rinkeby";
     const sdk = createRaribleSdk(web3Ethereum, env);
     setSdk(sdk);
@@ -33,7 +34,7 @@ const useRarible = () => {
       return;
     }
 
-    createSellOrder(
+    const order = createSellOrder(
       sdk,
       contractAddress,
       tokenId,
@@ -41,6 +42,8 @@ const useRarible = () => {
       price,
       originFees
     );
+
+    return order;
   };
 
   return {
