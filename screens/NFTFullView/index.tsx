@@ -37,23 +37,27 @@ const NFTFullView: React.FC<NFTFullViewProps> = ({ nft }) => {
         <div className="mt-12 w-full flex-1 pl-0 lg:mt-0 lg:max-w-lg lg:pl-12">
           <div className="mb-4">
             <h2 className="mb-2 text-4xl">{nft.meta.name}</h2>
-            <div className="prose mb-4 mt-4">
-              {showMore ? (
-                <ReactMarkdown>{nft.meta.description}</ReactMarkdown>
-              ) : (
-                `${nft.meta.description.substring(0, 250)}... ${" "}`
-              )}
-              {nft.meta.description.length > 250 && (
-                <div className="inline">
-                  <button
-                    className="text-gray-400"
-                    onClick={() => setShowMore(!showMore)}
-                  >
-                    {showMore ? "Show less" : "Show more"}
-                  </button>
-                </div>
-              )}
-            </div>
+            {nft.meta.description ? (
+              <div className="prose mb-4 mt-4">
+                {showMore ? (
+                  <ReactMarkdown>{nft.meta.description}</ReactMarkdown>
+                ) : (
+                  `${nft.meta.description.substring(0, 250)}${
+                    nft.meta.description.length > 250 ? `...` : ``
+                  } ${" "}`
+                )}
+                {nft.meta.description.length > 250 && (
+                  <div className="inline">
+                    <button
+                      className="text-gray-400"
+                      onClick={() => setShowMore(!showMore)}
+                    >
+                      {showMore ? "Show less" : "Show more"}
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : null}
             <div>
               <a
                 href={`https://rarible.com/token/${nft.id.replace(

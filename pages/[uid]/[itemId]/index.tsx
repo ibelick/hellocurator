@@ -52,7 +52,10 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
       );
     })
     .map((proposal) => {
-      return proposal.title.match(/ETHEREUM\S+/g)?.[0].replace("ETHEREUM:", "");
+      return proposal.title
+        .match(/ETHEREUM\S+/g)?.[0]
+        .replace("ETHEREUM:", "")
+        .replace("/", "");
     });
 
   const paths = assetsIds.map((itemId) => {

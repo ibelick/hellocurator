@@ -19,7 +19,7 @@ export interface Content {
 
 export interface Meta {
   name: string;
-  description: string;
+  description?: string;
   attributes: any[];
   content: Content[];
   restrictions: any[];
