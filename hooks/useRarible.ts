@@ -1,8 +1,9 @@
-import { createSellOrder } from "lib/nft";
+import { createSellOrder, removeFromSellOrder } from "lib/nft";
 import { useEffect, useState } from "react";
 import Web3 from "web3";
 import { Web3Ethereum } from "@rarible/web3-ethereum";
 import { createRaribleSdk, RaribleSdk } from "@rarible/protocol-ethereum-sdk";
+import { SimpleOrder } from "@rarible/protocol-ethereum-sdk/build/order/types";
 
 const useRarible = () => {
   const [sdk, setSdk] = useState<RaribleSdk | null>(null);
@@ -46,8 +47,19 @@ const useRarible = () => {
     return order;
   };
 
+  const removeSell = (orders: SimpleOrder) => {
+    if (!sdk) {
+      return;
+    }
+
+    const order = removeFromSellOrder(sdk, orders);
+
+    return order;
+  };
+
   return {
     sellOrder,
+    removeSell,
   };
 };
 

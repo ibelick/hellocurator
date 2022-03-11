@@ -8,6 +8,7 @@ import React, { useState } from "react";
 import type { NFT } from "types/rarible";
 import { useAccount } from "wagmi";
 import DialogSellNFT from "./DialogSellNFT";
+import DialogRemoveSell from "./DialogRemoveSell";
 
 export interface NFTFullViewProps {
   nft: NFT;
@@ -193,36 +194,40 @@ const CardCTA: React.FC<CardCTAProps> = ({
   return (
     <div className="mt-8 flex items-center justify-between rounded-xl border border-gray-200 bg-white p-8 shadow-lg">
       <div className="flex flex-col items-start">
-        {!isUserNft ? (
+        <p className="text-gray-400">PRICE</p>
+        {!makePrice ? (
           <>
-            <p className="text-gray-400">PRICE</p>
-            {!makePrice ? (
-              <>
-                <p className="text-2xl">Not listed yet</p>
-                <p className="text-gray-400">Come back soon</p>
-              </>
-            ) : (
-              <>
-                <p className="text-2xl">
-                  {`${Number(makePrice).toLocaleString("en-US", {
-                    minimumFractionDigits: 0,
-                  })} ETH`}
-                </p>
-                {!makePriceUsd ? null : (
-                  <p className="text-gray-400">{`= ${Number(
-                    makePriceUsd
-                  ).toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                    minimumFractionDigits: 0,
-                  })}`}</p>
-                )}
-              </>
-            )}
+            <p className="text-2xl">Not listed yet</p>
+            <p className="text-gray-400">Come back soon</p>
           </>
         ) : (
           <>
-            {/* @todo: remove from sale */}
+            <p className="text-2xl">
+              {`${Number(makePrice).toLocaleString("en-US", {
+                minimumFractionDigits: 0,
+              })} ETH`}
+            </p>
+            {!makePriceUsd ? null : (
+              <p className="text-gray-400">{`= ${Number(
+                makePriceUsd
+              ).toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+                minimumFractionDigits: 0,
+              })}`}</p>
+            )}
+          </>
+        )}
+      </div>
+      <div className="flex flex-col">
+        {!isUserNft ? (
+          <div className="h-auto">
+            <Button variant="primary" disabled>
+              Buy now
+            </Button>
+          </div>
+        ) : !makePrice ? (
+          <>
             <DialogSellNFT
               contractAddress={contractAddress}
               tokenId={tokenId}
@@ -232,15 +237,13 @@ const CardCTA: React.FC<CardCTAProps> = ({
               This NFT is in your wallet
             </span>
           </>
+        ) : (
+          <DialogRemoveSell
+            contractAddress={contractAddress}
+            tokenId={tokenId}
+          />
         )}
       </div>
-      {makePrice ? (
-        <div className="h-auto">
-          <Button variant="primary" disabled>
-            Buy now
-          </Button>
-        </div>
-      ) : null}
     </div>
   );
 };

@@ -2,6 +2,7 @@ import { RaribleSdk } from "@rarible/protocol-ethereum-sdk";
 import { toAddress, toBigNumber } from "@rarible/types";
 import { SellRequest } from "@rarible/protocol-ethereum-sdk/build/order/sell";
 import { Order } from "@rarible/ethereum-api-client";
+import { SimpleOrder } from "@rarible/protocol-ethereum-sdk/build/order/types";
 
 export const getItemById = async (itemId: string) => {
   // staging     `https://api.rarible.org/v0.1/items/${params}`,
@@ -16,21 +17,15 @@ export const getItemById = async (itemId: string) => {
   return nft;
 };
 
-// @todo: need API key from OpenSea to use it and retrieve severals NFTs in one request.
-export const getItemByIds = async () => {
+export const getItemOrders = async (contractId: string, tokenId: string) => {
   const response = await fetch(
-    "https://api.opensea.io/api/v1/assets?token_ids=%3Ftoken_ids%3D1%26token_ids%3D209&order_direction=desc&offset=0&limit=20",
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "X-API-KEY": "API_KEY",
-      },
-    }
+    // staging
+    `https://ethereum-api-staging.rarible.org/v0.1/order/orders/sell/byItem?contract=${contractId}&tokenId=${tokenId}`
   );
-  const nfts = await response.json();
+  // const response = await fetch(`https://api.rarible.org/v0.1/orders/${itemId}`);
+  const order = await response.json();
 
-  return nfts;
+  return order;
 };
 
 // @todo: make it available for other contract type
@@ -81,6 +76,15 @@ export const createSellOrder = async (
   };
 
   const order: Order = await raribleSdk.order.sell(request);
+
+  return order;
+};
+
+export const removeFromSellOrder = async (
+  raribleSdk: RaribleSdk,
+  sellOrder: SimpleOrder
+) => {
+  const order = await raribleSdk.order.cancel(sellOrder);
 
   return order;
 };

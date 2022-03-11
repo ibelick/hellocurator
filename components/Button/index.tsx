@@ -1,7 +1,7 @@
 import Spinner from "../Spinner";
 
 interface ButtonProps extends React.ComponentPropsWithoutRef<"button"> {
-  variant?: string;
+  variant?: "primary" | "secondary" | "tertiary";
   size?: string;
   disabled?: boolean;
   isLoading?: boolean;
@@ -20,6 +20,7 @@ const Button: React.FC<ButtonProps> = ({
   isLoading,
   type,
   isBlock,
+  onClick,
   ...props
 }) => {
   return (
@@ -31,7 +32,8 @@ const Button: React.FC<ButtonProps> = ({
         props.disabled
           ? `cursor-not-allowed bg-gray-400 text-gray-100 hover:bg-gray-400`
           : null
-      }`}
+      } ${isLoading ? `cursor-default` : ``}`}
+      onClick={isLoading ? undefined : onClick}
       {...props}
     >
       <>
