@@ -24,7 +24,7 @@ const DialogSubmitNFT: React.FC<DialogSubmitNFTProps> = ({
       isOpen={isOpen}
       trigger={
         <Button type="button" disabled={!Boolean(accountData?.address)}>
-          Submit a NFT
+          Submit an NFT
         </Button>
       }
     >
@@ -184,15 +184,6 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({
               required
             />
           </div>
-          {/* <div className="mb-4">
-            <TextInput
-              id="nftId"
-              label="NFT ID"
-              register={register}
-              placeholder="Enter the NFT id"
-              required
-            />
-          </div> */}
           <Button
             type="button"
             onClick={fetchNftsWithRarible}
