@@ -55,8 +55,7 @@ export const createProposal = async (
     type: "single-choice",
     title: `${urlIpfsUrl}`,
     body: `title: ${title}
-
-    ${description ? `description: ${description}` : null}
+    description: ${description}
     `,
     choices: ["🔥", "👎"],
     start: Math.floor(Date.now() / 1000),

@@ -47,7 +47,7 @@ const Dialog: React.FC<DialogProps> = ({
           >
             <DialogPrimitive.Content
               forceMount
-              className="fixed top-[50%] left-[50%] z-50 w-[95vw] max-w-md -translate-x-[50%] -translate-y-[50%] rounded-lg border border-gray-200 bg-white p-10 font-display shadow-xl focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75 md:w-full"
+              className="fixed top-[50%] left-[50%] z-50 max-h-full w-[95vw] max-w-md -translate-x-[50%] -translate-y-[50%] overflow-x-auto rounded-lg border border-gray-200 bg-white p-10 font-display shadow-xl focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75 md:w-full"
             >
               {children}
               <DialogPrimitive.Close className="absolute top-5 right-5">

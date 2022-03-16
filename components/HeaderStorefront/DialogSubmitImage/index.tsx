@@ -7,6 +7,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import TextInput from "components/TextInput";
 import FileInput from "components/FileInput";
 import { createProposal } from "lib/snapshot";
+import Textarea from "components/Textarea";
 
 // @ts-ignore
 const client = create("https://ipfs.infura.io:5001/api/v0");
@@ -88,7 +89,7 @@ const FormSubmitImage = () => {
           />
         </div>
         <div className="mb-4">
-          <TextInput
+          <Textarea
             id="description"
             label="Description (Optional)"
             placeholder={`e.g. "my cat name is Marcel, I love him"`}
