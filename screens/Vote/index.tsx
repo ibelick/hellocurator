@@ -86,6 +86,11 @@ const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
   if (isProposalsLoading) return null;
   if (error) return <p>Error :(</p>;
 
+  // @todo: prevent fetching test proposal for submit image, remove later
+  const proposals = data.proposals.filter((proposal: Proposals) =>
+    proposal.title.startsWith("Add the NFT")
+  );
+
   return (
     <div>
       <div className="mb-4 flex-none items-center justify-between rounded-xl bg-gray-50 p-8 md:flex">
@@ -116,7 +121,7 @@ const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
         </div>
       </div>
       <ul className="columns-1 sm:columns-2 md:columns-3">
-        {data.proposals?.map((proposal: Proposals) => {
+        {proposals?.map((proposal: Proposals) => {
           return (
             <Proposal
               key={proposal.id}
