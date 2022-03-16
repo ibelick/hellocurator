@@ -1,7 +1,7 @@
 interface TextInput {
   label: string;
   register: any;
-  required: boolean;
+  required?: boolean;
   placeholder?: string;
   id?: string;
 }

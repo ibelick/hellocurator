@@ -1,5 +1,5 @@
 import Link from "next/link";
-import DialogSubmitNFT from "./DialogSubmitNFT";
+import DialogSubmitImage from "./DialogSubmitImage";
 import { useRouter } from "next/router";
 
 export interface SpaceInfo {
@@ -32,9 +32,7 @@ const HeaderStorefront: React.FC<HeaderStorefrontProps> = ({
           <h2 className="text-base text-gray-400">{info.id}</h2>
         </div>
         <div className="flex items-center">
-          <DialogSubmitNFT
-            setCreateProposalReceiptId={setCreateProposalReceiptId!}
-          />
+          <DialogSubmitImage />
         </div>
       </div>
       <div className="mb-4 flex w-full justify-center">

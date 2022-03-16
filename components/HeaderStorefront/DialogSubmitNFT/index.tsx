@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createProposal } from "lib/snapshot";
+import { oldCreateProposal } from "lib/snapshot";
 import TextInput from "components/TextInput";
 import Button from "components/Button";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -125,7 +125,7 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({
     }
 
     try {
-      const receipt = await createProposal(itemId);
+      const receipt = await oldCreateProposal(itemId);
 
       if (receipt) {
         setIsNftSubmited(true);
