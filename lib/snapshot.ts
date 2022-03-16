@@ -53,11 +53,11 @@ export const createProposal = async (
   const receipt = await client.proposal(web3, account, {
     space: "loopclub.eth",
     type: "single-choice",
-    title: `${urlIpfsUrl}`,
-    body: `title: ${title}
-    description: ${description}
+    title: `${title}`,
+    body: `${urlIpfsUrl}
+    ${description}
     `,
-    choices: ["🔥", "👎"],
+    choices: ["+1"],
     start: Math.floor(Date.now() / 1000),
     end: Math.floor((Date.now() + 86400000) / 1000),
     snapshot: 14300331,

@@ -1,8 +1,6 @@
 import { castVote, getVotingPower, loopclubStrategies } from "lib/snapshot";
 import { Proposals } from "types/snapshot";
-import useNft from "hooks/useNft";
 import IconButton from "components/IconButton";
-import Progress from "components/Progress";
 import HeaderStorefront from "components/HeaderStorefront";
 import type { SpaceInfo } from "components/HeaderStorefront";
 import { useQuery } from "@apollo/client";
@@ -11,7 +9,6 @@ import { useRouter } from "next/router";
 import useVote from "hooks/useVote";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
-import Link from "next/link";
 
 export interface VoteProps {
   info: SpaceInfo;
@@ -86,9 +83,9 @@ const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
   if (isProposalsLoading) return null;
   if (error) return <p>Error :(</p>;
 
-  // @todo: prevent fetching test proposal for submit image, remove later
-  const proposals = data.proposals.filter((proposal: Proposals) =>
-    proposal.title.startsWith("Add the NFT")
+  // @todo: fetching proposal image, remove later
+  const proposals = data.proposals.filter(
+    (proposal: Proposals) => !proposal.title.startsWith("Add the NFT")
   );
 
   return (
@@ -161,46 +158,41 @@ const Proposal: React.FC<{ proposal: Proposals; userVotingPower: number }> = ({
   const remainingTime = timeBetweenDates(voteEnd, today);
   const [voteReceiptId, setVoteReceiptId] = useState<string | null>(null);
 
+  const imgLink = proposal.body.match(/\bhttps?:\/\/\S+/gi)?.[0];
+  const description = imgLink && proposal.body.replace(imgLink, "").trim();
+
   return (
     <li className="mb-6 break-inside-avoid">
       <div className="flex flex-col items-start justify-between rounded-xl bg-gray-50 p-4">
-        <div>
-          <NFTInfo itemId={proposal.title.match(/ETHEREUM\S+/g)?.[0]} />
-        </div>
-        <Votes
-          choices={proposal.choices}
-          proposalId={proposal.id}
-          voteReceiptId={voteReceiptId}
-        />
-        <div className="mb-4 flex w-full justify-center gap-4">
-          {proposal.choices.map((choice, index: number) => {
-            return (
-              <IconButton
-                disabled={userVotingPower === 0}
-                onClick={async () => {
-                  const receipt = await castVote(proposal.id, index + 1);
-                  // @ts-ignore
-                  setVoteReceiptId(receipt.id as string);
-                }}
-                icon={
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="56"
-                    height="56"
-                    viewBox="0 0 56 56"
-                  >
-                    <text y="34" x="19">
-                      {choice}
-                    </text>
-                  </svg>
-                }
-                key={`${index}-${choice}`}
-              />
-            );
-          })}
-        </div>
-        <div className="w-full text-center">
-          <p className="text-sm text-slate-400">Vote ends in {remainingTime}</p>
+        <img src={imgLink} alt={proposal.title} />
+        <span className="my-2 font-medium">{proposal.title}</span>
+        <div className="whitespace-pre-line">{description}</div>
+        <div className="flex w-full items-center justify-between">
+          <Votes
+            choices={proposal.choices}
+            proposalId={proposal.id}
+            voteReceiptId={voteReceiptId}
+          />
+          <IconButton
+            disabled={userVotingPower === 0}
+            onClick={async () => {
+              const receipt = await castVote(proposal.id, 1);
+              // @ts-ignore
+              setVoteReceiptId(receipt.id as string);
+            }}
+            icon={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="56"
+                height="56"
+                viewBox="0 0 56 56"
+              >
+                <text y="34" x="19">
+                  {proposal.choices[0]}
+                </text>
+              </svg>
+            }
+          />
         </div>
       </div>
     </li>
@@ -212,72 +204,16 @@ const Votes: React.FC<{
   proposalId: string;
   voteReceiptId?: string | null;
 }> = ({ choices, proposalId, voteReceiptId }) => {
-  const { choiceWithVotingPower, totalVotingPower } = useVote(
-    proposalId,
-    choices,
-    voteReceiptId
-  );
+  const { choiceWithVotingPower } = useVote(proposalId, choices, voteReceiptId);
+
+  const votingPower =
+    choiceWithVotingPower &&
+    Math.round(choiceWithVotingPower?.[0].votingPower * 10000) / 10000;
 
   return (
-    <div className="w-full">
-      {choices?.map((choice, index: number) => {
-        const votingPower =
-          choiceWithVotingPower &&
-          Math.round(choiceWithVotingPower?.[index].votingPower * 10000) /
-            10000;
-        const label = choiceWithVotingPower
-          ? `${choiceWithVotingPower?.[index].label} ${votingPower} ${loopclubStrategies[0].params.symbol}`
-          : undefined;
-        const value =
-          totalVotingPower && choiceWithVotingPower
-            ? (Math.round(
-                (100 * choiceWithVotingPower?.[index].votingPower) /
-                  totalVotingPower
-              ) *
-                100) /
-              100
-            : 0;
-
-        return (
-          <div key={`${index}-${choice}`} className="mb-4">
-            <Progress value={value} label={label} />
-          </div>
-        );
-      })}
-    </div>
-  );
-};
-
-const NFTInfo: React.FC<{ itemId?: string }> = ({ itemId }) => {
-  if (!itemId) {
-    return <p>failed to load.</p>;
-  }
-
-  const { nft, isError, isLoading } = useNft(itemId);
-
-  if (isLoading) {
-    return null;
-  }
-
-  if (isError || !nft) {
-    return null;
-  }
-
-  return (
-    <div className="flex flex-col">
-      <Link
-        href={`https://rarible.com/token/${nft.id.replace("ETHEREUM:", "")}`}
-      >
-        <a target="_blank" rel="noopener noreferrer">
-          <img
-            className="h-full w-full rounded"
-            src={nft.meta.content[0].url}
-            alt={nft.meta.name}
-          />
-        </a>
-      </Link>
-      <p className="my-2 font-medium">{nft.meta.name}</p>
-    </div>
+    <span className="font-medium">
+      {votingPower} {loopclubStrategies[0].params.symbol}
+    </span>
   );
 };
 
