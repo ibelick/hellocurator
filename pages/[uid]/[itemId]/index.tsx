@@ -5,11 +5,11 @@ import type { Proposal } from "types/snapshot";
 import { ParsedUrlQuery } from "querystring";
 import { WHITELISTED_STOREFRONTS } from "utils/storefront";
 import { getItemById } from "lib/nft";
-import NFTFullView from "screens/NFTFullView";
-import type { NFTFullViewProps } from "screens/NFTFullView";
+import ItemFullView from "screens/ItemFullView";
+import type { ItemFullViewProps } from "screens/ItemFullView";
 
-const ItemPage: NextPage<NFTFullViewProps> = ({ nft }) => {
-  return <NFTFullView nft={nft} />;
+const ItemPage: NextPage<ItemFullViewProps> = ({ item }) => {
+  return <ItemFullView item={item} />;
 };
 
 interface Params extends ParsedUrlQuery {
@@ -17,16 +17,16 @@ interface Params extends ParsedUrlQuery {
   itemId?: string;
 }
 
-export const getStaticProps: GetStaticProps<NFTFullViewProps, Params> = async (
+export const getStaticProps: GetStaticProps<ItemFullViewProps, Params> = async (
   context
 ) => {
   const { itemId } = context.params!;
 
-  const nft = await getItemById(`ETHEREUM:${itemId}`);
+  const item = await getItemById(`ETHEREUM:${itemId}`);
 
   return {
     props: {
-      nft,
+      item,
     },
     revalidate: 60,
   };

@@ -8,19 +8,21 @@ import React, { useState } from "react";
 import type { NFT } from "types/rarible";
 import { useAccount } from "wagmi";
 
-export interface NFTFullViewProps {
-  nft: NFT;
+export interface ItemFullViewProps {
+  item: NFT;
 }
 
-const NFTFullView: React.FC<NFTFullViewProps> = ({ nft }) => {
+const ItemFullView: React.FC<ItemFullViewProps> = ({ item }) => {
   const router = useRouter();
   const { uid } = router.query;
   const [showMore, setShowMore] = useState(false);
   const [{ data: dataEns }] = useEnsLookup({
-    address: nft ? nft.creators[0].account.replace("ETHEREUM:", "") : undefined,
+    address: item
+      ? item.creators[0].account.replace("ETHEREUM:", "")
+      : undefined,
   });
-  const creatorAddress = nft.creators[0].account.replace("ETHEREUM:", "");
-  const contractAddress = nft.contract.replace("ETHEREUM:", "");
+  const creatorAddress = item.creators[0].account.replace("ETHEREUM:", "");
+  const contractAddress = item.contract.replace("ETHEREUM:", "");
 
   return (
     <div>
@@ -33,23 +35,23 @@ const NFTFullView: React.FC<NFTFullViewProps> = ({ nft }) => {
         <div className="flex flex-1 items-start justify-center">
           <img
             className="max-h-screen w-full max-w-xl object-contain"
-            src={nft.meta?.content[0].url}
-            alt={nft.meta.name}
+            src={item.meta?.content[0].url}
+            alt={item.meta.name}
           />
         </div>
         <div className="mt-12 w-full flex-1 pl-0 lg:mt-0 lg:max-w-lg lg:pl-12">
           <div className="mb-4">
-            <h2 className="mb-2 text-4xl">{nft.meta.name}</h2>
-            {nft.meta.description ? (
+            <h2 className="mb-2 text-4xl">{item.meta.name}</h2>
+            {item.meta.description ? (
               <div className="prose mb-4 mt-4">
                 {showMore ? (
-                  <ReactMarkdown>{nft.meta.description}</ReactMarkdown>
+                  <ReactMarkdown>{item.meta.description}</ReactMarkdown>
                 ) : (
-                  `${nft.meta.description.substring(0, 250)}${
-                    nft.meta.description.length > 250 ? `...` : ``
+                  `${item.meta.description.substring(0, 250)}${
+                    item.meta.description.length > 250 ? `...` : ``
                   } ${" "}`
                 )}
-                {nft.meta.description.length > 250 && (
+                {item.meta.description.length > 250 && (
                   <div className="inline">
                     <button
                       className="text-gray-400"
@@ -63,7 +65,7 @@ const NFTFullView: React.FC<NFTFullViewProps> = ({ nft }) => {
             ) : null}
             <div>
               <a
-                href={`https://rarible.com/token/${nft.id.replace(
+                href={`https://rarible.com/token/${item.id.replace(
                   "ETHEREUM:",
                   ""
                 )}`}
@@ -75,11 +77,9 @@ const NFTFullView: React.FC<NFTFullViewProps> = ({ nft }) => {
               </a>
             </div>
             <CardCTA
-              contractAddress={contractAddress}
-              tokenId={nft.tokenId}
               sellerAddress={creatorAddress}
-              makePrice={nft?.bestSellOrder?.makePrice}
-              makePriceUsd={nft?.bestSellOrder?.makePriceUsd}
+              makePrice={item?.bestSellOrder?.makePrice}
+              makePriceUsd={item?.bestSellOrder?.makePriceUsd}
             />
           </div>
           <div className="mt-12">
@@ -94,13 +94,13 @@ const NFTFullView: React.FC<NFTFullViewProps> = ({ nft }) => {
               >
                 {!dataEns
                   ? truncateEthAddress(
-                      nft.creators[0].account.replace("ETHEREUM:", "")
+                      item.creators[0].account.replace("ETHEREUM:", "")
                     )
                   : dataEns}
               </a>
             </div>
           </div>
-          {nft.owners.length ? (
+          {item.owners.length ? (
             <div className="mb-2">
               <p className="font-medium">Owned by</p>
               <a
@@ -115,7 +115,7 @@ const NFTFullView: React.FC<NFTFullViewProps> = ({ nft }) => {
           ) : null}
           <div className="mt-12">
             <p className="mb-4 text-sm font-medium text-gray-400">
-              NFT DETAILS
+              item DETAILS
             </p>
             <ul>
               <li className="mb-6 flex justify-between">
@@ -133,22 +133,22 @@ const NFTFullView: React.FC<NFTFullViewProps> = ({ nft }) => {
               <li className="mb-6 flex justify-between">
                 <p className="font-medium">Token ID</p>
                 <div className="flex">
-                  <p>{nft.tokenId}</p>
+                  <p>{item.tokenId}</p>
                 </div>
               </li>
               <li className="mb-6 flex justify-between">
                 <p className="font-medium">Blockchain</p>
-                <p>{nft.blockchain}</p>
+                <p>{item.blockchain}</p>
               </li>
             </ul>
           </div>
-          {nft.meta.attributes.length ? (
+          {item.meta.attributes.length ? (
             <div className="mt-12">
               <p className="mb-4  text-sm font-medium text-gray-400">
                 PROPERTIES
               </p>
               <div className="mb-4 flex flex-wrap gap-4">
-                {nft.meta.attributes.map((attribute, index) => {
+                {item.meta.attributes.map((attribute, index) => {
                   return (
                     <div
                       className="flex flex-col rounded bg-gray-100 p-4 "
@@ -171,16 +171,12 @@ const NFTFullView: React.FC<NFTFullViewProps> = ({ nft }) => {
 };
 
 interface CardCTAProps {
-  contractAddress: string;
-  tokenId: string;
   sellerAddress: string;
   makePrice?: string;
   makePriceUsd?: string;
 }
 
 const CardCTA: React.FC<CardCTAProps> = ({
-  contractAddress,
-  tokenId,
   sellerAddress,
   makePrice,
   makePriceUsd,
@@ -230,4 +226,4 @@ const CardCTA: React.FC<CardCTAProps> = ({
   );
 };
 
-export default NFTFullView;
+export default ItemFullView;
