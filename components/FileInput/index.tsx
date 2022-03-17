@@ -40,7 +40,7 @@ const FileInput: React.FC<FileInputProps> = ({
         {label}
       </label>
       <div
-        className={`relative flex h-48 items-center justify-center overflow-hidden rounded-lg border-2 border-dotted border-blue-700 bg-gray-100 transition-opacity ${
+        className={`relative flex h-48 items-center justify-center overflow-hidden rounded-lg border-2 border-dotted border-slate-700 bg-gray-100 transition-opacity ${
           image ? `hover:opacity-50` : ``
         }`}
       >

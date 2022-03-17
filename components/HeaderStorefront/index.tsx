@@ -1,6 +1,8 @@
 import Link from "next/link";
 import DialogSubmitImage from "./DialogSubmitImage";
 import { useRouter } from "next/router";
+import { useAccount } from "wagmi";
+import Button from "components/Button";
 
 export interface SpaceInfo {
   id: string;
@@ -19,6 +21,7 @@ const HeaderStorefront: React.FC<HeaderStorefrontProps> = ({
   const router = useRouter();
   const { uid } = router.query;
   const linkSelectedCn = `font-bold text-primary-800 underline decoration-primary-800 decoration-2 decoration-4 underline-offset-4`;
+  const [{ data: accountData }] = useAccount();
 
   return (
     <>
@@ -32,7 +35,13 @@ const HeaderStorefront: React.FC<HeaderStorefrontProps> = ({
           <h2 className="text-base text-gray-400">{info.id}</h2>
         </div>
         <div className="flex items-center">
-          <DialogSubmitImage />
+          <Link href={`/${uid}/create`}>
+            <a>
+              <Button type="button" disabled={!Boolean(accountData?.address)}>
+                Submit an image
+              </Button>
+            </a>
+          </Link>
         </div>
       </div>
       <div className="mb-4 flex w-full justify-center">

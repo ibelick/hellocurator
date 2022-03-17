@@ -16,7 +16,7 @@ const Textarea: React.FC<TextareaProps> = ({
   rows,
 }) => {
   return (
-    <div className="mb-3 xl:w-96">
+    <>
       <label
         className="mb-1 block text-sm uppercase text-gray-500"
         htmlFor={id}
@@ -30,7 +30,7 @@ const Textarea: React.FC<TextareaProps> = ({
         placeholder={placeholder}
         {...register(id, { required })}
       />
-    </div>
+    </>
   );
 };
 
