@@ -14,8 +14,8 @@ const useRarible = () => {
     const web3Ethereum = new Web3Ethereum({
       web3: web3,
     });
-    // staging
-    const env = "rinkeby";
+    // @todo: environment config
+    const env = "mainnet";
     const sdk = createRaribleSdk(web3Ethereum, env);
     setSdk(sdk);
   }, []);

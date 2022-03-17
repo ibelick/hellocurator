@@ -62,9 +62,7 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
     return {
       params: {
         uid: WHITELISTED_STOREFRONTS[0],
-        // staging
-        itemId:
-          "0x2dd0b6f2312bca69b93e9524147004425ee9b40a:93444295422357783973373442776524436731507520868886774428849040171073728937985",
+        itemId,
       },
     };
   });

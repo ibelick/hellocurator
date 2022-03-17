@@ -4,8 +4,7 @@ import { SimpleOrder } from "@rarible/protocol-ethereum-sdk/build/order/types";
 
 const useOrders = (contractId: string, tokenId: string) => {
   const { data, error } = useSWR<{ orders: SimpleOrder[] }>(
-    // staging
-    `https://ethereum-api-staging.rarible.org/v0.1/order/orders/sell/byItem?contract=${contractId}&tokenId=${tokenId}`,
+    `https://ethereum-api.rarible.org/v0.1/order/orders/sell/byItem?contract=${contractId}&tokenId=${tokenId}`,
     fetcher
   );
 

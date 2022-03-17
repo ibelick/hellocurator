@@ -7,8 +7,6 @@ import { useEnsLookup } from "wagmi";
 import React, { useState } from "react";
 import type { NFT } from "types/rarible";
 import { useAccount } from "wagmi";
-import DialogSellNFT from "./DialogSellNFT";
-import DialogRemoveSell from "./DialogRemoveSell";
 
 export interface NFTFullViewProps {
   nft: NFT;
@@ -226,23 +224,7 @@ const CardCTA: React.FC<CardCTAProps> = ({
               Buy now
             </Button>
           </div>
-        ) : !makePrice ? (
-          <>
-            <DialogSellNFT
-              contractAddress={contractAddress}
-              tokenId={tokenId}
-              sellerAddress={sellerAddress}
-            />
-            <span className="mt-4 text-gray-400">
-              This NFT is in your wallet
-            </span>
-          </>
-        ) : (
-          <DialogRemoveSell
-            contractAddress={contractAddress}
-            tokenId={tokenId}
-          />
-        )}
+        ) : null}
       </div>
     </div>
   );

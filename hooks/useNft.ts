@@ -4,8 +4,7 @@ import type { NFT } from "types/rarible";
 
 const useNft = (assetId: string) => {
   const { data, error } = useSWR<NFT>(
-    // staging
-    `https://api-staging.rarible.org/v0.1/items/${assetId}`,
+    `https://api.rarible.org/v0.1/items/${assetId}`,
     fetcher
   );
 

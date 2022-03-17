@@ -5,13 +5,9 @@ import { Order } from "@rarible/ethereum-api-client";
 import { SimpleOrder } from "@rarible/protocol-ethereum-sdk/build/order/types";
 
 export const getItemById = async (itemId: string) => {
-  // staging     `https://api.rarible.org/v0.1/items/${params}`,
-  const response = await fetch(
-    `https://api-staging.rarible.org/v0.1/items/${itemId}`,
-    {
-      method: "GET",
-    }
-  );
+  const response = await fetch(`https://api.rarible.org/v0.1/items/${itemId}`, {
+    method: "GET",
+  });
   const nft = await response.json();
 
   return nft;
@@ -19,8 +15,7 @@ export const getItemById = async (itemId: string) => {
 
 export const getItemOrders = async (contractId: string, tokenId: string) => {
   const response = await fetch(
-    // staging
-    `https://ethereum-api-staging.rarible.org/v0.1/order/orders/sell/byItem?contract=${contractId}&tokenId=${tokenId}`
+    `https://ethereum-api.rarible.org/v0.1/order/orders/sell/byItem?contract=${contractId}&tokenId=${tokenId}`
   );
   // const response = await fetch(`https://api.rarible.org/v0.1/orders/${itemId}`);
   const order = await response.json();

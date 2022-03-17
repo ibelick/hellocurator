@@ -92,8 +92,7 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({
     setIsNftFetched(false);
     try {
       const response = await fetch(
-        // staging     `https://api.rarible.org/v0.1/items/${params}`,
-        `https://api-staging.rarible.org/v0.1/items/${params}`,
+        `https://api.rarible.org/v0.1/items/${params}`,
         {
           method: "GET",
         }
