@@ -2,15 +2,13 @@ import { useState } from "react";
 import Button from "components/Button";
 import Dialog from "components/Dialog";
 import { useAccount } from "wagmi";
-import { create } from "ipfs-http-client";
 import { SubmitHandler, useForm } from "react-hook-form";
 import TextInput from "components/TextInput";
 import FileInput from "components/FileInput";
 import { createProposal } from "lib/snapshot";
 import Textarea from "components/Textarea";
-
-// @ts-ignore
-const client = create("https://ipfs.infura.io:5001/api/v0");
+import { isFileImage } from "utils/file";
+import useIpfs from "hooks/useIpfs";
 
 const DialogSubmitNFT: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,7 +24,7 @@ const DialogSubmitNFT: React.FC = () => {
         </Button>
       }
     >
-      <FormSubmitImage />
+      <FormSubmitImage setIsOpen={setIsOpen} />
     </Dialog>
   );
 };
@@ -37,30 +35,30 @@ type FormValues = {
   description: string;
 };
 
-const FormSubmitImage = () => {
+const FormSubmitImage: React.FC<{
+  setIsOpen: (isOpen: boolean) => void;
+}> = ({ setIsOpen }) => {
   const { register, handleSubmit, watch } = useForm<FormValues>();
-  const { image } = watch();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { image, name } = watch();
+  const { upload } = useIpfs();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    console.log("data", data);
+    setIsLoading(true);
+    const file = data.image[0];
 
-    try {
-      const file = data.image[0];
+    const ipfsUrl = await upload(file);
 
-      const added = await client.add(file);
-      const urlIpfsUrl = `https://ipfs.infura.io/ipfs/${added.path}`;
-      console.log("url", urlIpfsUrl);
-
-      const receipt = await createProposal(
-        urlIpfsUrl,
-        data.name,
-        data.description
-      );
-
-      console.log("receipt", receipt);
-    } catch (error) {
-      console.log("Error uploading file: ", error);
+    if (!ipfsUrl) {
+      return;
     }
+
+    const receipt = await createProposal(ipfsUrl, data.name, data.description);
+
+    if (receipt) {
+      setIsOpen(false);
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -96,7 +94,13 @@ const FormSubmitImage = () => {
             register={register}
           />
         </div>
-        <Button isBlock>Submit image</Button>
+        <Button
+          isBlock
+          disabled={!isFileImage(image?.[0]) || !name}
+          isLoading={isLoading}
+        >
+          Submit image
+        </Button>
       </form>
     </div>
   );
