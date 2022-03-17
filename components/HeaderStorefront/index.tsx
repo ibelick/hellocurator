@@ -1,5 +1,4 @@
 import Link from "next/link";
-import DialogSubmitImage from "./DialogSubmitImage";
 import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
 import Button from "components/Button";
@@ -11,13 +10,9 @@ export interface SpaceInfo {
 
 interface HeaderStorefrontProps {
   info: SpaceInfo;
-  setCreateProposalReceiptId?: (createProposalReceiptId: string) => void;
 }
 
-const HeaderStorefront: React.FC<HeaderStorefrontProps> = ({
-  info,
-  setCreateProposalReceiptId,
-}) => {
+const HeaderStorefront: React.FC<HeaderStorefrontProps> = ({ info }) => {
   const router = useRouter();
   const { uid } = router.query;
   const linkSelectedCn = `font-bold text-primary-800 underline decoration-primary-800 decoration-2 decoration-4 underline-offset-4`;

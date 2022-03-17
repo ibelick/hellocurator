@@ -37,7 +37,6 @@ const Create: React.FC = () => {
     const receipt = await createProposal(ipfsUrl, data.name, data.description);
 
     // @todo: if receipt do something
-    console.log("receipt", receipt);
 
     setIsLoading(false);
   };

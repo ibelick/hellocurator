@@ -3,7 +3,7 @@ import { apolloClient } from "lib/apollo";
 import { SNAPSHOT_GET_PROPOSALS, SNAPSHOT_GET_SPACE } from "lib/queries";
 import Storefront from "screens/Storefront";
 import type { StorefrontProps } from "screens/Storefront";
-import type { Proposals, Space } from "types/snapshot";
+import type { Proposal, Space } from "types/snapshot";
 import { ParsedUrlQuery } from "querystring";
 import { WHITELISTED_STOREFRONTS } from "utils/storefront";
 
@@ -31,7 +31,7 @@ export const getStaticProps: GetStaticProps<StorefrontProps, Params> = async (
   });
 
   const { data: closedProposals } = await apolloClient.query<
-    { proposals: Proposals[] | [] },
+    { proposals: Proposal[] | [] },
     { spaceIn: string; state: string }
   >({
     query: SNAPSHOT_GET_PROPOSALS,

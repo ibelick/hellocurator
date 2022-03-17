@@ -1,7 +1,7 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { apolloClient } from "lib/apollo";
 import { SNAPSHOT_GET_PROPOSALS } from "lib/queries";
-import type { Proposals } from "types/snapshot";
+import type { Proposal } from "types/snapshot";
 import { ParsedUrlQuery } from "querystring";
 import { WHITELISTED_STOREFRONTS } from "utils/storefront";
 import { getItemById } from "lib/nft";
@@ -34,7 +34,7 @@ export const getStaticProps: GetStaticProps<NFTFullViewProps, Params> = async (
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
   const { data: closedProposals } = await apolloClient.query<
-    { proposals: Proposals[] | [] },
+    { proposals: Proposal[] | [] },
     { spaceIn: string; state: string }
   >({
     query: SNAPSHOT_GET_PROPOSALS,

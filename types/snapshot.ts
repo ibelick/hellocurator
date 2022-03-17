@@ -5,7 +5,7 @@ export interface Space {
   avatar: string;
 }
 
-export interface Proposals {
+export interface Proposal {
   __typename: string;
   id: string;
   title: string;
@@ -37,7 +37,7 @@ export interface Vote {
   choice: number;
   voter: string;
   space: Space;
-  proposal: Proposal;
+  proposal: VoteProposal;
 }
 
 interface Params {
@@ -50,7 +50,7 @@ interface Strategy {
   name: string;
 }
 
-interface Proposal {
+interface VoteProposal {
   __typename: string;
   created: number;
 }
