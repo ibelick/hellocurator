@@ -6,6 +6,7 @@ import Button from "components/Button";
 import { useEnsLookup } from "wagmi";
 import React, { useState } from "react";
 import type { NFT } from "types/rarible";
+import { useAccount } from "wagmi";
 
 export interface NFTFullViewProps {
   nft: NFT;
@@ -18,6 +19,8 @@ const NFTFullView: React.FC<NFTFullViewProps> = ({ nft }) => {
   const [{ data: dataEns }] = useEnsLookup({
     address: nft ? nft.creators[0].account.replace("ETHEREUM:", "") : undefined,
   });
+  const creatorAddress = nft.creators[0].account.replace("ETHEREUM:", "");
+  const contractAddress = nft.contract.replace("ETHEREUM:", "");
 
   return (
     <div>
@@ -71,51 +74,20 @@ const NFTFullView: React.FC<NFTFullViewProps> = ({ nft }) => {
                 View on Rarible
               </a>
             </div>
-            <div className="mt-8 flex items-center justify-between rounded-xl border border-gray-200 bg-white p-8 shadow-lg">
-              <div>
-                <p className="text-gray-400">PRICE</p>
-                <p className="text-2xl">
-                  {!nft.bestSellOrder
-                    ? "Not listed yet"
-                    : Number(nft.bestSellOrder.makePrice).toLocaleString(
-                        "en-US",
-                        {
-                          minimumFractionDigits: 0,
-                        }
-                      ) + " ETH"}
-                </p>
-                <p className="text-gray-400">
-                  {!nft.bestSellOrder
-                    ? "Come back soon"
-                    : "= " +
-                      Number(nft.bestSellOrder.makePriceUsd).toLocaleString(
-                        "en-US",
-                        {
-                          style: "currency",
-                          currency: "USD",
-                          minimumFractionDigits: 0,
-                        }
-                      )}
-                </p>
-              </div>
-              {nft.bestSellOrder ? (
-                <div className="h-auto">
-                  <Button variant="primary" disabled>
-                    Buy now
-                  </Button>
-                </div>
-              ) : null}
-            </div>
+            <CardCTA
+              contractAddress={contractAddress}
+              tokenId={nft.tokenId}
+              sellerAddress={creatorAddress}
+              makePrice={nft?.bestSellOrder?.makePrice}
+              makePriceUsd={nft?.bestSellOrder?.makePriceUsd}
+            />
           </div>
           <div className="mt-12">
             <p className="font-medium">Created by</p>
             <div className="mt-2 flex items-center">
               <div className="h-8 w-8 rounded-full bg-gradient-to-r from-blue-700 to-red-200"></div>
               <a
-                href={`https://rarible.com/user/${nft.creators[0].account.replace(
-                  "ETHEREUM:",
-                  ""
-                )}`}
+                href={`https://rarible.com/user/${creatorAddress}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="ml-2"
@@ -132,16 +104,12 @@ const NFTFullView: React.FC<NFTFullViewProps> = ({ nft }) => {
             <div className="mb-2">
               <p className="font-medium">Owned by</p>
               <a
-                href={`https://rarible.com/user/${nft.creators[0].account.replace(
-                  "ETHEREUM:",
-                  ""
-                )}`}
+                // @todo: replace by owner when available in API
+                href={`https://rarible.com/user/${creatorAddress}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {truncateEthAddress(
-                  nft.owners[0].account.replace("ETHEREUM:", "")
-                )}
+                {truncateEthAddress(creatorAddress)}
               </a>
             </div>
           ) : null}
@@ -155,15 +123,10 @@ const NFTFullView: React.FC<NFTFullViewProps> = ({ nft }) => {
 
                 <a
                   className="flex"
-                  href={`https://etherscan.io/address/${nft.contract.replace(
-                    "ETHEREUM:",
-                    ""
-                  )}`}
+                  href={`https://etherscan.io/address/${contractAddress}`}
                   target="_blank"
                 >
-                  <p>
-                    {truncateEthAddress(nft.contract.replace("ETHEREUM:", ""))}
-                  </p>
+                  <p>{truncateEthAddress(contractAddress)}</p>
                   <img src="/arrow-up-right.svg" className="ml-2 h-6 w-6"></img>
                 </a>
               </li>
@@ -202,6 +165,66 @@ const NFTFullView: React.FC<NFTFullViewProps> = ({ nft }) => {
             </div>
           ) : null}
         </div>
+      </div>
+    </div>
+  );
+};
+
+interface CardCTAProps {
+  contractAddress: string;
+  tokenId: string;
+  sellerAddress: string;
+  makePrice?: string;
+  makePriceUsd?: string;
+}
+
+const CardCTA: React.FC<CardCTAProps> = ({
+  contractAddress,
+  tokenId,
+  sellerAddress,
+  makePrice,
+  makePriceUsd,
+}) => {
+  const [{ data: accountData }] = useAccount();
+  const isUserNft =
+    sellerAddress.toUpperCase() === accountData?.address.toUpperCase();
+
+  return (
+    <div className="mt-8 flex items-center justify-between rounded-xl border border-gray-200 bg-white p-8 shadow-lg">
+      <div className="flex flex-col items-start">
+        <p className="text-gray-400">PRICE</p>
+        {!makePrice ? (
+          <>
+            <p className="text-2xl">Not listed yet</p>
+            <p className="text-gray-400">Come back soon</p>
+          </>
+        ) : (
+          <>
+            <p className="text-2xl">
+              {`${Number(makePrice).toLocaleString("en-US", {
+                minimumFractionDigits: 0,
+              })} ETH`}
+            </p>
+            {!makePriceUsd ? null : (
+              <p className="text-gray-400">{`= ${Number(
+                makePriceUsd
+              ).toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+                minimumFractionDigits: 0,
+              })}`}</p>
+            )}
+          </>
+        )}
+      </div>
+      <div className="flex flex-col">
+        {!isUserNft ? (
+          <div className="h-auto">
+            <Button variant="primary" disabled>
+              Buy now
+            </Button>
+          </div>
+        ) : null}
       </div>
     </div>
   );
