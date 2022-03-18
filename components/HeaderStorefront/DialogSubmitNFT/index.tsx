@@ -7,6 +7,7 @@ import Dialog from "components/Dialog";
 import type { NFT } from "types/rarible";
 import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
+import { BASE_URL_MULTICHAIN } from "lib/nft";
 
 interface DialogSubmitNFTProps {
   setCreateProposalReceiptId: (createProposalReceiptId: string) => void;
@@ -91,12 +92,9 @@ const FormSubmitNFT: React.FC<FormSubmitNFTProps> = ({
     setIsLoading(true);
     setIsNftFetched(false);
     try {
-      const response = await fetch(
-        `https://api.rarible.org/v0.1/items/${params}`,
-        {
-          method: "GET",
-        }
-      );
+      const response = await fetch(`${BASE_URL_MULTICHAIN}/items/${params}`, {
+        method: "GET",
+      });
 
       if (!response.ok) {
         setError("Failed to preview");

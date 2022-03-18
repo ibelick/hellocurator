@@ -9,6 +9,7 @@ import Textarea from "components/Textarea";
 import { isFileImage } from "utils/file";
 import useIpfs from "hooks/useIpfs";
 import { useRouter } from "next/router";
+import useRarible from "hooks/useRarible";
 
 type FormValues = {
   image: FileList;
@@ -23,6 +24,7 @@ const Create: React.FC = () => {
   const { uid } = router.query;
   const { image, name } = watch();
   const { upload } = useIpfs();
+  const { lazyMintNft } = useRarible();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     setIsLoading(true);
@@ -48,6 +50,7 @@ const Create: React.FC = () => {
           <a>← Back to gallery</a>
         </Link>
       </div>
+      <p onClick={lazyMintNft}>lazy mint</p>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col lg:flex-row">
           <div className="flex-1">
