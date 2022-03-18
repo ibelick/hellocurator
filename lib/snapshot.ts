@@ -40,11 +40,7 @@ export const oldCreateProposal = async (itemId: string) => {
   return receipt;
 };
 
-export const createProposal = async (
-  urlIpfsUrl: string,
-  title: string,
-  description?: string
-) => {
+export const createProposal = async (imageUrl: string, metadataUrl: string) => {
   // @ts-ignore
   const web3 = new Web3Provider(window.ethereum);
 
@@ -53,10 +49,8 @@ export const createProposal = async (
   const receipt = await client.proposal(web3, account, {
     space: "loopclub.eth",
     type: "single-choice",
-    title: `${title}`,
-    body: `${urlIpfsUrl}
-    ${description}
-    `,
+    title: `${imageUrl}`,
+    body: `${metadataUrl}`,
     choices: ["+1"],
     start: Math.floor(Date.now() / 1000),
     end: Math.floor((Date.now() + 86400000) / 1000),

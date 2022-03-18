@@ -9,7 +9,6 @@ import Textarea from "components/Textarea";
 import { isFileImage } from "utils/file";
 import useIpfs from "hooks/useIpfs";
 import { useRouter } from "next/router";
-import useRarible from "hooks/useRarible";
 
 type FormValues = {
   image: FileList;
@@ -24,20 +23,32 @@ const Create: React.FC = () => {
   const { uid } = router.query;
   const { image, name } = watch();
   const { upload } = useIpfs();
-  const { lazyMintNft } = useRarible();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     setIsLoading(true);
     const file = data.image[0];
 
-    const ipfsUrl = await upload(file);
+    const imageUploaded = await upload(file);
 
-    if (!ipfsUrl) {
+    if (!imageUploaded) {
       return;
     }
 
-    const receipt = await createProposal(ipfsUrl, data.name, data.description);
+    const jsonMetadata = JSON.stringify({
+      name: data.name,
+      description: data.description,
+      image: `ipfs://ipfs/${imageUploaded.hash}`,
+      external_url: "",
+      animation_url: `ipfs://ipfs/${imageUploaded.hash}`,
+    });
 
+    const metadata = await upload(jsonMetadata);
+
+    if (!metadata) {
+      return;
+    }
+
+    const receipt = await createProposal(imageUploaded.url, metadata.url);
     // @todo: if receipt do something
 
     setIsLoading(false);
@@ -50,7 +61,6 @@ const Create: React.FC = () => {
           <a>← Back to gallery</a>
         </Link>
       </div>
-      <p onClick={lazyMintNft}>lazy mint</p>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col lg:flex-row">
           <div className="flex-1">

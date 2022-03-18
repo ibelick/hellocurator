@@ -7,9 +7,9 @@ const useIpfs = () => {
   const upload = async (file: ImportCandidate) => {
     try {
       const added = await client.add(file);
-      const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+      const ipfsUrl = `https://ipfs.infura.io/ipfs/${added.path}`;
 
-      return url;
+      return { url: ipfsUrl, hash: added.path };
     } catch (error) {
       console.error("Error uploading file: ", error);
     }

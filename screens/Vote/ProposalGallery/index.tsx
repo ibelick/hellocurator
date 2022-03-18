@@ -4,6 +4,8 @@ import IconButton from "components/IconButton";
 import useVote from "hooks/useVote";
 import { useState } from "react";
 import { truncateEthAddress } from "utils/ethereum";
+import useSWR from "swr";
+import { fetcher } from "lib/fetch";
 
 interface ProposalGalleryProps {
   proposals: Proposal[];
@@ -63,16 +65,14 @@ const Proposal: React.FC<{ proposal: Proposal; userVotingPower: number }> = ({
   const remainingTime = timeBetweenDates(voteEnd, today);
   const [voteReceiptId, setVoteReceiptId] = useState<string | null>(null);
 
-  const imgLink = proposal.body.match(/\bhttps?:\/\/\S+/gi)?.[0];
-  // const description = imgLink && proposal.body.replace(imgLink, "").trim();
-
   return (
     <li className="mb-6 break-inside-avoid">
       <div className="flex flex-col items-start justify-between">
-        <img src={imgLink} alt={proposal.title} />
-        <span className="my-2 font-medium">{proposal.title}</span>
-        <span>Submitted by {truncateEthAddress(proposal.author)}</span>
-        {/* <div className="whitespace-pre-line">{description}</div> */}
+        <Item
+          img={proposal.title}
+          metadataUrl={proposal.body}
+          authorAddress={proposal.author}
+        />
         <div className="flex w-full items-center justify-between">
           <Votes
             choices={proposal.choices}
@@ -102,6 +102,26 @@ const Proposal: React.FC<{ proposal: Proposal; userVotingPower: number }> = ({
         </div>
       </div>
     </li>
+  );
+};
+
+const Item: React.FC<{
+  metadataUrl: string;
+  img: string;
+  authorAddress: string;
+}> = ({ metadataUrl, img, authorAddress }) => {
+  const { data: metadata, error } = useSWR(metadataUrl, fetcher);
+
+  if (!error && !metadata) {
+    return null;
+  }
+
+  return (
+    <>
+      <img src={img} alt={metadata.name} />
+      <span className="my-2 font-medium">{metadata.name}</span>
+      <span>Submitted by {truncateEthAddress(authorAddress)}</span>
+    </>
   );
 };
 
