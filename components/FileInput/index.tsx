@@ -40,13 +40,17 @@ const FileInput: React.FC<FileInputProps> = ({
         {label}
       </label>
       <div
-        className={`relative flex h-48 items-center justify-center overflow-hidden rounded-lg border-2 border-dotted border-slate-700 bg-gray-100 transition-opacity ${
+        className={` relative flex h-full items-center justify-center rounded-lg border-2 border-dotted border-slate-100 bg-gray-100 py-24 transition-opacity ${
           image ? `hover:opacity-50` : ``
         }`}
       >
         <div className="absolute">
           {!image ? (
             <div className="flex flex-col items-center">
+              <img src="/upload.svg" className="mb-4 h-12 w-12"></img>
+              <h1 className="text-lg font-bold">
+                Click to upload or Drag and Drop
+              </h1>
               <span className="block px-8 text-center font-normal text-gray-400">
                 You can drag and drop your file here. .png, .jpg, and .gif are
                 supported

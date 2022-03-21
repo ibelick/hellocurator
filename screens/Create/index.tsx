@@ -63,7 +63,21 @@ const Create: React.FC = () => {
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col lg:flex-row">
-          <div className="flex-1">
+          <div className="mb-4 w-full flex-1 cursor-pointer pl-0 lg:mb-0 ">
+            <FileInput
+              label=""
+              id="image"
+              register={register}
+              required
+              value={image}
+            />
+          </div>
+          <div className="ml-0 flex-1 lg:ml-12">
+            <h1 className="text-xl font-bold">Submit an image</h1>
+            <p className="mb-8">
+              for <span className="text-primary-800">“Freedom of lands”</span>{" "}
+              by <span className="text-primary-800">UkraineDAO</span>
+            </p>
             <div className="mb-4">
               <TextInput
                 id="name"
@@ -81,23 +95,14 @@ const Create: React.FC = () => {
                 register={register}
               />
             </div>
-          </div>
-          <div className="mb-4 w-full flex-1 pl-0 lg:mb-0 lg:pl-12">
-            <FileInput
-              label="Image"
-              id="image"
-              register={register}
-              required
-              value={image}
-            />
+            <Button
+              disabled={!isFileImage(image?.[0]) || !name}
+              isLoading={isLoading}
+            >
+              Submit image
+            </Button>
           </div>
         </div>
-        <Button
-          disabled={!isFileImage(image?.[0]) || !name}
-          isLoading={isLoading}
-        >
-          Submit image
-        </Button>
       </form>
     </div>
   );
