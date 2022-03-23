@@ -6,6 +6,8 @@ import { useState } from "react";
 import { truncateEthAddress } from "utils/ethereum";
 import useSWR from "swr";
 import { fetcher } from "lib/fetch";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 interface ProposalGalleryProps {
   proposals: Proposal[];
@@ -72,6 +74,7 @@ const Proposal: React.FC<{ proposal: Proposal; userVotingPower: number }> = ({
           img={proposal.title}
           metadataUrl={proposal.body}
           authorAddress={proposal.author}
+          id={proposal.id}
         />
         <div className="flex w-full items-center justify-between">
           <Votes
@@ -109,8 +112,10 @@ const Item: React.FC<{
   metadataUrl: string;
   img: string;
   authorAddress: string;
-}> = ({ metadataUrl, img, authorAddress }) => {
+  id: string;
+}> = ({ metadataUrl, img, authorAddress, id }) => {
   const { data: metadata, error } = useSWR(metadataUrl, fetcher);
+  const router = useRouter();
 
   if (!error && !metadata) {
     return null;
@@ -118,9 +123,15 @@ const Item: React.FC<{
 
   return (
     <>
-      <img src={img} alt={metadata.name} />
-      <span className="my-2 font-medium">{metadata.name}</span>
-      <span>Submitted by {truncateEthAddress(authorAddress)}</span>
+      <Link href={`/${router.query.uid}/vote/${id}`}>
+        <a className="flex flex-col">
+          <img src={img} alt={metadata.name} />
+          <span className="mt-2 font-medium">{metadata.name}</span>
+        </a>
+      </Link>
+      <span className="mt-2">
+        Submitted by {truncateEthAddress(authorAddress)}
+      </span>
     </>
   );
 };

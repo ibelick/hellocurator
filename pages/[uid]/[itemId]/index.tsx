@@ -9,7 +9,7 @@ import ItemFullView from "screens/ItemFullView";
 import type { ItemFullViewProps } from "screens/ItemFullView";
 
 const ItemPage: NextPage<ItemFullViewProps> = ({ item }) => {
-  return <ItemFullView item={item} />;
+  return <ItemFullView item={item} isNFT />;
 };
 
 interface Params extends ParsedUrlQuery {
