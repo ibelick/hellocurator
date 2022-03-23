@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 
 interface FileInputProps {
-  label: string;
+  label?: string;
   register: any;
   required?: boolean;
   id?: string;
   value?: FileList;
+  accept?: string;
 }
 
 const FileInput: React.FC<FileInputProps> = ({
@@ -14,15 +15,17 @@ const FileInput: React.FC<FileInputProps> = ({
   id,
   required,
   value,
+  accept,
 }) => {
   const [image, setImage] = useState<null | string>(null);
 
   useEffect(() => {
-    if (!value) {
+    if (!Boolean(value?.length)) {
+      setImage(null);
       return;
     }
 
-    const file = value[0];
+    const file = value?.[0];
 
     if (!file) {
       return;
@@ -33,14 +36,16 @@ const FileInput: React.FC<FileInputProps> = ({
 
   return (
     <>
-      <label
-        className="mb-1 block text-sm uppercase text-gray-500"
-        htmlFor={id}
-      >
-        {label}
-      </label>
+      {label ? (
+        <label
+          className="mb-1 block text-sm uppercase text-gray-500"
+          htmlFor={id}
+        >
+          {label}
+        </label>
+      ) : null}
       <div
-        className={` relative flex h-full items-center justify-center rounded-lg border-2 border-dotted border-slate-100 bg-gray-100 py-24 transition-opacity ${
+        className={`relative flex h-full max-h-96 items-center justify-center overflow-hidden rounded-lg border-2 border-dotted border-slate-100 bg-gray-100 py-24 transition-opacity ${
           image ? `hover:opacity-50` : ``
         }`}
       >
@@ -68,6 +73,7 @@ const FileInput: React.FC<FileInputProps> = ({
           id={id}
           type="file"
           className="h-full w-full opacity-0"
+          accept={accept}
           {...register(id, { required })}
         />
       </div>
