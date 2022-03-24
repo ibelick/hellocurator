@@ -11,11 +11,7 @@ import useIpfs from "hooks/useIpfs";
 import { useRouter } from "next/router";
 import Dialog from "components/Dialog";
 import Spinner from "components/Spinner";
-
-const SPACE_EXAMPLE = {
-  event: "The mountains are calling",
-  name: "ClimateDAO",
-};
+import { SPACE_EXAMPLE } from "utils/storefront";
 
 type FormValues = {
   image: FileList;

@@ -146,7 +146,7 @@ const Votes: React.FC<{
 }> = ({ choices, proposalId, voteReceiptId }) => {
   const { choiceWithVotingPower } = useVote(proposalId, choices, voteReceiptId);
 
-  const votingPower =
+  const totalVotingPower =
     choiceWithVotingPower &&
     Math.round(choiceWithVotingPower?.[0].votingPower * 10000) / 10000;
 
@@ -154,7 +154,7 @@ const Votes: React.FC<{
     <div>
       <p className="text-sm text-gray-400">Votes</p>
       <span className="font-medium">
-        {votingPower} {loopclubStrategies[0].params.symbol}
+        {totalVotingPower} {loopclubStrategies[0].params.symbol}
       </span>
     </div>
   );
