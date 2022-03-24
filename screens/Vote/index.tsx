@@ -1,6 +1,7 @@
 import { getVotingPower, loopclubStrategies } from "lib/snapshot";
 import { Proposal } from "types/snapshot";
 import HeaderStorefront from "components/HeaderStorefront";
+import Button from "components/Button";
 import type { SpaceInfo } from "components/HeaderStorefront";
 import { useQuery } from "@apollo/client";
 import { SNAPSHOT_GET_PROPOSALS } from "lib/queries";
@@ -70,6 +71,70 @@ const Proposals: React.FC = () => {
 
   return (
     <div>
+      <div className="mb-8 w-full rounded-xl border border-gray-100 bg-white py-8 px-8 shadow-xl transition   lg:px-12">
+        <ul className="justify-between lg:flex">
+          <li className="border-r-1 mb-4 border-gray-100 lg:mb-0">
+            <p className="text-sm text-gray-400">Start in</p>
+            <p className="text-2xl font-medium">00:40</p>
+          </li>
+          <li className="border-r-1 mb-4 border-gray-100 lg:mb-0">
+            <p className="text-sm text-gray-400">Ukraine DAO fee</p>
+            <p className="text-2xl font-medium">100%</p>
+          </li>
+          <li className="border-r-1 mb-4  border-gray-100 lg:mb-0">
+            <p className="text-sm text-gray-400">Contributions</p>
+            <p className="text-2xl font-medium">98</p>
+          </li>
+          <li className="border-r-1 mb-4  border-gray-100 lg:mb-0">
+            <p className="text-sm text-gray-400">Voting power</p>
+            <p className="text-2xl font-medium">LOVE Tokens</p>
+          </li>
+          <li>
+            <Button variant="secondary">Submit an image</Button>
+          </li>
+        </ul>
+      </div>
+      <div className="mb-4 items-center lg:flex">
+        <img
+          src="https://images.unsplash.com/photo-1648042354854-b2890d803335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDF8aFNQNkp4OHc0WjR8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=60"
+          className="mr-8  mb-4 w-full rounded-lg lg:mb-0 lg:w-2/4"
+        />
+        <div className="">
+          <div className="mb-8 justify-between lg:flex">
+            <div>
+              <h1 className="text-2xl font-bold">SubjectMivity</h1>
+              <p className="">
+                Submitted by <span className="text-primary-800">ethan.eth</span>{" "}
+              </p>
+            </div>
+
+            <div className="mt-4 lg:mt-0">
+              <Button variant="secondary">Mint now</Button>
+            </div>
+          </div>
+          <p>
+            This commission is an exploration of the ways our past plays a role
+            in the development of our psychological beings. Following the clues
+            of involuntary memories, the project traces the line of my family’s
+            emotional history that forms our personalities and informs our
+            experience of the present.
+          </p>
+          <ul className="mt-8 lg:flex">
+            <li className="border-r-1 mb-4 border-gray-100 lg:mb-0 ">
+              <p className="text-sm text-gray-400">Price</p>
+              <p className="text-2xl font-medium">0.01 ETH</p>
+            </li>
+            <li className="border-r-1 mb-4 border-gray-100 px-0 lg:mb-0 lg:px-12">
+              <p className="text-sm text-gray-400">Already minted</p>
+              <p className="text-2xl font-medium">149</p>
+            </li>
+            <li className="border-r-1 mb-4  border-gray-100 px-0 lg:mb-0 lg:px-12">
+              <p className="text-sm text-gray-400">Minting ends in</p>
+              <p className="text-2xl font-medium">00:00:30</p>
+            </li>
+          </ul>
+        </div>
+      </div>
       <div className="mb-4 flex-none items-center justify-between rounded-xl bg-gray-50 p-8 md:flex">
         <div className="flex items-center">
           <span>🔥</span>

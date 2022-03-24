@@ -27,17 +27,19 @@ const ProposalGallery: React.FC<ProposalGalleryProps> = ({
   }
 
   return (
-    <ul className="columns-1 sm:columns-2 md:columns-3">
-      {proposals?.map((proposal: Proposal) => {
-        return (
-          <Proposal
-            key={proposal.id}
-            proposal={proposal}
-            userVotingPower={userVotingPower!}
-          />
-        );
-      })}
-    </ul>
+    <div>
+      <ul className="columns-1 sm:columns-2 md:columns-4">
+        {proposals?.map((proposal: Proposal) => {
+          return (
+            <Proposal
+              key={proposal.id}
+              proposal={proposal}
+              userVotingPower={userVotingPower!}
+            />
+          );
+        })}
+      </ul>
+    </div>
   );
 };
 
@@ -126,12 +128,13 @@ const Item: React.FC<{
       <Link href={`/${router.query.uid}/vote/${id}`}>
         <a className="flex flex-col">
           <img src={img} alt={metadata.name} />
-          <span className="mt-2 font-medium">{metadata.name}</span>
+          <span className="mt-4 text-lg font-medium">{metadata.name}</span>
         </a>
       </Link>
-      <span className="mt-2">
+      <span className=" text-gray-400">
         Submitted by {truncateEthAddress(authorAddress)}
       </span>
+      <div className="mt-4 mb-4 h-0.5 w-full bg-gray-100"></div>
     </>
   );
 };
@@ -148,9 +151,12 @@ const Votes: React.FC<{
     Math.round(choiceWithVotingPower?.[0].votingPower * 10000) / 10000;
 
   return (
-    <span className="font-medium">
-      {votingPower} {loopclubStrategies[0].params.symbol}
-    </span>
+    <div>
+      <p className="text-sm text-gray-400">Votes</p>
+      <span className="font-medium">
+        {votingPower} {loopclubStrategies[0].params.symbol}
+      </span>
+    </div>
   );
 };
 
