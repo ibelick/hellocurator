@@ -1,4 +1,7 @@
+import { loopclubStrategies } from "lib/snapshot";
 import Button from "components/Button";
+import useVotingPower from "hooks/useVotingPower";
+import { useAccount } from "wagmi";
 
 export interface MetadataProposalProps {
   description: string;
@@ -12,6 +15,9 @@ interface MetaProposalProps {
 }
 
 const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
+  const { userVotingPower } = useVotingPower();
+  const [{ data: accountData }] = useAccount();
+
   return (
     <div>
       <div className="mb-4 flex items-center justify-between">
@@ -20,7 +26,7 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
       </div>
       <div className="h-0.5 w-full bg-gray-100"></div>
       <div className="mt-8">
-        <h1 className="text-2xl font-bold">Subjectivity</h1>
+        <h1 className="text-2xl font-bold">{meta.name}</h1>
         <p className="mb-8">
           for <span className="text-primary-800">“Freedom of lands”</span> by{" "}
           <span className="text-primary-800">UkraineDAO</span>
@@ -29,11 +35,7 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
           <div className="mr-2 h-6 w-6 rounded-full bg-gradient-to-r from-blue-700 to-red-200"></div>
           <p className="">Submitted by john.eth</p>
         </div>
-        <p>
-          The world’s first and largest digital marketplace for crypto
-          collectibles and non-fungible tokens (NFTs). Buy, sell, and discover
-          exclusive digital items.
-        </p>
+        <p>{meta.description}</p>
       </div>
       <div className="mt-8 w-full rounded-xl border border-gray-200 bg-white p-6 shadow transition hover:bg-gray-100">
         <div>
@@ -45,7 +47,16 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
       </div>
       <div className="mt-4 rounded-lg bg-gray-50 px-4 py-2">
         <p>
-          Your voting power: <span className="text-primary-800">500 LOVE</span>
+          Your voting power :{" "}
+          {accountData ? (
+            <span className="font-bold text-primary-800">
+              {userVotingPower} {loopclubStrategies[0].params.symbol}
+            </span>
+          ) : (
+            <span className="font-bold text-primary-800">
+              Connect your wallet
+            </span>
+          )}
         </p>
       </div>
       <div className="mt-8 flex items-center justify-between">

@@ -1,4 +1,4 @@
-import { getVotingPower, loopclubStrategies } from "lib/snapshot";
+import { loopclubStrategies } from "lib/snapshot";
 import { Proposal } from "types/snapshot";
 import HeaderStorefront from "components/HeaderStorefront";
 import Button from "components/Button";
@@ -6,8 +6,8 @@ import type { SpaceInfo } from "components/HeaderStorefront";
 import { useQuery } from "@apollo/client";
 import { SNAPSHOT_GET_PROPOSALS } from "lib/queries";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
+import useVotingPower from "hooks/useVotingPower";
 import ProposalGallery from "./ProposalGallery";
 
 export interface VoteProps {
@@ -37,29 +37,7 @@ const Proposals: React.FC = () => {
     },
   });
   const [{ data: accountData }] = useAccount();
-  const [userVotingPower, setUserVotingPower] = useState<number | null>(null);
-
-  useEffect(() => {
-    if (!accountData?.address) {
-      setUserVotingPower(0);
-      return;
-    }
-
-    const fetchVotingPower = async () => {
-      const votingPower = await getVotingPower([accountData.address]);
-
-      const userVotingPower = votingPower?.[0][accountData.address];
-
-      if (!userVotingPower) {
-        setUserVotingPower(0);
-        return;
-      }
-
-      setUserVotingPower(userVotingPower);
-    };
-
-    fetchVotingPower();
-  }, [accountData?.address]);
+  const { userVotingPower } = useVotingPower();
 
   if (isProposalsLoading) return null;
   if (error) return <p>Error :(</p>;
