@@ -6,11 +6,11 @@ interface SpinnerProps {
 const VARIANT_ENUM: { [key: string]: string } = {
   primary: "text-white",
   secondary: "text-black",
-  tertiary: "text-blue-700",
+  tertiary: "text-primary-800",
 };
 
 const SIZE_ENUM: { [key: string]: string } = {
-  xl: "h-12 w-12",
+  xl: "h-8 w-8",
   md: "h-5 w-5",
 };
 
