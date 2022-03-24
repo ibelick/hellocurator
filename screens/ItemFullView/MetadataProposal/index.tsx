@@ -1,7 +1,7 @@
 import { castVote, loopclubStrategies } from "lib/snapshot";
 import Button from "components/Button";
 import useVotingPower from "hooks/useVotingPower";
-import { useAccount } from "wagmi";
+import { useAccount, useEnsLookup } from "wagmi";
 import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
 import { SNAPSHOT_GET_PROPOSAL } from "lib/queries";
@@ -10,6 +10,9 @@ import Link from "next/link";
 import { SPACE_EXAMPLE } from "utils/storefront";
 import IconButton from "components/IconButton";
 import { useState } from "react";
+import { truncateEthAddress } from "utils/ethereum";
+import { dynamicTimeLeft } from "utils/date";
+import Timer from "components/Timer";
 
 export interface MetadataProposalProps {
   description: string;
@@ -41,12 +44,23 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
   const totalVotingPower =
     choiceWithVotingPower &&
     Math.round(choiceWithVotingPower?.[0].votingPower * 10000) / 10000;
+  const [{ data: dataEns }] = useEnsLookup({
+    address: data?.proposal?.author,
+  });
+  const dateVoteEnd = new Date(data?.proposal?.end * 1000);
+  const isClosed = dateVoteEnd <= new Date();
 
   return (
     <div>
       <div className="mb-4 flex items-center justify-between">
-        <p>Voting ends in</p>
-        <p className="text-xl font-medium">00:23:00</p>
+        {!isClosed ? (
+          <>
+            <p>Voting ends in</p>
+            {dateVoteEnd ? <Timer dateEnd={dateVoteEnd} /> : null}
+          </>
+        ) : (
+          <p>Voting closed</p>
+        )}
       </div>
       <div className="h-0.5 w-full bg-gray-100"></div>
       <div className="mt-8">
@@ -57,7 +71,12 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
         </p>
         <div className="mb-8 flex items-center">
           <div className="mr-2 h-6 w-6 rounded-full bg-gradient-to-r from-blue-700 to-red-200"></div>
-          <p className="">Submitted by john.eth</p>
+          <p className="">
+            Submitted by{" "}
+            {!dataEns && data?.proposal?.author
+              ? truncateEthAddress(data?.proposal?.author)
+              : dataEns}
+          </p>
         </div>
         <p>{meta.description}</p>
       </div>
@@ -68,30 +87,32 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
             {totalVotingPower} {loopclubStrategies[0].params.symbol}
           </p>
         </div>
-        <IconButton
-          disabled={userVotingPower === 0}
-          onClick={async () => {
-            if (!proposalId) {
-              return;
-            }
+        {!isClosed ? (
+          <IconButton
+            disabled={userVotingPower === 0}
+            onClick={async () => {
+              if (!proposalId) {
+                return;
+              }
 
-            const receipt = await castVote(proposalId as string, 1);
-            // @ts-ignore
-            setVoteReceiptId(receipt.id as string);
-          }}
-          icon={
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="56"
-              height="56"
-              viewBox="0 0 56 56"
-            >
-              <text y="34" x="19">
-                {data?.proposal?.choices}
-              </text>
-            </svg>
-          }
-        />
+              const receipt = await castVote(proposalId as string, 1);
+              // @ts-ignore
+              setVoteReceiptId(receipt.id as string);
+            }}
+            icon={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="56"
+                height="56"
+                viewBox="0 0 56 56"
+              >
+                <text y="34" x="19">
+                  {data?.proposal?.choices}
+                </text>
+              </svg>
+            }
+          />
+        ) : null}
       </div>
       <div className="mt-4 rounded-lg bg-gray-50 px-4 py-2">
         <p>

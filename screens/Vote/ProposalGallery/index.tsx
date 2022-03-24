@@ -64,9 +64,6 @@ const Proposal: React.FC<{ proposal: Proposal; userVotingPower: number }> = ({
   proposal,
   userVotingPower,
 }) => {
-  const voteEnd = new Date(proposal.end * 1000);
-  const today = new Date(Date.now());
-  const remainingTime = timeBetweenDates(voteEnd, today);
   const [voteReceiptId, setVoteReceiptId] = useState<string | null>(null);
 
   return (
