@@ -1,4 +1,4 @@
-import { loopclubStrategies } from "lib/snapshot";
+import { castVote, loopclubStrategies } from "lib/snapshot";
 import Button from "components/Button";
 import useVotingPower from "hooks/useVotingPower";
 import { useAccount } from "wagmi";
@@ -8,6 +8,8 @@ import { SNAPSHOT_GET_PROPOSAL } from "lib/queries";
 import useVote from "hooks/useVote";
 import Link from "next/link";
 import { SPACE_EXAMPLE } from "utils/storefront";
+import IconButton from "components/IconButton";
+import { useState } from "react";
 
 export interface MetadataProposalProps {
   description: string;
@@ -30,9 +32,11 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
       id: proposalId,
     },
   });
+  const [voteReceiptId, setVoteReceiptId] = useState<string | null>(null);
   const { choiceWithVotingPower } = useVote(
     proposalId as string,
-    data?.proposal?.choices
+    data?.proposal?.choices,
+    voteReceiptId
   );
   const totalVotingPower =
     choiceWithVotingPower &&
@@ -57,13 +61,37 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
         </div>
         <p>{meta.description}</p>
       </div>
-      <div className="mt-8 w-full rounded-xl border border-gray-200 bg-white p-6 shadow">
+      <div className="mt-8 flex w-full flex-row justify-between rounded-xl border border-gray-200 bg-white p-6 shadow">
         <div>
           <p className="text-gray-400">Total votes</p>
           <p className="font-lg text-lg font-medium text-primary-800">
             {totalVotingPower} {loopclubStrategies[0].params.symbol}
           </p>
         </div>
+        <IconButton
+          disabled={userVotingPower === 0}
+          onClick={async () => {
+            if (!proposalId) {
+              return;
+            }
+
+            const receipt = await castVote(proposalId as string, 1);
+            // @ts-ignore
+            setVoteReceiptId(receipt.id as string);
+          }}
+          icon={
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="56"
+              height="56"
+              viewBox="0 0 56 56"
+            >
+              <text y="34" x="19">
+                {data?.proposal?.choices}
+              </text>
+            </svg>
+          }
+        />
       </div>
       <div className="mt-4 rounded-lg bg-gray-50 px-4 py-2">
         <p>
