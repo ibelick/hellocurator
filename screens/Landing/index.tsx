@@ -19,10 +19,8 @@ const Landing: React.FC<LandingProps> = ({ spaces }) => {
     <div>
       <div className="mb-4 flex flex-col justify-between md:flex-row md:items-center">
         <div className="mb-2 md:mb-0">
-          <h2 className="text-xl font-bold">Popular galleries</h2>
-          <p className="text-gray-400">
-            Explore galleries curated by communities
-          </p>
+          <h2 className="text-xl font-bold">Events</h2>
+          <p className="text-gray-400">Explore live and past events</p>
         </div>
         <DialogCreateSpace />
       </div>
@@ -30,22 +28,12 @@ const Landing: React.FC<LandingProps> = ({ spaces }) => {
         <div className="mb-4 mr-0 md:mb-0 md:mr-4">
           <CardSpace
             href="loopclub.eth"
-            name={spaces.space.name}
+            name="Share the latest picture on your phone"
             id={spaces.space.id}
-            imgSrc={spaces.space.avatar.replace(
-              "ipfs://",
-              "https://ipfs.io/ipfs/"
-            )}
+            imgSrc="https://images.unsplash.com/photo-1644799823986-6708ccdfa46f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=864&q=80"
           />
         </div>
-        <div>
-          <CardSpace
-            name="Playgrounds"
-            id="playgrounds.wtf"
-            imgSrc="https://pbs.twimg.com/profile_images/1490688819900919815/mSx79mUo_400x400.jpg"
-            isSoon
-          />
-        </div>
+        <div></div>
       </div>
       <div className="mt-8 h-0.5 w-full bg-gray-100"></div>
       <div className="mt-8 rounded-xl bg-gray-100 p-10">
@@ -96,15 +84,29 @@ const CardSpace: React.FC<CardSpaceProps> = ({
   return (
     <Link href={`/${href}`}>
       <a className={`block ${isSoon ? `cursor-wait` : ``}`}>
-        <div className="relative w-full rounded-xl border border-gray-200 bg-white p-8 shadow transition hover:bg-gray-100 md:w-72">
+        <div className="md:w-100 relative w-full rounded-xl border border-gray-200 bg-white shadow transition hover:bg-gray-100">
           {isSoon ? (
             <span className="absolute top-4 right-4 rounded-full bg-gray-100 px-4 py-2 text-sm font-bold text-gray-400">
               SOON
             </span>
           ) : null}
-          <img className="mb-4 w-14 rounded-full" src={imgSrc} alt={name} />
-          <h3 className="text-mb-1 mt-2 text-xl font-bold">{name}</h3>
-          <p className="text-gray-400">{id}</p>
+
+          <p className="absolute top-6 right-6 rounded-full bg-green-50 px-4 py-2 text-green-500">
+            Open
+          </p>
+
+          <img
+            className="mb-4 h-28 w-full rounded-t-lg object-cover"
+            src={imgSrc}
+            alt={name}
+          />
+          <div className="px-8">
+            <h3 className="text-mb-1 mt-8 text-xl font-bold">{name}</h3>
+            <p className="text-gray-400">by {id}</p>
+            <div className="mt-4 h-0.5 w-full bg-gray-100"></div>
+            <p className="mt-6 text-sm text-gray-400">Ends in</p>
+            <p className="mb-8 text-xl font-medium">30 days</p>
+          </div>
         </div>
       </a>
     </Link>

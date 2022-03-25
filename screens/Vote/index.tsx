@@ -81,9 +81,13 @@ const Proposals: React.FC = () => {
           <div className="mb-8 justify-between lg:flex">
             <div>
               <h1 className="text-2xl font-bold">SubjectMivity</h1>
-              <p className="">
-                Submitted by <span className="text-primary-800">ethan.eth</span>{" "}
+              <p className="mb-8">
+                Total votes: <span className="text-primary-800">450 Votes</span>{" "}
               </p>
+              <div className=" flex items-center">
+                <div className="mr-2 h-6 w-6 rounded-full bg-gradient-to-r from-blue-700 to-red-200"></div>
+                <p className="">Submitted by john.eth</p>
+              </div>
             </div>
 
             <div className="mt-4 lg:mt-0">
@@ -111,6 +115,23 @@ const Proposals: React.FC = () => {
               <p className="text-2xl font-medium">00:00:30</p>
             </li>
           </ul>
+        </div>
+      </div>
+      <div className="mb-4 flex-none items-center justify-between rounded-xl bg-gray-50 p-8 md:flex">
+        <div className="flex items-center">
+          <span className="text-xl">🏆</span>
+          <div className="ml-4">
+            <h3 className="text-lg font-medium">
+              Winner will be announced soon
+            </h3>
+            <p className="text-gray-400">
+              You will soon be able to mint the winner image as an NFT
+            </p>
+          </div>
+        </div>
+        <div>
+          <p className="text-sm text-gray-400">Minting starts in</p>
+          <p className="text-2xl font-medium">00:30:40</p>
         </div>
       </div>
       <div className="mb-4 flex-none items-center justify-between rounded-xl bg-gray-50 p-8 md:flex">
