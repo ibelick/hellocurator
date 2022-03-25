@@ -28,7 +28,7 @@ const Vote: React.FC<VoteProps> = ({ info }) => {
 
 const Proposals: React.FC = () => {
   const router = useRouter();
-  const { uid } = router.query;
+  const { uid, eventId } = router.query;
   const {
     loading: isProposalsLoading,
     error,
@@ -50,7 +50,7 @@ const Proposals: React.FC = () => {
     (proposal: Proposal) => !proposal.title.startsWith("Add the NFT")
   );
 
-  const isEventStarted = false;
+  const isEventStarted = true;
   const isMintStarted = false;
 
   return (
@@ -85,7 +85,7 @@ const Proposals: React.FC = () => {
           </li>
           <li>
             {isEventStarted ? (
-              <Link href={`/${uid}/create`}>
+              <Link href={`/${uid}/${eventId}/create`}>
                 <a>
                   <Button
                     variant="secondary"
@@ -102,24 +102,7 @@ const Proposals: React.FC = () => {
           </li>
         </ul>
       </div>
-      {/*  const isMintStarted = false*/}
-      <div className="mb-4 flex-none items-center justify-between rounded-xl bg-gray-50 p-8 md:flex">
-        <div className="flex items-center">
-          <span className="text-xl">🏆</span>
-          <div className="ml-4">
-            <h3 className="text-lg font-medium">
-              Winner will be announced soon
-            </h3>
-            <p className="text-gray-400">
-              You will soon be able to mint the winner image as an NFT
-            </p>
-          </div>
-        </div>
-        <div>
-          <p className="text-sm text-gray-400">Minting starts in</p>
-          <p className="text-2xl font-medium">00:30:40</p>
-        </div>
-      </div>
+      {isMintStarted ? <MintItem /> : null}
       <div className="mb-4 flex-none items-center justify-between rounded-xl bg-gray-50 p-8 md:flex">
         <div className="flex items-center">
           <span>🔥</span>
@@ -151,6 +134,26 @@ const Proposals: React.FC = () => {
         proposals={proposals}
         userVotingPower={userVotingPower}
       />
+    </div>
+  );
+};
+
+const EventFinished = () => {
+  return (
+    <div className="mb-4 flex-none items-center justify-between rounded-xl bg-gray-50 p-8 md:flex">
+      <div className="flex items-center">
+        <span className="text-xl">🏆</span>
+        <div className="ml-4">
+          <h3 className="text-lg font-medium">Winner will be announced soon</h3>
+          <p className="text-gray-400">
+            You will soon be able to mint the winner image as an NFT
+          </p>
+        </div>
+      </div>
+      <div>
+        <p className="text-sm text-gray-400">Minting starts in</p>
+        <p className="text-2xl font-medium">00:30:40</p>
+      </div>
     </div>
   );
 };

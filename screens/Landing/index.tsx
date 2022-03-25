@@ -3,6 +3,7 @@ import Button from "components/Button";
 import { useState } from "react";
 import { Space } from "types/snapshot";
 import Dialog from "components/Dialog";
+import { EVENT_INIT } from "utils/storefront";
 
 export interface LandingProps {
   spaces: Spaces;
@@ -26,14 +27,18 @@ const Landing: React.FC<LandingProps> = ({ spaces }) => {
       </div>
       <div className="flex flex-col md:flex-row">
         <div className="mb-4 mr-0 md:mb-0 md:mr-4">
-          <CardSpace
-            href="loopclub.eth"
-            name="Share the latest picture on your phone"
-            id={spaces.space.id}
-            imgSrc="https://images.unsplash.com/photo-1644799823986-6708ccdfa46f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=864&q=80"
-          />
+          {EVENT_INIT.map((event) => {
+            return (
+              <CardSpace
+                key={`${event.creator_id}-${event.event_id}`}
+                href={`/${event.creator_id}/${event.event_id}`}
+                name={event.event_name}
+                id={spaces.space.id}
+                imgSrc="https://images.unsplash.com/photo-1644799823986-6708ccdfa46f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=864&q=80"
+              />
+            );
+          })}
         </div>
-        <div></div>
       </div>
       <div className="mt-8 h-0.5 w-full bg-gray-100"></div>
       <div className="mt-8 rounded-xl bg-gray-100 p-10">
@@ -81,7 +86,7 @@ const CardSpace: React.FC<CardSpaceProps> = ({
   isSoon,
 }) => {
   return (
-    <Link href={`/${href}`}>
+    <Link href={href}>
       <a className={`block ${isSoon ? `cursor-wait` : ``}`}>
         <div className="md:w-100 relative w-full rounded-xl border border-gray-200 bg-white shadow transition hover:bg-gray-100">
           {isSoon ? (
@@ -89,11 +94,9 @@ const CardSpace: React.FC<CardSpaceProps> = ({
               SOON
             </span>
           ) : null}
-
           <p className="absolute top-6 right-6 rounded-full bg-green-50 px-4 py-2 text-green-500">
             Open
           </p>
-
           <img
             className="mb-4 h-28 w-full rounded-t-lg object-cover"
             src={imgSrc}

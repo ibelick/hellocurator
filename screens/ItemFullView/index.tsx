@@ -23,7 +23,7 @@ export type ItemFullViewProps = {
 
 const ItemFullView: React.FC<ItemFullViewProps> = ({ item, isNFT }) => {
   const router = useRouter();
-  const { uid } = router.query;
+  const { uid, eventId } = router.query;
   const img = isNFT
     ? { url: item.meta?.content[0].url, alt: item.meta.name }
     : {
@@ -34,7 +34,7 @@ const ItemFullView: React.FC<ItemFullViewProps> = ({ item, isNFT }) => {
   return (
     <div>
       <div className="mb-6 inline-block rounded-full bg-white px-4 py-2 text-gray-400 transition hover:bg-gray-100 lg:mb-12">
-        <Link href={`/${uid}`}>
+        <Link href={`/${uid}/${eventId}`}>
           <a>← Back to gallery</a>
         </Link>
       </div>

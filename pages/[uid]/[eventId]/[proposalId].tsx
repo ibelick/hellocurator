@@ -4,6 +4,7 @@ import { GetServerSideProps, NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
 import ItemFullView from "screens/ItemFullView";
 import type { MetadataProposalProps } from "screens/ItemFullView/MetadataProposal";
+import { EVENT_INIT } from "utils/storefront";
 
 interface ProposalPageProps {
   metadata: MetadataProposalProps;
@@ -15,12 +16,22 @@ const ProposalPage: NextPage<ProposalPageProps> = (props) => {
 
 interface Params extends ParsedUrlQuery {
   uid: string;
+  eventId: string;
 }
 
-export const getServerSideProps: GetServerSideProps<any, Params> = async (
-  context
-) => {
-  const { proposalId } = context.params!;
+export const getServerSideProps: GetServerSideProps<
+  ProposalPageProps,
+  Params
+> = async (context) => {
+  const { proposalId, eventId } = context.params!;
+
+  const isSpaceExist = EVENT_INIT.some((event) => event.event_id === eventId);
+
+  if (!isSpaceExist) {
+    return {
+      notFound: true,
+    };
+  }
 
   const { data } = await apolloClient.query({
     query: SNAPSHOT_GET_PROPOSAL,

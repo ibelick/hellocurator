@@ -122,7 +122,7 @@ const Item: React.FC<{
 
   return (
     <>
-      <Link href={`/${router.query.uid}/vote/${id}`}>
+      <Link href={`/${router.query.uid}/${router.query.eventId}/${id}`}>
         <a className="flex flex-col">
           <img src={img} alt={metadata.name} />
           <span className="mt-4 text-lg font-medium">{metadata.name}</span>
