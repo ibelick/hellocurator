@@ -1,8 +1,6 @@
 import { loopclubStrategies } from "lib/snapshot";
 import { Proposal } from "types/snapshot";
-import HeaderStorefront from "components/HeaderStorefront";
 import Button from "components/Button";
-import type { SpaceInfo } from "components/HeaderStorefront";
 import { useQuery } from "@apollo/client";
 import { SNAPSHOT_GET_PROPOSALS } from "lib/queries";
 import { useRouter } from "next/router";
@@ -15,10 +13,14 @@ export interface VoteProps {
   info: SpaceInfo;
 }
 
+interface SpaceInfo {
+  id: string;
+  name: string;
+}
+
 const Vote: React.FC<VoteProps> = ({ info }) => {
   return (
     <div className="pb-12">
-      <HeaderStorefront info={info} />
       <Proposals />
     </div>
   );
