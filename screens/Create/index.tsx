@@ -11,7 +11,7 @@ import useIpfs from "hooks/useIpfs";
 import { useRouter } from "next/router";
 import Dialog from "components/Dialog";
 import Spinner from "components/Spinner";
-import { SPACE_EXAMPLE } from "utils/storefront";
+import { SPACE_INIT } from "utils/storefront";
 
 type FormValues = {
   image: FileList;
@@ -121,10 +121,12 @@ const Create: React.FC = () => {
                 <p className="mb-8">
                   for{" "}
                   <span className="text-primary-800">
-                    {SPACE_EXAMPLE.event}
+                    {SPACE_INIT?.event_name}
                   </span>{" "}
                   by{" "}
-                  <span className="text-primary-800">{SPACE_EXAMPLE.name}</span>
+                  <span className="text-primary-800">
+                    {SPACE_INIT?.creator_name}
+                  </span>
                 </p>
                 <div className="mb-4">
                   <TextInput
@@ -160,8 +162,11 @@ const Create: React.FC = () => {
             </h2>
             <p className="mb-4">
               for{" "}
-              <span className="text-primary-800">{SPACE_EXAMPLE.event}</span> by{" "}
-              <span className="text-primary-800">{SPACE_EXAMPLE.name}</span>
+              <span className="text-primary-800">{SPACE_INIT?.event_name}</span>{" "}
+              by{" "}
+              <span className="text-primary-800">
+                {SPACE_INIT?.creator_name}
+              </span>
             </p>
             <Link href={`/${uid}/vote/${receipt?.id}`}>
               <a>

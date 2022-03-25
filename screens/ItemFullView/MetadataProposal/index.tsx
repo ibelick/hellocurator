@@ -7,11 +7,10 @@ import { useQuery } from "@apollo/client";
 import { SNAPSHOT_GET_PROPOSAL } from "lib/queries";
 import useVote from "hooks/useVote";
 import Link from "next/link";
-import { SPACE_EXAMPLE } from "utils/storefront";
+import { SPACE_INIT } from "utils/storefront";
 import IconButton from "components/IconButton";
 import { useState } from "react";
 import { truncateEthAddress } from "utils/ethereum";
-import { dynamicTimeLeft } from "utils/date";
 import Timer from "components/Timer";
 
 export interface MetadataProposalProps {
@@ -66,8 +65,9 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
       <div className="mt-8">
         <h1 className="text-2xl font-bold">{meta.name}</h1>
         <p className="mb-8">
-          for <span className="text-primary-800">{SPACE_EXAMPLE.event}</span> by{" "}
-          <span className="text-primary-800">{SPACE_EXAMPLE.name}</span>
+          for{" "}
+          <span className="text-primary-800">{SPACE_INIT?.creator_name}</span>{" "}
+          by <span className="text-primary-800">{SPACE_INIT?.event_name}</span>
         </p>
         <div className="mb-8 flex items-center">
           <div className="mr-2 h-6 w-6 rounded-full bg-gradient-to-r from-blue-700 to-red-200"></div>
