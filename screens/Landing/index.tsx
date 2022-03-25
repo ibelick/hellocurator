@@ -38,14 +38,13 @@ const Landing: React.FC<LandingProps> = ({ spaces }) => {
       <div className="mt-8 h-0.5 w-full bg-gray-100"></div>
       <div className="mt-8 rounded-xl bg-gray-100 p-10">
         <div>
-          <h2 className="mb-2 text-xl font-bold">
-            🦖 Powered by Playgrounds.wtf
-          </h2>
+          <h2 className="mb-2 text-xl font-bold">What is hellocurator?</h2>
           <p className="mb-4 text-gray-400">
-            We’re a community of builders, creators and adventurers building
-            cool shit with crypto and web3, guided by principles of openness,
-            curiosity and play. We aim to build public goods for the future that
-            create and sustain an equitable, open Metaverse for all.
+            A curation event is 24h or more where people can submit an image
+            responding to a given theme, community members can vote with crypto.
+            Then, the most voted image gets minted or auctioned for a limited
+            period of time. Funds from the sale are then distributed accordingly
+            to what the community decided.
           </p>
         </div>
         <div className="flex w-full flex-col sm:flex-row">
@@ -55,7 +54,7 @@ const Landing: React.FC<LandingProps> = ({ spaces }) => {
             rel="noopener noreferrer"
             className="mb-4 mr-2 sm:mb-0"
           >
-            <Button variant="tertiary">Visit website</Button>
+            <Button variant="tertiary">Read mirror</Button>
           </a>
           <a href={DISCORD_LINK} target="_blank" rel="noopener noreferrer">
             <Button variant="tertiary">Join Discord</Button>
