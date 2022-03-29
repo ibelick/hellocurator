@@ -7,13 +7,13 @@ const CreatePage: NextPage = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { uid } = context.params!;
+  const { eventId } = context.params!;
 
-  const isSpaceExist = EVENT_INIT.some(
-    (event) => event.creator_id === uid && event.date_start
+  const isEventExist = EVENT_INIT.some(
+    (event) => event.event_id === eventId && event.date_start
   );
 
-  if (!isSpaceExist) {
+  if (!isEventExist) {
     return {
       notFound: true,
     };

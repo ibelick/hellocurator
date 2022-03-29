@@ -23,11 +23,13 @@ export const getServerSideProps: GetServerSideProps<
   ProposalPageProps,
   Params
 > = async (context) => {
-  const { proposalId, eventId } = context.params!;
+  const { eventId, proposalId } = context.params!;
 
-  const isSpaceExist = EVENT_INIT.some((event) => event.event_id === eventId);
+  const isEventExist = EVENT_INIT.some(
+    (event) => event.event_id === eventId && event.date_start
+  );
 
-  if (!isSpaceExist) {
+  if (!isEventExist) {
     return {
       notFound: true,
     };

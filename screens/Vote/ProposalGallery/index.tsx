@@ -115,6 +115,7 @@ const Item: React.FC<{
 }> = ({ metadataUrl, img, authorAddress, id }) => {
   const { data: metadata, error } = useSWR(metadataUrl, fetcher);
   const router = useRouter();
+  const { eventId } = router.query;
 
   if (!error && !metadata) {
     return null;
@@ -122,7 +123,7 @@ const Item: React.FC<{
 
   return (
     <>
-      <Link href={`/${router.query.uid}/${router.query.eventId}/${id}`}>
+      <Link href={`/events/${eventId}/${id}`}>
         <a className="flex flex-col">
           <img src={img} alt={metadata.name} />
           <span className="mt-4 text-lg font-medium">{metadata.name}</span>

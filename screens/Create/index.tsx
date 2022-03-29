@@ -30,7 +30,7 @@ const Create: React.FC = () => {
   const [isImageSubmited, setIsImageSubmited] = useState<boolean>(false);
   const [receipt, setReceipt] = useState<null | Receipt>(null);
   const router = useRouter();
-  const { uid, eventId } = router.query;
+  const { eventId } = router.query;
   const { image, name } = watch();
   const { upload } = useIpfs();
 
@@ -95,7 +95,7 @@ const Create: React.FC = () => {
       </Dialog>
       <div>
         <div className="mb-6 inline-block rounded-full bg-white px-4 py-2 text-gray-400 transition hover:bg-gray-100 lg:mb-12">
-          <Link href={`/${uid}/${eventId}`}>
+          <Link href={`/events/${eventId}`}>
             <a>← Back to gallery</a>
           </Link>
         </div>
@@ -168,12 +168,12 @@ const Create: React.FC = () => {
                 {SPACE_INIT?.creator_name}
               </span>
             </p>
-            <Link href={`/${uid}/${eventId}/${receipt?.id}`}>
+            <Link href={`/events/${eventId}/${receipt?.id}`}>
               <a>
                 <Button>View submission</Button>
               </a>
             </Link>
-            <Link href={`/${uid}/${eventId}/${receipt?.id}`}>
+            <Link href={`/events/${eventId}/${receipt?.id}`}>
               <a>
                 <img
                   className="mt-4 h-96 w-full object-contain"

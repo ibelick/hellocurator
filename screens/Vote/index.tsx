@@ -8,6 +8,7 @@ import { useAccount } from "wagmi";
 import useVotingPower from "hooks/useVotingPower";
 import ProposalGallery from "./ProposalGallery";
 import Link from "next/link";
+import { WHITELISTED_STOREFRONTS } from "utils/storefront";
 
 export interface VoteProps {
   info: SpaceInfo;
@@ -28,14 +29,14 @@ const Vote: React.FC<VoteProps> = ({ info }) => {
 
 const Proposals: React.FC = () => {
   const router = useRouter();
-  const { uid, eventId } = router.query;
+  const { eventId } = router.query;
   const {
     loading: isProposalsLoading,
     error,
     data,
   } = useQuery(SNAPSHOT_GET_PROPOSALS, {
     variables: {
-      spaceIn: uid,
+      spaceIn: WHITELISTED_STOREFRONTS[0],
       state: "active",
     },
   });
@@ -85,7 +86,7 @@ const Proposals: React.FC = () => {
           </li>
           <li>
             {isEventStarted ? (
-              <Link href={`/${uid}/${eventId}/create`}>
+              <Link href={`/events/${eventId}/create`}>
                 <a>
                   <Button
                     variant="secondary"

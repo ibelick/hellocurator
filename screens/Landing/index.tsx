@@ -31,7 +31,7 @@ const Landing: React.FC<LandingProps> = ({ spaces }) => {
             return (
               <CardSpace
                 key={`${event.creator_id}-${event.event_id}`}
-                href={`/${event.creator_id}/${event.event_id}`}
+                href={`/events/${event.event_id}`}
                 name={event.event_name}
                 id={spaces.space.id}
                 isSoon={Boolean(!event.date_start)}

@@ -5,7 +5,7 @@ import { Space } from "types/snapshot";
 import Vote from "screens/Vote";
 import type { VoteProps } from "screens/Vote";
 import { ParsedUrlQuery } from "querystring";
-import { EVENT_INIT } from "utils/storefront";
+import { EVENT_INIT, WHITELISTED_STOREFRONTS } from "utils/storefront";
 
 const VotePage: NextPage<VoteProps> = (props) => {
   return <Vote info={props.info} />;
@@ -18,13 +18,13 @@ interface Params extends ParsedUrlQuery {
 export const getStaticProps: GetStaticProps<VoteProps, Params> = async (
   context
 ) => {
-  const { uid } = context.params!;
+  const { eventId } = context.params!;
 
-  const isSpaceExist = EVENT_INIT.some(
-    (event) => event.creator_id === uid && event.date_start
+  const isEventExist = EVENT_INIT.some(
+    (event) => event.event_id === eventId && event.date_start
   );
 
-  if (!isSpaceExist) {
+  if (!isEventExist) {
     return {
       notFound: true,
     };
@@ -36,7 +36,7 @@ export const getStaticProps: GetStaticProps<VoteProps, Params> = async (
   >({
     query: SNAPSHOT_GET_SPACE,
     variables: {
-      spaceIn: uid,
+      spaceIn: WHITELISTED_STOREFRONTS[0],
     },
   });
 

@@ -1,5 +1,6 @@
 import { Web3Provider } from "@ethersproject/providers";
 import snapshot from "@snapshot-labs/snapshot.js";
+import { WHITELISTED_STOREFRONTS } from "utils/storefront";
 
 const hub = "https://hub.snapshot.org";
 const client = new snapshot.Client712(hub);
@@ -22,7 +23,7 @@ export const oldCreateProposal = async (itemId: string) => {
   const [account] = await web3.listAccounts();
 
   const receipt = await client.proposal(web3, account, {
-    space: "loopclub.eth",
+    space: WHITELISTED_STOREFRONTS[0],
     type: "single-choice",
     title: `Add the NFT ETHEREUM:${itemId} to the curation`,
     body: `link to NFT: https://rarible.com/token/${itemId}`,
@@ -47,7 +48,7 @@ export const createProposal = async (imageUrl: string, metadataUrl: string) => {
   const [account] = await web3.listAccounts();
 
   const receipt = await client.proposal(web3, account, {
-    space: "loopclub.eth",
+    space: WHITELISTED_STOREFRONTS[0],
     type: "single-choice",
     title: `${imageUrl}`,
     body: `${metadataUrl}`,
@@ -83,7 +84,7 @@ export const castVote = async (proposal: string, choice: number) => {
   const [account] = await web3.listAccounts();
 
   const receipt = await client.vote(web3, account, {
-    space: "loopclub.eth",
+    space: WHITELISTED_STOREFRONTS[0],
     proposal,
     type: "single-choice",
     choice,
@@ -98,7 +99,7 @@ interface Score {
 }
 
 export const getVotingPower = async (voters: string[]) => {
-  const space = "loopclub.eth";
+  const space = WHITELISTED_STOREFRONTS[0];
   const network = "1";
 
   try {

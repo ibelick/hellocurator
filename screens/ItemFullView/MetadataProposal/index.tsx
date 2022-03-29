@@ -130,7 +130,7 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
       </div>
       <div className="mt-8 flex items-center justify-between">
         <Button variant="secondary">Share the image</Button>
-        <Link href={`/${uid}`}>
+        <Link href={`/events`}>
           <a>
             <Button variant="primary">See all submissions</Button>
           </a>
