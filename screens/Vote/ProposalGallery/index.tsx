@@ -1,6 +1,5 @@
-import { castVote, loopclubStrategies } from "lib/snapshot";
+import { loopclubStrategies } from "lib/snapshot";
 import { Proposal } from "types/snapshot";
-import IconButton from "components/IconButton";
 import useVote from "hooks/useVote";
 import { useState } from "react";
 import { truncateEthAddress } from "utils/ethereum";
@@ -8,6 +7,7 @@ import useSWR from "swr";
 import { fetcher } from "lib/fetch";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import VoteButton from "components/VoteButton";
 
 interface ProposalGalleryProps {
   proposals: Proposal[];
@@ -81,25 +81,11 @@ const Proposal: React.FC<{ proposal: Proposal; userVotingPower: number }> = ({
             proposalId={proposal.id}
             voteReceiptId={voteReceiptId}
           />
-          <IconButton
-            disabled={userVotingPower === 0}
-            onClick={async () => {
-              const receipt = await castVote(proposal.id, 1);
-              // @ts-ignore
-              setVoteReceiptId(receipt.id as string);
-            }}
-            icon={
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="56"
-                height="56"
-                viewBox="0 0 56 56"
-              >
-                <text y="34" x="19">
-                  {proposal.choices[0]}
-                </text>
-              </svg>
-            }
+          <VoteButton
+            userVotingPower={userVotingPower}
+            proposalId={proposal.id}
+            choice={proposal.choices[0]}
+            setVoteReceiptId={setVoteReceiptId}
           />
         </div>
       </div>

@@ -8,7 +8,7 @@ import { SNAPSHOT_GET_PROPOSAL } from "lib/queries";
 import useVote from "hooks/useVote";
 import Link from "next/link";
 import { SPACE_INIT } from "utils/storefront";
-import IconButton from "components/IconButton";
+import VoteButton from "components/VoteButton";
 import { useState } from "react";
 import { truncateEthAddress } from "utils/ethereum";
 import Timer from "components/Timer";
@@ -28,7 +28,7 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
   const { userVotingPower } = useVotingPower();
   const [{ data: accountData }] = useAccount();
   const router = useRouter();
-  const { proposalId, uid } = router.query;
+  const { proposalId } = router.query;
   const { data } = useQuery(SNAPSHOT_GET_PROPOSAL, {
     variables: {
       id: proposalId,
@@ -87,30 +87,12 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
             {totalVotingPower} {loopclubStrategies[0].params.symbol}
           </p>
         </div>
-        {!isClosed ? (
-          <IconButton
-            disabled={userVotingPower === 0}
-            onClick={async () => {
-              if (!proposalId) {
-                return;
-              }
-
-              const receipt = await castVote(proposalId as string, 1);
-              // @ts-ignore
-              setVoteReceiptId(receipt.id as string);
-            }}
-            icon={
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="56"
-                height="56"
-                viewBox="0 0 56 56"
-              >
-                <text y="34" x="19">
-                  {data?.proposal?.choices}
-                </text>
-              </svg>
-            }
+        {!isClosed && userVotingPower && data.proposal ? (
+          <VoteButton
+            userVotingPower={userVotingPower}
+            proposalId={proposalId as string}
+            choice={data.proposal.choices}
+            setVoteReceiptId={setVoteReceiptId}
           />
         ) : null}
       </div>
