@@ -34,6 +34,7 @@ const Landing: React.FC<LandingProps> = ({ spaces }) => {
                 href={`/${event.creator_id}/${event.event_id}`}
                 name={event.event_name}
                 id={spaces.space.id}
+                isSoon={Boolean(!event.date_start)}
                 imgSrc="https://images.unsplash.com/photo-1644799823986-6708ccdfa46f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=864&q=80"
               />
             );
@@ -54,12 +55,14 @@ const Landing: React.FC<LandingProps> = ({ spaces }) => {
         </div>
         <div className="flex w-full flex-col sm:flex-row">
           <a
-            href="https://playgrounds.wtf/"
-            target="_blank"
+            // href="https://playgrounds.wtf/"
+            // target="_blank"
             rel="noopener noreferrer"
             className="mb-4 mr-2 sm:mb-0"
           >
-            <Button variant="tertiary">Read mirror</Button>
+            <Button variant="tertiary" disabled>
+              Read mirror
+            </Button>
           </a>
           <a href={DISCORD_LINK} target="_blank" rel="noopener noreferrer">
             <Button variant="tertiary">Join Discord</Button>
@@ -71,7 +74,7 @@ const Landing: React.FC<LandingProps> = ({ spaces }) => {
 };
 
 interface CardSpaceProps {
-  href?: string;
+  href: string;
   name: string;
   id: string;
   imgSrc: string;
@@ -79,24 +82,25 @@ interface CardSpaceProps {
 }
 
 const CardSpace: React.FC<CardSpaceProps> = ({
-  href = "",
+  href,
   name,
   id,
   imgSrc,
   isSoon,
 }) => {
   return (
-    <Link href={href}>
+    <Link href={isSoon ? `/` : href}>
       <a className={`block ${isSoon ? `cursor-wait` : ``}`}>
         <div className="md:w-100 relative w-full rounded-xl border border-gray-200 bg-white shadow transition hover:bg-gray-100">
           {isSoon ? (
             <span className="absolute top-4 right-4 rounded-full bg-gray-100 px-4 py-2 text-sm font-bold text-gray-400">
               SOON
             </span>
-          ) : null}
-          <p className="absolute top-6 right-6 rounded-full bg-green-50 px-4 py-2 text-green-500">
-            Open
-          </p>
+          ) : (
+            <span className="absolute top-6 right-6 rounded-full bg-green-50 px-4 py-2 text-green-500">
+              Open
+            </span>
+          )}
           <img
             className="mb-4 h-28 w-full rounded-t-lg object-cover"
             src={imgSrc}
@@ -107,7 +111,9 @@ const CardSpace: React.FC<CardSpaceProps> = ({
             <p className="text-gray-400">by {id}</p>
             <div className="mt-4 h-0.5 w-full bg-gray-100"></div>
             <p className="mt-6 text-sm text-gray-400">Ends in</p>
-            <p className="mb-8 text-xl font-medium">30 days</p>
+            <p className="mb-8 text-xl font-medium">
+              {!isSoon ? `30 days` : `-`}
+            </p>
           </div>
         </div>
       </a>

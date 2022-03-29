@@ -20,6 +20,16 @@ export const getStaticProps: GetStaticProps<VoteProps, Params> = async (
 ) => {
   const { uid } = context.params!;
 
+  const isSpaceExist = EVENT_INIT.some(
+    (event) => event.creator_id === uid && event.date_start
+  );
+
+  if (!isSpaceExist) {
+    return {
+      notFound: true,
+    };
+  }
+
   const { data: spaceInfo } = await apolloClient.query<
     { space: Space },
     { spaceIn: string }

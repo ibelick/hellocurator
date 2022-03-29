@@ -5,7 +5,9 @@ const Layout: React.FC = ({ children }) => {
   return (
     <div className="font-display">
       <Header />
-      <main className="mx-auto max-w-screen-2xl px-6 md:px-24">{children}</main>
+      <main className="mx-auto max-w-screen-2xl px-6 pb-12 md:px-24">
+        {children}
+      </main>
     </div>
   );
 };

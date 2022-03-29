@@ -8,7 +8,9 @@ const SpacePage: NextPage = () => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { uid } = context.params!;
 
-  const isSpaceExist = EVENT_INIT.some((event) => event.creator_id === uid);
+  const isSpaceExist = EVENT_INIT.some(
+    (event) => event.creator_id === uid && event.date_start
+  );
 
   if (!isSpaceExist) {
     return {
