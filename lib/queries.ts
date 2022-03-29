@@ -29,6 +29,26 @@ export const SNAPSHOT_GET_PROPOSALS = gql`
   }
 `;
 
+export const SNAPSHOT_GET_PROPOSAL = gql`
+  query GetProposal($id: String!) {
+    proposal(id: $id) {
+      id
+      title
+      body
+      choices
+      start
+      end
+      snapshot
+      state
+      author
+      space {
+        id
+        name
+      }
+    }
+  }
+`;
+
 export const SNAPSHOT_GET_SPACE = gql`
   query GetSpace($spaceIn: String!) {
     space(id: $spaceIn) {

@@ -15,11 +15,11 @@ interface ChoiceWithVotingPower {
 }
 
 const useVote = (
-  proposalId: string,
-  availableChoices: string[],
+  proposalId?: string,
+  availableChoices?: string[],
   voteReceiptId?: string | null
 ) => {
-  const { error, data, refetch } = useQuery<VoteData, { proposalId: string }>(
+  const { error, data, refetch } = useQuery<VoteData, { proposalId?: string }>(
     SNAPSHOS_GET_VOTE,
     {
       variables: {
@@ -40,7 +40,7 @@ const useVote = (
 
   useEffect(() => {
     const fetchScore = async () => {
-      if (!data || error) {
+      if (!data || error || !availableChoices) {
         return;
       }
 
@@ -94,7 +94,7 @@ const useVote = (
     };
 
     fetchScore();
-  }, [data]);
+  }, [data, availableChoices]);
 
   return { choiceWithVotingPower, totalVotingPower };
 };

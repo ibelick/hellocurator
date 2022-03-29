@@ -5,7 +5,7 @@ import { Space } from "types/snapshot";
 import Vote from "screens/Vote";
 import type { VoteProps } from "screens/Vote";
 import { ParsedUrlQuery } from "querystring";
-import { WHITELISTED_STOREFRONTS } from "utils/storefront";
+import { EVENT_INIT } from "utils/storefront";
 
 const VotePage: NextPage<VoteProps> = (props) => {
   return <Vote info={props.info} />;
@@ -19,6 +19,16 @@ export const getStaticProps: GetStaticProps<VoteProps, Params> = async (
   context
 ) => {
   const { uid } = context.params!;
+
+  const isSpaceExist = EVENT_INIT.some(
+    (event) => event.creator_id === uid && event.date_start
+  );
+
+  if (!isSpaceExist) {
+    return {
+      notFound: true,
+    };
+  }
 
   const { data: spaceInfo } = await apolloClient.query<
     { space: Space },
@@ -44,8 +54,8 @@ export const getStaticProps: GetStaticProps<VoteProps, Params> = async (
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = WHITELISTED_STOREFRONTS.map((uid) => {
-    return { params: { uid } };
+  const paths = EVENT_INIT.map((event) => {
+    return { params: { uid: event.creator_id, eventId: event.event_id } };
   });
 
   return {

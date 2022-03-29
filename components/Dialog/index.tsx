@@ -4,9 +4,9 @@ import * as Portal from "@radix-ui/react-portal";
 import { Fragment, ReactNode } from "react";
 
 interface DialogProps {
-  trigger: ReactNode;
+  trigger?: ReactNode;
   isOpen?: boolean;
-  setIsOpen: (isOpen: boolean) => void;
+  setIsOpen?: (isOpen: boolean) => void;
 }
 
 const Dialog: React.FC<DialogProps> = ({
@@ -17,9 +17,11 @@ const Dialog: React.FC<DialogProps> = ({
 }) => {
   return (
     <DialogPrimitive.Root open={isOpen} onOpenChange={setIsOpen}>
-      <DialogPrimitive.Trigger asChild>
-        <div className="appearance-none">{trigger}</div>
-      </DialogPrimitive.Trigger>
+      {trigger ? (
+        <DialogPrimitive.Trigger asChild>
+          <div className="appearance-none">{trigger}</div>
+        </DialogPrimitive.Trigger>
+      ) : null}
       <Portal.Root>
         <Transition.Root show={isOpen}>
           <Transition.Child
@@ -47,12 +49,14 @@ const Dialog: React.FC<DialogProps> = ({
           >
             <DialogPrimitive.Content
               forceMount
-              className="fixed top-[50%] left-[50%] z-50 w-[95vw] max-w-md -translate-x-[50%] -translate-y-[50%] rounded-lg border border-gray-200 bg-white p-10 font-display shadow-xl focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75 md:w-full"
+              className="fixed top-[50%] left-[50%] z-50 max-h-full w-[95vw] max-w-md -translate-x-[50%] -translate-y-[50%] overflow-x-auto rounded-lg border border-gray-200 bg-white p-10 font-display shadow-xl focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75 md:w-full"
             >
               {children}
-              <DialogPrimitive.Close className="absolute top-5 right-5">
-                <span className="text-2xl">×</span>
-              </DialogPrimitive.Close>
+              {setIsOpen ? (
+                <DialogPrimitive.Close className="absolute top-5 right-5">
+                  <span className="text-2xl">×</span>
+                </DialogPrimitive.Close>
+              ) : null}
             </DialogPrimitive.Content>
           </Transition.Child>
         </Transition.Root>

@@ -1,4 +1,4 @@
-import { createSellOrder, removeFromSellOrder } from "lib/nft";
+import { createSellOrder, removeFromSellOrder, lazyMint } from "lib/nft";
 import { useEffect, useState } from "react";
 import Web3 from "web3";
 import { Web3Ethereum } from "@rarible/web3-ethereum";
@@ -15,7 +15,7 @@ const useRarible = () => {
       web3: web3,
     });
     // @todo: environment config
-    const env = "mainnet";
+    const env = "rinkeby";
     const sdk = createRaribleSdk(web3Ethereum, env);
     setSdk(sdk);
   }, []);
@@ -57,9 +57,20 @@ const useRarible = () => {
     return order;
   };
 
+  const lazyMintNft = () => {
+    if (!sdk) {
+      return;
+    }
+
+    const mint = lazyMint(sdk);
+
+    return mint;
+  };
+
   return {
     sellOrder,
     removeSell,
+    lazyMintNft,
   };
 };
 

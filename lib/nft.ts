@@ -4,8 +4,14 @@ import { SellRequest } from "@rarible/protocol-ethereum-sdk/build/order/sell";
 import { Order } from "@rarible/ethereum-api-client";
 import { SimpleOrder } from "@rarible/protocol-ethereum-sdk/build/order/types";
 
+// stagging
+export const BASE_URL_ETHEREUM =
+  "https://ethereum-api-staging.rarible.org/v0.1";
+// mainnet
+export const BASE_URL_MULTICHAIN = "https://api.rarible.org/v0.1";
+
 export const getItemById = async (itemId: string) => {
-  const response = await fetch(`https://api.rarible.org/v0.1/items/${itemId}`, {
+  const response = await fetch(`${BASE_URL_MULTICHAIN}/items/${itemId}`, {
     method: "GET",
   });
   const nft = await response.json();
@@ -15,9 +21,8 @@ export const getItemById = async (itemId: string) => {
 
 export const getItemOrders = async (contractId: string, tokenId: string) => {
   const response = await fetch(
-    `https://ethereum-api.rarible.org/v0.1/order/orders/sell/byItem?contract=${contractId}&tokenId=${tokenId}`
+    `${BASE_URL_ETHEREUM}/order/orders/sell/byItem?contract=${contractId}&tokenId=${tokenId}`
   );
-  // const response = await fetch(`https://api.rarible.org/v0.1/orders/${itemId}`);
   const order = await response.json();
 
   return order;
@@ -82,4 +87,44 @@ export const removeFromSellOrder = async (
   const order = await raribleSdk.order.cancel(sellOrder);
 
   return order;
+};
+
+// @todo
+export const lazyMint = async (raribleSdk: RaribleSdk) => {
+  const uri = "ipfs:/QmWLsBu6nS4ovaHbGAXprD1qEssJu4r5taQfB74sCG51tp";
+  const makerAccount = toAddress("0xcE9798d145cA63B5FdE24f651cC29B1C4fa07744");
+
+  const nftCollection =
+    await raribleSdk.apis.nftCollection.getNftCollectionById({
+      collection: toAddress("0xf2f61be6495f43f7836ddde8de70a0987d7c22fb"),
+    });
+
+  const creators = [
+    {
+      account: toAddress(makerAccount),
+      value: 10000,
+    },
+  ];
+
+  const token = await generateNftToken(nftCollection.id, makerAccount);
+
+  const response = await raribleSdk.nft.mint({
+    // @ts-ignore
+    collection: nftCollection,
+    uri,
+    supply: 1000,
+    lazy: true,
+    nftTokenId: token,
+    creators,
+  });
+
+  return response;
+};
+
+export const generateNftToken = async (collection: string, minter: string) => {
+  return (
+    await fetch(
+      `${BASE_URL_ETHEREUM}/nft/collections/${collection}/generate_token_id?minter=${minter}`
+    )
+  ).json();
 };

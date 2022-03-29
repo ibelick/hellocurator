@@ -1,8 +1,9 @@
-import { GetServerSideProps, NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
+import Create from "screens/Create";
 import { EVENT_INIT } from "utils/storefront";
 
-const SpacePage: NextPage = () => {
-  return <span></span>;
+const CreatePage: NextPage = () => {
+  return <Create />;
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -18,16 +19,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  const lastEventPath = EVENT_INIT.find(
-    (event) => event.creator_id === "loopclub.eth"
-  )?.event_id;
-
   return {
-    redirect: {
-      destination: `${uid}/${lastEventPath}`,
-      permanent: false,
-    },
+    props: {},
   };
 };
 
-export default SpacePage;
+export default CreatePage;

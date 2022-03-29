@@ -1,10 +1,11 @@
 import useSWR from "swr";
 import { fetcher } from "lib/fetch";
 import type { NFT } from "types/rarible";
+import { BASE_URL_MULTICHAIN } from "lib/nft";
 
 const useNft = (assetId: string) => {
   const { data, error } = useSWR<NFT>(
-    `https://api.rarible.org/v0.1/items/${assetId}`,
+    `${BASE_URL_MULTICHAIN}/items/${assetId}`,
     fetcher
   );
 

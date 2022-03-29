@@ -1,48 +1,38 @@
-import { castVote, getVotingPower, loopclubStrategies } from "lib/snapshot";
-import { Proposals } from "types/snapshot";
-import useNft from "hooks/useNft";
-import IconButton from "components/IconButton";
-import Progress from "components/Progress";
-import HeaderStorefront from "components/HeaderStorefront";
-import type { SpaceInfo } from "components/HeaderStorefront";
+import { loopclubStrategies } from "lib/snapshot";
+import { Proposal } from "types/snapshot";
+import Button from "components/Button";
 import { useQuery } from "@apollo/client";
 import { SNAPSHOT_GET_PROPOSALS } from "lib/queries";
 import { useRouter } from "next/router";
-import useVote from "hooks/useVote";
-import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
+import useVotingPower from "hooks/useVotingPower";
+import ProposalGallery from "./ProposalGallery";
 import Link from "next/link";
 
 export interface VoteProps {
   info: SpaceInfo;
 }
 
-const Vote: React.FC<VoteProps> = ({ info }) => {
-  const [createProposalReceiptId, setCreateProposalReceiptId] = useState<
-    string | null
-  >(null);
+interface SpaceInfo {
+  id: string;
+  name: string;
+}
 
+const Vote: React.FC<VoteProps> = ({ info }) => {
   return (
     <div className="pb-12">
-      <HeaderStorefront
-        info={info}
-        setCreateProposalReceiptId={setCreateProposalReceiptId}
-      />
-      <Proposals createProposalReceiptId={createProposalReceiptId} />
+      <Proposals />
     </div>
   );
 };
 
-const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
-  createProposalReceiptId,
-}) => {
+const Proposals: React.FC = () => {
   const router = useRouter();
-  const { uid } = router.query;
+  const { uid, eventId } = router.query;
   const {
     loading: isProposalsLoading,
     error,
     data,
-    refetch,
   } = useQuery(SNAPSHOT_GET_PROPOSALS, {
     variables: {
       spaceIn: uid,
@@ -50,49 +40,69 @@ const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
     },
   });
   const [{ data: accountData }] = useAccount();
-  const [userVotingPower, setUserVotingPower] = useState<number | null>(null);
-
-  // refetch proposals data when user submit NFT
-  useEffect(() => {
-    if (!createProposalReceiptId) {
-      return;
-    }
-
-    refetch();
-  }, [createProposalReceiptId]);
-
-  useEffect(() => {
-    if (!accountData?.address) {
-      setUserVotingPower(0);
-      return;
-    }
-
-    const fetchVotingPower = async () => {
-      const votingPower = await getVotingPower([accountData.address]);
-
-      const userVotingPower = votingPower?.[0][accountData.address];
-
-      if (!userVotingPower) {
-        setUserVotingPower(0);
-        return;
-      }
-
-      setUserVotingPower(userVotingPower);
-    };
-
-    fetchVotingPower();
-  }, [accountData?.address]);
+  const { userVotingPower } = useVotingPower();
 
   if (isProposalsLoading) return null;
   if (error) return <p>Error :(</p>;
 
-  // @todo: prevent fetching test proposal for submit image, remove later
-  const proposals = data.proposals.filter((proposal: Proposals) =>
-    proposal.title.startsWith("Add the NFT")
+  // @todo: fetching proposal image, remove later
+  const proposals = data.proposals.filter(
+    (proposal: Proposal) => !proposal.title.startsWith("Add the NFT")
   );
+
+  const isEventStarted = true;
+  const isMintStarted = false;
 
   return (
     <div>
+      <div className="mb-8 w-full rounded-xl border border-gray-100 bg-white py-8 px-8 shadow-xl transition   lg:px-12">
+        <ul className="justify-between lg:flex">
+          <li className="border-r-1 mb-4 border-gray-100 lg:mb-0">
+            <p className="text-sm text-gray-400">Start in</p>
+            <p className="text-2xl font-medium">
+              {isEventStarted ? null : `-`}
+            </p>
+          </li>
+          <li className="border-r-1 mb-4 border-gray-100 lg:mb-0">
+            <p className="text-sm text-gray-400">LOOP CLUB fee</p>
+            <p className="text-2xl font-medium">
+              {" "}
+              {isEventStarted ? null : `-`}
+            </p>
+          </li>
+          <li className="border-r-1 mb-4  border-gray-100 lg:mb-0">
+            <p className="text-sm text-gray-400">Contributions</p>
+            <p className="text-2xl font-medium">
+              {isEventStarted ? null : `-`}
+            </p>
+          </li>
+          <li className="border-r-1 mb-4  border-gray-100 lg:mb-0">
+            <p className="text-sm text-gray-400">Voting power</p>
+            <p className="text-2xl font-medium">
+              {" "}
+              {isEventStarted ? null : `-`}
+            </p>
+          </li>
+          <li>
+            {isEventStarted ? (
+              <Link href={`/${uid}/${eventId}/create`}>
+                <a>
+                  <Button
+                    variant="secondary"
+                    type="button"
+                    disabled={!Boolean(accountData?.address)}
+                  >
+                    Submit an image
+                  </Button>
+                </a>
+              </Link>
+            ) : (
+              <Button disabled>Opening soon</Button>
+            )}
+          </li>
+        </ul>
+      </div>
+      {isMintStarted ? <MintItem /> : null}
       <div className="mb-4 flex-none items-center justify-between rounded-xl bg-gray-50 p-8 md:flex">
         <div className="flex items-center">
           <span>🔥</span>
@@ -120,163 +130,76 @@ const Proposals: React.FC<{ createProposalReceiptId?: string | null }> = ({
           </p>
         </div>
       </div>
-      <ul className="columns-1 sm:columns-2 md:columns-3">
-        {proposals?.map((proposal: Proposals) => {
-          return (
-            <Proposal
-              key={proposal.id}
-              proposal={proposal}
-              userVotingPower={userVotingPower!}
-            />
-          );
-        })}
-      </ul>
+      <ProposalGallery
+        proposals={proposals}
+        userVotingPower={userVotingPower}
+      />
     </div>
   );
 };
 
-const timeBetweenDates = (date1: Date, date2: Date) => {
-  const differenceMilliseconds = date1.getTime() - date2.getTime();
-  const minutes = Math.round(differenceMilliseconds / 60000);
-  const hours = Math.round(differenceMilliseconds / 3600000);
-  const days = Math.round(differenceMilliseconds / 86400000);
-
-  if (!days && !hours) {
-    return `${minutes} min.`;
-  }
-
-  if (!days) {
-    return `${hours} hr.`;
-  }
-
-  return `${days} days`;
-};
-
-const Proposal: React.FC<{ proposal: Proposals; userVotingPower: number }> = ({
-  proposal,
-  userVotingPower,
-}) => {
-  const voteEnd = new Date(proposal.end * 1000);
-  const today = new Date(Date.now());
-  const remainingTime = timeBetweenDates(voteEnd, today);
-  const [voteReceiptId, setVoteReceiptId] = useState<string | null>(null);
-
+const EventFinished = () => {
   return (
-    <li className="mb-6 break-inside-avoid">
-      <div className="flex flex-col items-start justify-between rounded-xl bg-gray-50 p-4">
-        <div>
-          <NFTInfo itemId={proposal.title.match(/ETHEREUM\S+/g)?.[0]} />
-        </div>
-        <Votes
-          choices={proposal.choices}
-          proposalId={proposal.id}
-          voteReceiptId={voteReceiptId}
-        />
-        <div className="mb-4 flex w-full justify-center gap-4">
-          {proposal.choices.map((choice, index: number) => {
-            return (
-              <IconButton
-                disabled={userVotingPower === 0}
-                onClick={async () => {
-                  const receipt = await castVote(proposal.id, index + 1);
-                  // @ts-ignore
-                  setVoteReceiptId(receipt.id as string);
-                }}
-                icon={
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="56"
-                    height="56"
-                    viewBox="0 0 56 56"
-                  >
-                    <text y="34" x="19">
-                      {choice}
-                    </text>
-                  </svg>
-                }
-                key={`${index}-${choice}`}
-              />
-            );
-          })}
-        </div>
-        <div className="w-full text-center">
-          <p className="text-sm text-slate-400">Vote ends in {remainingTime}</p>
+    <div className="mb-4 flex-none items-center justify-between rounded-xl bg-gray-50 p-8 md:flex">
+      <div className="flex items-center">
+        <span className="text-xl">🏆</span>
+        <div className="ml-4">
+          <h3 className="text-lg font-medium">Winner will be announced soon</h3>
+          <p className="text-gray-400">
+            You will soon be able to mint the winner image as an NFT
+          </p>
         </div>
       </div>
-    </li>
-  );
-};
-
-const Votes: React.FC<{
-  choices: string[];
-  proposalId: string;
-  voteReceiptId?: string | null;
-}> = ({ choices, proposalId, voteReceiptId }) => {
-  const { choiceWithVotingPower, totalVotingPower } = useVote(
-    proposalId,
-    choices,
-    voteReceiptId
-  );
-
-  return (
-    <div className="w-full">
-      {choices?.map((choice, index: number) => {
-        const votingPower =
-          choiceWithVotingPower &&
-          Math.round(choiceWithVotingPower?.[index].votingPower * 10000) /
-            10000;
-        const label = choiceWithVotingPower
-          ? `${choiceWithVotingPower?.[index].label} ${votingPower} ${loopclubStrategies[0].params.symbol}`
-          : undefined;
-        const value =
-          totalVotingPower && choiceWithVotingPower
-            ? (Math.round(
-                (100 * choiceWithVotingPower?.[index].votingPower) /
-                  totalVotingPower
-              ) *
-                100) /
-              100
-            : 0;
-
-        return (
-          <div key={`${index}-${choice}`} className="mb-4">
-            <Progress value={value} label={label} />
-          </div>
-        );
-      })}
+      <div>
+        <p className="text-sm text-gray-400">Minting starts in</p>
+        <p className="text-2xl font-medium">00:30:40</p>
+      </div>
     </div>
   );
 };
 
-const NFTInfo: React.FC<{ itemId?: string }> = ({ itemId }) => {
-  if (!itemId) {
-    return <p>failed to load.</p>;
-  }
-
-  const { nft, isError, isLoading } = useNft(itemId);
-
-  if (isLoading) {
-    return null;
-  }
-
-  if (isError || !nft) {
-    return null;
-  }
-
+const MintItem = () => {
   return (
-    <div className="flex flex-col">
-      <Link
-        href={`https://rarible.com/token/${nft.id.replace("ETHEREUM:", "")}`}
-      >
-        <a target="_blank" rel="noopener noreferrer">
-          <img
-            className="h-full w-full rounded"
-            src={nft.meta.content[0].url}
-            alt={nft.meta.name}
-          />
-        </a>
-      </Link>
-      <p className="my-2 font-medium">{nft.meta.name}</p>
+    <div className="mb-4 items-center lg:flex">
+      <img
+        src="https://images.unsplash.com/photo-1648042354854-b2890d803335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDF8aFNQNkp4OHc0WjR8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=60"
+        className="mr-8  mb-4 w-full rounded-lg lg:mb-0 lg:w-2/4"
+      />
+      <div>
+        <div className="mb-8 justify-between lg:flex">
+          <div>
+            <h1 className="text-2xl font-bold">SubjectMivity</h1>
+            <p>
+              Submitted by <span className="text-primary-800">ethan.eth</span>{" "}
+            </p>
+          </div>
+
+          <div className="mt-4 lg:mt-0">
+            <Button variant="secondary">Mint now</Button>
+          </div>
+        </div>
+        <p>
+          This commission is an exploration of the ways our past plays a role in
+          the development of our psychological beings. Following the clues of
+          involuntary memories, the project traces the line of my family’s
+          emotional history that forms our personalities and informs our
+          experience of the present.
+        </p>
+        <ul className="mt-8 lg:flex">
+          <li className="border-r-1 mb-4 border-gray-100 lg:mb-0 ">
+            <p className="text-sm text-gray-400">Price</p>
+            <p className="text-2xl font-medium">0.01 ETH</p>
+          </li>
+          <li className="border-r-1 mb-4 border-gray-100 px-0 lg:mb-0 lg:px-12">
+            <p className="text-sm text-gray-400">Already minted</p>
+            <p className="text-2xl font-medium">149</p>
+          </li>
+          <li className="border-r-1 mb-4  border-gray-100 px-0 lg:mb-0 lg:px-12">
+            <p className="text-sm text-gray-400">Minting ends in</p>
+            <p className="text-2xl font-medium">00:00:30</p>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 };

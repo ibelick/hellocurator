@@ -1,9 +1,26 @@
-const Spinner: React.FC<{ variant?: string }> = ({ variant }) => {
+interface SpinnerProps {
+  variant?: "primary" | "secondary" | "tertiary";
+  size?: "xl" | "sm";
+}
+
+const VARIANT_ENUM: { [key: string]: string } = {
+  primary: "text-white",
+  secondary: "text-black",
+  tertiary: "text-primary-800",
+};
+
+const SIZE_ENUM: { [key: string]: string } = {
+  xl: "h-8 w-8",
+  md: "h-5 w-5",
+};
+
+const Spinner: React.FC<SpinnerProps> = ({
+  variant = "primary",
+  size = "md",
+}) => {
   return (
     <svg
-      className={`h-5 w-5 animate-spin ${
-        variant === "secondary" ? `text-white` : `text-black`
-      }`}
+      className={`${SIZE_ENUM[size]} animate-spin ${VARIANT_ENUM[variant]}`}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"

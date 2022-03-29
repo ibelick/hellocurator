@@ -10,7 +10,7 @@ const HomePage: NextPage<LandingProps> = (props) => {
   return <Landing spaces={props.spaces} />;
 };
 
-export const getStaticProps: GetStaticProps<any> = async (context) => {
+export const getStaticProps: GetStaticProps<any> = async () => {
   // @todo: fetch multiples spaces
   const { data } = await apolloClient.query<
     { space: Space },

@@ -1,17 +1,19 @@
-interface TextInputProps {
+interface TextareaProps {
   label: string;
   register: any;
   required?: boolean;
   placeholder?: string;
   id?: string;
+  rows?: number;
 }
 
-const TextInput: React.FC<TextInputProps> = ({
+const Textarea: React.FC<TextareaProps> = ({
   label,
   register,
   required,
   placeholder,
   id,
+  rows,
 }) => {
   return (
     <>
@@ -21,10 +23,10 @@ const TextInput: React.FC<TextInputProps> = ({
       >
         {label}
       </label>
-      <input
-        id={id}
+      <textarea
         className="focus:shadow-outline w-full appearance-none rounded bg-gray-100 py-4 px-4 leading-tight text-gray-700 placeholder:text-gray-400 focus:outline-none"
-        type="text"
+        id={id}
+        rows={rows}
         placeholder={placeholder}
         {...register(id, { required })}
       />
@@ -32,4 +34,4 @@ const TextInput: React.FC<TextInputProps> = ({
   );
 };
 
-export default TextInput;
+export default Textarea;
