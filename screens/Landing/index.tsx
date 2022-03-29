@@ -35,7 +35,7 @@ const Landing: React.FC<LandingProps> = ({ spaces }) => {
                 name={event.event_name}
                 id={spaces.space.id}
                 isSoon={Boolean(!event.date_start)}
-                imgSrc="https://images.unsplash.com/photo-1644799823986-6708ccdfa46f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=864&q=80"
+                imgSrc="https://images.unsplash.com/photo-1647682619185-92b42eaec8d0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=770&q=80"
               />
             );
           })}
