@@ -2,20 +2,22 @@ import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { apolloClient } from "lib/apollo";
 import { SNAPSHOT_GET_SPACE } from "lib/queries";
 import { Space } from "types/snapshot";
-import Vote from "screens/Vote";
-import type { VoteProps } from "screens/Vote";
+import Event from "screens/Event";
+import type { EventProps } from "screens/Event";
 import { ParsedUrlQuery } from "querystring";
 import { EVENT_INIT, WHITELISTED_STOREFRONTS } from "utils/storefront";
 
-const VotePage: NextPage<VoteProps> = (props) => {
-  return <Vote info={props.info} />;
+const EventPage: NextPage<EventProps> = (props) => {
+  console.log("props", props);
+
+  return <Event info={props.info} />;
 };
 
 interface Params extends ParsedUrlQuery {
   uid: string;
 }
 
-export const getStaticProps: GetStaticProps<VoteProps, Params> = async (
+export const getStaticProps: GetStaticProps<EventProps, Params> = async (
   context
 ) => {
   const { eventId } = context.params!;
@@ -47,7 +49,7 @@ export const getStaticProps: GetStaticProps<VoteProps, Params> = async (
 
   return {
     props: {
-      info,
+      info: spaceInfo,
     },
     revalidate: 60,
   };
@@ -64,4 +66,4 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export default VotePage;
+export default EventPage;

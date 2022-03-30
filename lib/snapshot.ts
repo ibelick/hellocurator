@@ -10,7 +10,7 @@ export const loopclubStrategies = [
   {
     name: "eth-with-balance",
     params: {
-      symbol: "ETH",
+      symbol: "LOOP",
       minBalance: 0.001,
     },
   },

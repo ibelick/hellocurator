@@ -10,7 +10,7 @@ import ProposalGallery from "./ProposalGallery";
 import Link from "next/link";
 import { WHITELISTED_STOREFRONTS } from "utils/storefront";
 
-export interface VoteProps {
+export interface EventProps {
   info: SpaceInfo;
 }
 
@@ -19,7 +19,7 @@ interface SpaceInfo {
   name: string;
 }
 
-const Vote: React.FC<VoteProps> = ({ info }) => {
+const Event: React.FC<EventProps> = ({ info }) => {
   return (
     <div className="pb-12">
       <Proposals />
@@ -72,7 +72,7 @@ const Proposals: React.FC = () => {
             </p>
           </li>
           <li className="border-r-1 mb-4  border-gray-100 lg:mb-0">
-            <p className="text-sm text-gray-400">Contributions</p>
+            <p className="text-sm text-gray-400">Contributors</p>
             <p className="text-2xl font-medium">
               {isEventStarted ? null : `-`}
             </p>
@@ -205,4 +205,4 @@ const MintItem = () => {
   );
 };
 
-export default Vote;
+export default Event;
