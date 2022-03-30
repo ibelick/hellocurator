@@ -3,12 +3,13 @@ import { SNAPSHOS_GET_VOTE } from "lib/queries";
 import { getVotingPower } from "lib/snapshot";
 import { useEffect, useState } from "react";
 import type { Vote } from "types/snapshot";
+import { useAccount } from "wagmi";
 
 interface VoteData {
   votes: Vote[];
 }
 
-interface ChoiceWithVotingPower {
+export interface ChoiceWithVotingPower {
   label: string;
   choice: number;
   votingPower: number;
@@ -19,6 +20,7 @@ const useVote = (
   availableChoices?: string[],
   voteReceiptId?: string | null
 ) => {
+  const [{ data: accountData }] = useAccount();
   const { error, data, refetch } = useQuery<VoteData, { proposalId?: string }>(
     SNAPSHOS_GET_VOTE,
     {
@@ -27,6 +29,7 @@ const useVote = (
       },
     }
   );
+  const [hasUserVoted, setHasUserVoted] = useState(false);
 
   // refetch votes data when user cast a vote
   useEffect(() => {
@@ -59,6 +62,11 @@ const useVote = (
       }
 
       const voters = data.votes.map((vote) => vote.voter);
+      const hasConnectedUserAlreadyVote = voters.some(
+        (vote) => vote === accountData?.address
+      );
+      setHasUserVoted(hasConnectedUserAlreadyVote);
+
       const score = await getVotingPower(voters);
 
       const totalVotingPower = Object.values(score![0]).reduce(
@@ -96,7 +104,7 @@ const useVote = (
     fetchScore();
   }, [data, availableChoices]);
 
-  return { choiceWithVotingPower, totalVotingPower };
+  return { choiceWithVotingPower, totalVotingPower, hasUserVoted };
 };
 
 export default useVote;

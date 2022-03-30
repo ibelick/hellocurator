@@ -8,10 +8,10 @@ const client = new snapshot.Client712(hub);
 // @todo: replace when onboard more spaces
 export const loopclubStrategies = [
   {
-    name: "erc721",
+    name: "eth-with-balance",
     params: {
-      symbol: "Morphs",
-      address: "0x480894ceedc8ff63b6db624568f666e634dc8623",
+      symbol: "ETH",
+      minBalance: 0.001,
     },
   },
 ];

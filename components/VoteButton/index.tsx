@@ -9,6 +9,7 @@ interface VoteButtonProps {
   proposalId: string;
   choice: string;
   setVoteReceiptId: (arg: string) => void;
+  hasUserVoted: boolean;
 }
 
 const VoteButton: React.FC<VoteButtonProps> = ({
@@ -16,6 +17,7 @@ const VoteButton: React.FC<VoteButtonProps> = ({
   proposalId,
   choice,
   setVoteReceiptId,
+  hasUserVoted,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -46,7 +48,7 @@ const VoteButton: React.FC<VoteButtonProps> = ({
         </div>
       </Dialog>
       <IconButton
-        disabled={userVotingPower === 0}
+        disabled={userVotingPower === 0 || hasUserVoted}
         onClick={onVote}
         icon={
           <svg
@@ -55,9 +57,15 @@ const VoteButton: React.FC<VoteButtonProps> = ({
             height="56"
             viewBox="0 0 56 56"
           >
-            <text y="34" x="19">
-              {choice}
-            </text>
+            {!hasUserVoted ? (
+              <text y="34" x="19">
+                {choice}
+              </text>
+            ) : (
+              <text y="34" x="6">
+                voted
+              </text>
+            )}
           </svg>
         }
       />

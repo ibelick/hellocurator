@@ -5,16 +5,14 @@ const SpacePage: NextPage = () => {
   return <span></span>;
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  // const isSpaceExist = EVENT_INIT.some(
-  //   (event) => event.creator_id === uid && event.date_start
-  // );
+export const getServerSideProps: GetServerSideProps = async () => {
+  const hasEvent = Boolean(EVENT_INIT[0].event_id && EVENT_INIT[0].date_start);
 
-  // if (!isSpaceExist) {
-  //   return {
-  //     notFound: true,
-  //   };
-  // }
+  if (!hasEvent) {
+    return {
+      notFound: true,
+    };
+  }
 
   const lastEventPath = EVENT_INIT.find(
     (event) => event.creator_id === WHITELISTED_STOREFRONTS[0]

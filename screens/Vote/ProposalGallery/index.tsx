@@ -1,6 +1,7 @@
 import { loopclubStrategies } from "lib/snapshot";
 import { Proposal } from "types/snapshot";
 import useVote from "hooks/useVote";
+import type { ChoiceWithVotingPower } from "hooks/useVote";
 import { useState } from "react";
 import { truncateEthAddress } from "utils/ethereum";
 import useSWR from "swr";
@@ -43,28 +44,16 @@ const ProposalGallery: React.FC<ProposalGalleryProps> = ({
   );
 };
 
-const timeBetweenDates = (date1: Date, date2: Date) => {
-  const differenceMilliseconds = date1.getTime() - date2.getTime();
-  const minutes = Math.round(differenceMilliseconds / 60000);
-  const hours = Math.round(differenceMilliseconds / 3600000);
-  const days = Math.round(differenceMilliseconds / 86400000);
-
-  if (!days && !hours) {
-    return `${minutes} min.`;
-  }
-
-  if (!days) {
-    return `${hours} hr.`;
-  }
-
-  return `${days} days`;
-};
-
 const Proposal: React.FC<{ proposal: Proposal; userVotingPower: number }> = ({
   proposal,
   userVotingPower,
 }) => {
   const [voteReceiptId, setVoteReceiptId] = useState<string | null>(null);
+  const { choiceWithVotingPower, hasUserVoted } = useVote(
+    proposal.id,
+    proposal.choices,
+    voteReceiptId
+  );
 
   return (
     <li className="mb-6 break-inside-avoid">
@@ -76,16 +65,13 @@ const Proposal: React.FC<{ proposal: Proposal; userVotingPower: number }> = ({
           id={proposal.id}
         />
         <div className="flex w-full items-center justify-between">
-          <Votes
-            choices={proposal.choices}
-            proposalId={proposal.id}
-            voteReceiptId={voteReceiptId}
-          />
+          <Votes choiceWithVotingPower={choiceWithVotingPower} />
           <VoteButton
             userVotingPower={userVotingPower}
             proposalId={proposal.id}
             choice={proposal.choices[0]}
             setVoteReceiptId={setVoteReceiptId}
+            hasUserVoted={hasUserVoted}
           />
         </div>
       </div>
@@ -124,12 +110,8 @@ const Item: React.FC<{
 };
 
 const Votes: React.FC<{
-  choices: string[];
-  proposalId: string;
-  voteReceiptId?: string | null;
-}> = ({ choices, proposalId, voteReceiptId }) => {
-  const { choiceWithVotingPower } = useVote(proposalId, choices, voteReceiptId);
-
+  choiceWithVotingPower: ChoiceWithVotingPower[] | null;
+}> = ({ choiceWithVotingPower }) => {
   const totalVotingPower =
     choiceWithVotingPower &&
     Math.round(choiceWithVotingPower?.[0].votingPower * 10000) / 10000;

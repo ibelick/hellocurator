@@ -35,7 +35,7 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
     },
   });
   const [voteReceiptId, setVoteReceiptId] = useState<string | null>(null);
-  const { choiceWithVotingPower } = useVote(
+  const { choiceWithVotingPower, hasUserVoted } = useVote(
     proposalId as string,
     data?.proposal?.choices,
     voteReceiptId
@@ -93,6 +93,7 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
             proposalId={proposalId as string}
             choice={data.proposal.choices}
             setVoteReceiptId={setVoteReceiptId}
+            hasUserVoted={hasUserVoted}
           />
         ) : null}
       </div>
