@@ -59,6 +59,10 @@ export const SNAPSHOT_GET_SPACE = gql`
       symbol
       members
       avatar
+      filters {
+        minScore
+        onlyMembers
+      }
     }
   }
 `;

@@ -8,8 +8,6 @@ import { ParsedUrlQuery } from "querystring";
 import { EVENT_INIT, WHITELISTED_STOREFRONTS } from "utils/storefront";
 
 const EventPage: NextPage<EventProps> = (props) => {
-  console.log("props", props);
-
   return <Event info={props.info} />;
 };
 
@@ -49,7 +47,7 @@ export const getStaticProps: GetStaticProps<EventProps, Params> = async (
 
   return {
     props: {
-      info: spaceInfo,
+      info,
     },
     revalidate: 60,
   };

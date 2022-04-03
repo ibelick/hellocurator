@@ -28,14 +28,9 @@ const Header = () => {
         </ul>
         <ul className="flex w-fit items-center justify-end">
           <li className="mr-6">
-            <a
-              href="https://www.notion.so/Introducing-hellocurator-v0-a4d98061d93a470b9bf2da93af9f9be1"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-gray-500"
-            >
-              About
-            </a>
+            <Link href="/about">
+              <a className="text-gray-400 hover:text-gray-500">About</a>
+            </Link>
           </li>
           <li className="flex">
             <ButtonConnectWallet />
