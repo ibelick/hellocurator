@@ -11,16 +11,7 @@ import Link from "next/link";
 import { WHITELISTED_STOREFRONTS, SPACE_INIT } from "utils/storefront";
 import { timeBetweenDates } from "utils/date";
 
-export interface EventProps {
-  info: SpaceInfo;
-}
-
-interface SpaceInfo {
-  id: string;
-  name: string;
-}
-
-const Event: React.FC<EventProps> = ({ info }) => {
+const Event: React.FC = () => {
   return (
     <div className="pb-12">
       <Proposals />
@@ -47,7 +38,7 @@ const Proposals: React.FC = () => {
   if (isProposalsLoading) return null;
   if (error) return <p>Error :(</p>;
 
-  // @todo: fetching proposal image, remove later
+  // @todo: filter with date ends + title + body IPFS
   const proposals = data.proposals.filter(
     (proposal: Proposal) => !proposal.title.startsWith("Add the NFT")
   );
@@ -84,7 +75,9 @@ const Proposals: React.FC = () => {
           </li>
           <li className="border-r-1 mb-4  border-gray-100 lg:mb-0">
             <p className="text-sm text-gray-400">Submissions</p>
-            <p className="text-2xl font-medium">{isEventStarted ? `-` : `-`}</p>
+            <p className="text-2xl font-medium">
+              {isEventStarted ? `${proposals.length}` : `-`}
+            </p>
           </li>
           <li className="border-r-1 mb-4  border-gray-100 lg:mb-0">
             <p className="text-sm text-gray-400">Voting power</p>

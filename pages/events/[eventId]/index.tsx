@@ -7,8 +7,8 @@ import type { EventProps } from "screens/Event";
 import { ParsedUrlQuery } from "querystring";
 import { EVENT_INIT, WHITELISTED_STOREFRONTS } from "utils/storefront";
 
-const EventPage: NextPage<EventProps> = (props) => {
-  return <Event info={props.info} />;
+const EventPage: NextPage = () => {
+  return <Event />;
 };
 
 interface Params extends ParsedUrlQuery {
@@ -30,26 +30,20 @@ export const getStaticProps: GetStaticProps<EventProps, Params> = async (
     };
   }
 
-  const { data: spaceInfo } = await apolloClient.query<
-    { space: Space },
-    { spaceIn: string }
-  >({
-    query: SNAPSHOT_GET_SPACE,
-    variables: {
-      spaceIn: WHITELISTED_STOREFRONTS[0],
-    },
-  });
-
-  const info = {
-    name: spaceInfo.space.name,
-    id: spaceInfo.space.id,
-    symbol: spaceInfo.space.symbol,
-    filters: spaceInfo.space.filters.minScore,
-  };
+  // @todo: later
+  // const { data: spaceInfo } = await apolloClient.query<
+  //   { space: Space },
+  //   { spaceIn: string }
+  // >({
+  //   query: SNAPSHOT_GET_SPACE,
+  //   variables: {
+  //     spaceIn: WHITELISTED_STOREFRONTS[0],
+  //   },
+  // });
 
   return {
     props: {
-      info,
+      // spaceInfo,
     },
     revalidate: 60,
   };

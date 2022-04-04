@@ -61,7 +61,7 @@ const About = () => {
           ></img>
           <div>
             <p className="font-medium">Ibelick</p>
-            <a href="https://twitter.com/smoooogy" target="_blank">
+            <a href="https://twitter.com/ibelick" target="_blank">
               Twitter
             </a>
           </div>
@@ -73,7 +73,7 @@ const About = () => {
           ></img>
           <div>
             <p className="font-medium">Smoogy</p>
-            <a href="https://twitter.com/Ibelick" target="_blank">
+            <a href="https://twitter.com/smoooogy" target="_blank">
               Twitter
             </a>
           </div>

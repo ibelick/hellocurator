@@ -63,6 +63,7 @@ export const SNAPSHOT_GET_SPACE = gql`
         minScore
         onlyMembers
       }
+      proposalsCount
     }
   }
 `;

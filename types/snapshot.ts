@@ -25,6 +25,7 @@ export interface Space {
   symbol: string;
   members: string[];
   filters: Filters;
+  proposalsCount: number;
 }
 
 interface Filters {
