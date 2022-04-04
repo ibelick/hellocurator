@@ -8,7 +8,8 @@ export const EVENT_INIT = [
     event_description:
       "Take a picture of what is in front of you. Don't cheat!",
     event_id: "photo-front-of-you",
-    date_end: 1650034800000,
+    date_end: null,
+    // date_end: 1650034800000,
   },
 ];
 

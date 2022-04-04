@@ -49,8 +49,8 @@ const Proposals: React.FC = () => {
   return (
     <div>
       <div className="mb-8 w-full rounded-xl border border-gray-100 bg-white py-8 px-8 shadow-xl transition   lg:px-12">
-        <div className="mb-8 mt-4 flex items-center justify-between">
-          <div className="">
+        <div className="mb-8 mt-4 flex flex-col items-start justify-between md:flex-row md:items-center">
+          <div>
             <h1 className="text-2xl font-medium">{SPACE_INIT?.event_name}</h1>
             <p className="pb-4 text-gray-400">
               {SPACE_INIT?.event_description}
@@ -67,7 +67,7 @@ const Proposals: React.FC = () => {
         <ul className="justify-between lg:flex">
           <li className="border-r-1 mb-4 border-gray-100 lg:mb-0">
             <p className="text-sm text-gray-400">Ends in</p>
-            <p className="text-xl font-medium">
+            <p className="text-xl">
               {isEventStarted
                 ? `${timeBetweenDates(
                     new Date(SPACE_INIT?.date_end!),
@@ -85,7 +85,7 @@ const Proposals: React.FC = () => {
           </li>
           <li className="border-r-1 mb-4  border-gray-100 lg:mb-0">
             <p className="text-sm text-gray-400">Submissions</p>
-            <p className="text-xl font-medium">
+            <p className="text-xl">
               {isEventStarted ? `${proposals.length}` : `-`}
             </p>
           </li>

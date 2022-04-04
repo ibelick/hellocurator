@@ -101,16 +101,14 @@ const Item: React.FC<{
   }
 
   return (
-    <div>
+    <div className="w-full">
       <Link href={`/events/${eventId}/${id}`}>
         <a className="flex w-full flex-col">
-          <div className="">
-            <img
-              className="h-44 w-full rounded-lg object-cover"
-              src={img}
-              alt={metadata.name}
-            />
-          </div>
+          <img
+            className="h-44 w-full rounded-lg object-cover"
+            src={img}
+            alt={metadata.name}
+          />
           <span className="mt-4 text-lg font-medium">{metadata.name}</span>
         </a>
       </Link>
