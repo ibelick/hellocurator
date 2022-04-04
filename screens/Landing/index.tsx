@@ -21,7 +21,7 @@ const Landing: React.FC<LandingProps> = ({ spaces }) => {
       <div className="mb-4 flex flex-col justify-between md:flex-row md:items-center">
         <div className="mb-2 md:mb-0">
           <h2 className="text-xl font-bold">Events</h2>
-          <p className="text-gray-400">Explore live and past events</p>
+          <p className="text-gray-400">Explore live events on hellocurator</p>
         </div>
         <DialogCreateSpace />
       </div>
@@ -44,13 +44,16 @@ const Landing: React.FC<LandingProps> = ({ spaces }) => {
       <div className="mt-8 h-0.5 w-full bg-gray-100"></div>
       <div className="mt-8 rounded-xl bg-gray-100 p-10">
         <div>
-          <h2 className="mb-2 text-xl font-bold">What is hellocurator?</h2>
+          <h2 className="mb-2 text-xl font-bold">
+            What is an event on hellocurator?
+          </h2>
           <p className="mb-4 text-gray-400">
-            A curation event is 24h or more where people can submit an image
-            responding to a given theme, community members can vote with crypto.
-            Then, the most voted image gets minted or auctioned for a limited
-            period of time. Funds from the sale are then distributed accordingly
-            to what the community decided.
+            A curation event is a period of 24hrs or more where people can
+            submit content following a theme set by the creators of the event.
+            During this time, a community can vote on the submitted content. The
+            content with the most votes at the end of the period is then sold as
+            an NFT to the public. Funds from the sale are distributed
+            accordingly to the wishes of the curation event’s creators.
           </p>
         </div>
         <div className="flex w-full flex-col sm:flex-row">
@@ -60,8 +63,13 @@ const Landing: React.FC<LandingProps> = ({ spaces }) => {
             rel="noopener noreferrer"
             className="mb-4 mr-2 sm:mb-0"
           >
-            <Button variant="tertiary" disabled>
-              Read mirror
+            <Button variant="tertiary">
+              <a
+                href="https://mirror.xyz/hellocurator.eth/ejbQtqckavjt1aS7kScgXq8qkIMobov0kbT9P2eW9FE"
+                target="_blank"
+              >
+                Read mirror
+              </a>
             </Button>
           </a>
           <a href={DISCORD_LINK} target="_blank" rel="noopener noreferrer">
@@ -107,7 +115,7 @@ const CardSpace: React.FC<CardSpaceProps> = ({
             alt={name}
           />
           <div className="px-8">
-            <h3 className="text-mb-1 mt-8 text-xl font-bold">{name}</h3>
+            <h3 className="text-mb-1 mt-6 text-xl font-bold">{name}</h3>
             <p className="text-gray-400">by {id}</p>
             <div className="mt-4 h-0.5 w-full bg-gray-100"></div>
             <p className="mt-6 text-sm text-gray-400">Ends in</p>
@@ -126,18 +134,21 @@ const DialogCreateSpace = () => {
 
   return (
     <Dialog
-      trigger={<Button>Create space</Button>}
+      trigger={<Button>Create Event</Button>}
       isOpen={isOpen}
       setIsOpen={setIsOpen}
     >
       <div className="text-center">
         <span className="text-4xl">🦖</span>
         <h2 className="mt-4 text-lg font-bold text-black">
-          Want to start a gallery? Join our Discord
+          Want to launch an event on Hellocurator? Join our Discord
         </h2>
         <p className="mt-2">
-          We are currently building hellocurator as part of Playgrounds.wtf,
-          join our Discord and #loopclub channel to engage with us!
+          We are looking to partner with existing communities to launch new
+          events on hellocurator. Whether you’re a DAO, a PFP-based NFTs
+          community, or another project. If you like what we are building and
+          want to launch an event with us, please shoot us a DM on Twitter at
+          @hellocurator
         </p>
         <div className="mt-4 flex justify-center">
           <a href={DISCORD_LINK} target="_blank" rel="noopener noreferrer">

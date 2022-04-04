@@ -9,6 +9,7 @@ import { fetcher } from "lib/fetch";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import VoteButton from "components/VoteButton";
+import { useEnsLookup } from "wagmi";
 
 interface ProposalGalleryProps {
   proposals: Proposal[];
@@ -56,7 +57,7 @@ const Proposal: React.FC<{ proposal: Proposal; userVotingPower: number }> = ({
   );
 
   return (
-    <li className="mb-6 break-inside-avoid">
+    <li className="mb-6 break-inside-avoid rounded-lg border border-gray-100 p-4">
       <div className="flex flex-col items-start justify-between">
         <Item
           img={proposal.title}
@@ -88,6 +89,9 @@ const Item: React.FC<{
   const { data: metadata, error } = useSWR(metadataUrl, fetcher);
   const router = useRouter();
   const { eventId } = router.query;
+  const [{ data: dataEns }] = useEnsLookup({
+    address: authorAddress || undefined,
+  });
 
   if (!error && !metadata) {
     return null;
@@ -97,12 +101,12 @@ const Item: React.FC<{
     <>
       <Link href={`/events/${eventId}/${id}`}>
         <a className="flex flex-col">
-          <img src={img} alt={metadata.name} />
+          <img className="rounded-lg " src={img} alt={metadata.name} />
           <span className="mt-4 text-lg font-medium">{metadata.name}</span>
         </a>
       </Link>
       <span className=" text-gray-400">
-        Submitted by {truncateEthAddress(authorAddress)}
+        Submitted by {!dataEns ? truncateEthAddress(authorAddress) : dataEns}
       </span>
       <div className="mt-4 mb-4 h-0.5 w-full bg-gray-100"></div>
     </>

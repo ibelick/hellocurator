@@ -41,9 +41,11 @@ const VoteButton: React.FC<VoteButtonProps> = ({
           <span className="flex w-full justify-center">
             <Spinner variant="tertiary" size="xl" />
           </span>
-          <h2 className="mt-4 text-xl font-medium text-black">Loading...</h2>
+          <h2 className="mt-4 text-xl font-medium text-black">
+            Waiting for signature...
+          </h2>
           <p className="mt-2 text-gray-400">
-            You have to sign the transaction to vote
+            Please sign the transaction using Snapshot to vote
           </p>
         </div>
       </Dialog>
@@ -58,7 +60,7 @@ const VoteButton: React.FC<VoteButtonProps> = ({
               height="56"
               viewBox="0 0 56 56"
             >
-              <text y="34" x="19">
+              <text className="font-bold" y="34" x="19">
                 {choice}
               </text>
             </svg>

@@ -97,9 +97,11 @@ const Create: React.FC<CreateProps> = ({ minScore, symbol }) => {
           <span className="flex w-full justify-center">
             <Spinner variant="tertiary" size="xl" />
           </span>
-          <h2 className="mt-4 text-xl font-medium text-black">Loading...</h2>
+          <h2 className="mt-4 text-xl font-medium text-black">
+            Waiting for signature...
+          </h2>
           <p className="mt-2 text-gray-400">
-            You have to sign the transaction to upload your image
+            Please sign the transaction using Snapshot to upload your image
           </p>
         </div>
       </Dialog>

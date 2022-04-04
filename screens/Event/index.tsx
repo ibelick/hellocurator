@@ -57,22 +57,31 @@ const Proposals: React.FC = () => {
   return (
     <div>
       <div className="mb-8 w-full rounded-xl border border-gray-100 bg-white py-8 px-8 shadow-xl transition   lg:px-12">
+        <div className="mb-4 mt-4">
+          <h1 className="text-2xl font-medium">
+            Share the latest photo you took
+          </h1>
+          <p className="pb-4 text-gray-400">
+            Share a picture, an artwork of yours answer the question above
+          </p>
+        </div>
+        <div className="mt-4 mb-8 h-0.5 w-full bg-gray-50"></div>
         <ul className="justify-between lg:flex">
           <li className="border-r-1 mb-4 border-gray-100 lg:mb-0">
-            <p className="text-sm text-gray-400">Start in</p>
+            <p className="text-sm text-gray-400">Ends in</p>
             <p className="text-2xl font-medium">
               {isEventStarted ? null : `-`}
             </p>
           </li>
           <li className="border-r-1 mb-4 border-gray-100 lg:mb-0">
-            <p className="text-sm text-gray-400">LOOP CLUB fee</p>
+            <p className="text-sm text-gray-400">100% proceeds going to</p>
             <p className="text-2xl font-medium">
               {" "}
               {isEventStarted ? null : `-`}
             </p>
           </li>
           <li className="border-r-1 mb-4  border-gray-100 lg:mb-0">
-            <p className="text-sm text-gray-400">Contributors</p>
+            <p className="text-sm text-gray-400">Submissions</p>
             <p className="text-2xl font-medium">
               {isEventStarted ? null : `-`}
             </p>
@@ -109,10 +118,12 @@ const Proposals: React.FC = () => {
           <span>🔥</span>
           <div className="ml-4">
             <h3 className="font-medium">
-              Vote for which NFTs should join the gallery
+              Use your {loopclubStrategies[0].params.symbol} to vote for best
+              submissions
             </h3>
             <p className="text-gray-400">
-              Use your {loopclubStrategies[0].params.symbol} to vote
+              Most upvoted images will get minted collectively at the end of the
+              event
             </p>
           </div>
         </div>
