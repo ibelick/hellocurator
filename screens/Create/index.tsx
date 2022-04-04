@@ -12,6 +12,12 @@ import { useRouter } from "next/router";
 import Dialog from "components/Dialog";
 import Spinner from "components/Spinner";
 import { SPACE_INIT } from "utils/storefront";
+import useVotingPower from "hooks/useVotingPower";
+
+export interface CreateProps {
+  minScore: number;
+  symbol: string;
+}
 
 type FormValues = {
   image: FileList;
@@ -23,7 +29,7 @@ type Receipt = {
   id: string;
 };
 
-const Create: React.FC = () => {
+const Create: React.FC<CreateProps> = ({ minScore, symbol }) => {
   const { register, handleSubmit, watch } = useForm<FormValues>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
@@ -33,6 +39,10 @@ const Create: React.FC = () => {
   const { eventId } = router.query;
   const { image, name } = watch();
   const { upload } = useIpfs();
+  const { userVotingPower } = useVotingPower();
+  const isUserCanSubmit = Boolean(
+    userVotingPower && userVotingPower > 0 && userVotingPower >= minScore
+  );
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     setIsLoading(true);
@@ -106,6 +116,10 @@ const Create: React.FC = () => {
                 🚨 An error occured when uploading your image
               </div>
             ) : null}
+            <div className="mb-10 rounded-md border p-2 text-center">
+              You need to have a minimum of {minScore} {symbol} in order to
+              submit an image.
+            </div>
             <div className="flex flex-col lg:flex-row">
               <div className="mb-4 w-full flex-1 cursor-pointer pl-0 lg:mb-0 ">
                 <FileInput
@@ -146,7 +160,10 @@ const Create: React.FC = () => {
                   />
                 </div>
                 <Button
-                  disabled={!isFileImage(image?.[0]) || !name}
+                  disabled={
+                    !isUserCanSubmit &&
+                    Boolean(!isFileImage(image?.[0]) || !name)
+                  }
                   isLoading={isLoading}
                 >
                   Submit image

@@ -1,10 +1,3 @@
-export interface Space {
-  __typename: string;
-  id: string;
-  name: string;
-  avatar: string;
-}
-
 export interface Proposal {
   __typename: string;
   id: string;
@@ -27,9 +20,16 @@ export interface Space {
   id: string;
   name: string;
   about: string;
+  avatar: string;
   network: string;
   symbol: string;
   members: string[];
+  filters: Filters;
+}
+
+interface Filters {
+  minScore: number;
+  onlyMembers: boolean;
 }
 
 export interface Vote {

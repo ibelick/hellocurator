@@ -43,6 +43,8 @@ export const getStaticProps: GetStaticProps<EventProps, Params> = async (
   const info = {
     name: spaceInfo.space.name,
     id: spaceInfo.space.id,
+    symbol: spaceInfo.space.symbol,
+    filters: spaceInfo.space.filters.minScore,
   };
 
   return {

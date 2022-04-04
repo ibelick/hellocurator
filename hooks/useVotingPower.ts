@@ -3,7 +3,7 @@ import { useAccount } from "wagmi";
 import { getVotingPower } from "lib/snapshot";
 
 const useVotingPower = () => {
-  const [{ data: accountData, error }] = useAccount();
+  const [{ data: accountData }] = useAccount();
   const [userVotingPower, setUserVotingPower] = useState<number | null>(null);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const useVotingPower = () => {
 
   return {
     userVotingPower,
-    isLoading: !error && !userVotingPower,
+    isLoading: Boolean(!accountData?.address && !userVotingPower),
     isError: !accountData?.address,
   };
 };
