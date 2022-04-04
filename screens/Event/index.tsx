@@ -49,15 +49,25 @@ const Proposals: React.FC = () => {
   return (
     <div>
       <div className="mb-8 w-full rounded-xl border border-gray-100 bg-white py-8 px-8 shadow-xl transition   lg:px-12">
-        <div className="mb-4 mt-4">
-          <h1 className="text-2xl font-medium">{SPACE_INIT?.event_name}</h1>
-          <p className="pb-4 text-gray-400">{SPACE_INIT?.event_description}</p>
+        <div className="mb-8 mt-4 flex items-center justify-between">
+          <div className="">
+            <h1 className="text-2xl font-medium">{SPACE_INIT?.event_name}</h1>
+            <p className="pb-4 text-gray-400">
+              {SPACE_INIT?.event_description}
+            </p>
+          </div>
+          <a
+            href="https://mirror.xyz/hellocurator.eth/ejbQtqckavjt1aS7kScgXq8qkIMobov0kbT9P2eW9FE"
+            target="_blank"
+          >
+            <Button variant="tertiary">How it works? →</Button>
+          </a>
         </div>
         <div className="mt-4 mb-8 h-0.5 w-full bg-gray-50"></div>
         <ul className="justify-between lg:flex">
           <li className="border-r-1 mb-4 border-gray-100 lg:mb-0">
             <p className="text-sm text-gray-400">Ends in</p>
-            <p className="text-2xl font-medium">
+            <p className="text-xl font-medium">
               {isEventStarted
                 ? `${timeBetweenDates(
                     new Date(SPACE_INIT?.date_end!),
@@ -67,22 +77,22 @@ const Proposals: React.FC = () => {
             </p>
           </li>
           <li className="border-r-1 mb-4 border-gray-100 lg:mb-0">
-            <p className="text-sm text-gray-400">100% proceeds going to</p>
-            <p className="text-2xl font-medium">
-              {" "}
+            <p className="text-sm text-gray-400">Supporting</p>
+            <p className="text-xl ">
+              {"UkraineDAO"}
               {isEventStarted ? null : `-`}
             </p>
           </li>
           <li className="border-r-1 mb-4  border-gray-100 lg:mb-0">
             <p className="text-sm text-gray-400">Submissions</p>
-            <p className="text-2xl font-medium">
+            <p className="text-xl font-medium">
               {isEventStarted ? `${proposals.length}` : `-`}
             </p>
           </li>
           <li className="border-r-1 mb-4  border-gray-100 lg:mb-0">
             <p className="text-sm text-gray-400">Voting power</p>
-            <p className="text-2xl font-medium">
-              {" "}
+            <p className="text-xl ">
+              1 vote<span className="text-xs"> per wallet</span>
               {isEventStarted ? null : `-`}
             </p>
           </li>
@@ -106,16 +116,13 @@ const Proposals: React.FC = () => {
         </ul>
       </div>
       {isMintStarted ? <MintItem /> : null}
-      <div className="mb-4 flex-none items-center justify-between rounded-xl bg-gray-50 p-8 md:flex">
+      <div className="mb-4 flex-none items-center justify-between rounded-xl bg-gray-100 p-8 md:flex">
         <div className="flex items-center">
-          <span>🔥</span>
+          <span>↑</span>
           <div className="ml-4">
-            <h3 className="font-medium">
-              Use your {hellocuratorStrategies[0].params.symbol} to vote for
-              best submissions
-            </h3>
+            <h3 className="font-medium">Upvote the images you like the most</h3>
             <p className="text-gray-400">
-              Most upvoted images will get minted collectively at the end of the
+              Most upvoted image will get minted collectively at the end of the
               event
             </p>
           </div>
@@ -125,13 +132,16 @@ const Proposals: React.FC = () => {
             Your voting power :{" "}
             {accountData ? (
               <span className="font-bold text-primary-800">
-                {userVotingPower} {hellocuratorStrategies[0].params.symbol}
+                1 wallet = 1 vote
               </span>
             ) : (
               <span className="font-bold text-primary-800">
                 Connect your wallet
               </span>
             )}
+          </p>
+          <p className="ml-8 text-left text-sm text-gray-400 md:ml-0 lg:text-right">
+            0.0001 ETH required to vote
           </p>
         </div>
       </div>

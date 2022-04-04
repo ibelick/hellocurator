@@ -105,7 +105,12 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
           Your voting power :{" "}
           {accountData ? (
             <span className="font-bold text-primary-800">
+<<<<<<< HEAD
               {userVotingPower} {hellocuratorStrategies[0].params.symbol}
+=======
+              {/* {userVotingPower} {loopclubStrategies[0].params.symbol} */}1
+              wallet = 1 vote
+>>>>>>> update banner event
             </span>
           ) : (
             <span className="font-bold text-primary-800">
