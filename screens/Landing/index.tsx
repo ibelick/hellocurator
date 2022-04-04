@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Space } from "types/snapshot";
 import Dialog from "components/Dialog";
 import { EVENT_INIT } from "utils/storefront";
+import { timeBetweenDates } from "utils/date";
 
 export interface LandingProps {
   spaces: Spaces;
@@ -34,7 +35,8 @@ const Landing: React.FC<LandingProps> = ({ spaces }) => {
                 href={`/events/${event.event_id}`}
                 name={event.event_name}
                 id={spaces.space.id}
-                isSoon={Boolean(!event.date_start)}
+                isSoon={Boolean(!event.date_end)}
+                dateEnd={event.date_end}
                 imgSrc="https://images.unsplash.com/photo-1647682619185-92b42eaec8d0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=770&q=80"
               />
             );
@@ -58,19 +60,11 @@ const Landing: React.FC<LandingProps> = ({ spaces }) => {
         </div>
         <div className="flex w-full flex-col sm:flex-row">
           <a
-            // href="https://playgrounds.wtf/"
-            // target="_blank"
+            href="https://mirror.xyz/hellocurator.eth/ejbQtqckavjt1aS7kScgXq8qkIMobov0kbT9P2eW9FE"
             rel="noopener noreferrer"
             className="mb-4 mr-2 sm:mb-0"
           >
-            <Button variant="tertiary">
-              <a
-                href="https://mirror.xyz/hellocurator.eth/ejbQtqckavjt1aS7kScgXq8qkIMobov0kbT9P2eW9FE"
-                target="_blank"
-              >
-                Read mirror
-              </a>
-            </Button>
+            <Button variant="tertiary">Read mirror</Button>
           </a>
           <a href={DISCORD_LINK} target="_blank" rel="noopener noreferrer">
             <Button variant="tertiary">Join Discord</Button>
@@ -87,6 +81,7 @@ interface CardSpaceProps {
   id: string;
   imgSrc: string;
   isSoon?: boolean;
+  dateEnd: number | null;
 }
 
 const CardSpace: React.FC<CardSpaceProps> = ({
@@ -95,6 +90,7 @@ const CardSpace: React.FC<CardSpaceProps> = ({
   id,
   imgSrc,
   isSoon,
+  dateEnd,
 }) => {
   return (
     <Link href={isSoon ? `/` : href}>
@@ -120,7 +116,9 @@ const CardSpace: React.FC<CardSpaceProps> = ({
             <div className="mt-4 h-0.5 w-full bg-gray-100"></div>
             <p className="mt-6 text-sm text-gray-400">Ends in</p>
             <p className="mb-8 text-xl font-medium">
-              {!isSoon ? `30 days` : `-`}
+              {!isSoon && dateEnd
+                ? `${timeBetweenDates(new Date(dateEnd), new Date())}`
+                : `-`}
             </p>
           </div>
         </div>

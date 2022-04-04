@@ -1,4 +1,4 @@
-import { loopclubStrategies } from "lib/snapshot";
+import { hellocuratorStrategies } from "lib/snapshot";
 import { Proposal } from "types/snapshot";
 import Button from "components/Button";
 import { useQuery } from "@apollo/client";
@@ -8,7 +8,8 @@ import { useAccount } from "wagmi";
 import useVotingPower from "hooks/useVotingPower";
 import ProposalGallery from "./ProposalGallery";
 import Link from "next/link";
-import { WHITELISTED_STOREFRONTS } from "utils/storefront";
+import { WHITELISTED_STOREFRONTS, SPACE_INIT } from "utils/storefront";
+import { timeBetweenDates } from "utils/date";
 
 export interface EventProps {
   info: SpaceInfo;
@@ -58,19 +59,20 @@ const Proposals: React.FC = () => {
     <div>
       <div className="mb-8 w-full rounded-xl border border-gray-100 bg-white py-8 px-8 shadow-xl transition   lg:px-12">
         <div className="mb-4 mt-4">
-          <h1 className="text-2xl font-medium">
-            Share the latest photo you took
-          </h1>
-          <p className="pb-4 text-gray-400">
-            Share a picture, an artwork of yours answer the question above
-          </p>
+          <h1 className="text-2xl font-medium">{SPACE_INIT?.event_name}</h1>
+          <p className="pb-4 text-gray-400">{SPACE_INIT?.event_description}</p>
         </div>
         <div className="mt-4 mb-8 h-0.5 w-full bg-gray-50"></div>
         <ul className="justify-between lg:flex">
           <li className="border-r-1 mb-4 border-gray-100 lg:mb-0">
             <p className="text-sm text-gray-400">Ends in</p>
             <p className="text-2xl font-medium">
-              {isEventStarted ? null : `-`}
+              {isEventStarted
+                ? `${timeBetweenDates(
+                    new Date(SPACE_INIT?.date_end!),
+                    new Date()
+                  )}`
+                : `-`}
             </p>
           </li>
           <li className="border-r-1 mb-4 border-gray-100 lg:mb-0">
@@ -82,9 +84,7 @@ const Proposals: React.FC = () => {
           </li>
           <li className="border-r-1 mb-4  border-gray-100 lg:mb-0">
             <p className="text-sm text-gray-400">Submissions</p>
-            <p className="text-2xl font-medium">
-              {isEventStarted ? null : `-`}
-            </p>
+            <p className="text-2xl font-medium">{isEventStarted ? `-` : `-`}</p>
           </li>
           <li className="border-r-1 mb-4  border-gray-100 lg:mb-0">
             <p className="text-sm text-gray-400">Voting power</p>
@@ -118,8 +118,8 @@ const Proposals: React.FC = () => {
           <span>🔥</span>
           <div className="ml-4">
             <h3 className="font-medium">
-              Use your {loopclubStrategies[0].params.symbol} to vote for best
-              submissions
+              Use your {hellocuratorStrategies[0].params.symbol} to vote for
+              best submissions
             </h3>
             <p className="text-gray-400">
               Most upvoted images will get minted collectively at the end of the
@@ -132,7 +132,7 @@ const Proposals: React.FC = () => {
             Your voting power :{" "}
             {accountData ? (
               <span className="font-bold text-primary-800">
-                {userVotingPower} {loopclubStrategies[0].params.symbol}
+                {userVotingPower} {hellocuratorStrategies[0].params.symbol}
               </span>
             ) : (
               <span className="font-bold text-primary-800">

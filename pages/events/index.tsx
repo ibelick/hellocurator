@@ -6,7 +6,7 @@ const SpacePage: NextPage = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const hasEvent = Boolean(EVENT_INIT[0].event_id && EVENT_INIT[0].date_start);
+  const hasEvent = Boolean(EVENT_INIT[0].event_id && EVENT_INIT[0].date_end);
 
   if (!hasEvent) {
     return {

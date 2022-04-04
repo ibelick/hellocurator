@@ -1,4 +1,4 @@
-import { loopclubStrategies } from "lib/snapshot";
+import { hellocuratorStrategies } from "lib/snapshot";
 import { Proposal } from "types/snapshot";
 import useVote from "hooks/useVote";
 import type { ChoiceWithVotingPower } from "hooks/useVote";
@@ -132,7 +132,7 @@ const Votes: React.FC<{
     <div className="flex flex-col">
       <p className="text-sm text-gray-400">Votes</p>
       <span className="font-medium">
-        {totalVotingPower} {loopclubStrategies[0].params.symbol}
+        {totalVotingPower} {hellocuratorStrategies[0].params.symbol}
       </span>
     </div>
   );

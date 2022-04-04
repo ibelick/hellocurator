@@ -1,12 +1,14 @@
-export const WHITELISTED_STOREFRONTS = ["loopclub.eth"];
+export const WHITELISTED_STOREFRONTS = ["hellocurator.eth"];
 
 export const EVENT_INIT = [
   {
-    creator_id: "loopclub.eth",
-    creator_name: "LOOP CLUB",
-    event_name: "Share the last photo you took",
-    event_id: "share-photo-took",
-    date_start: null,
+    creator_id: "hellocurator.eth",
+    creator_name: "hellocurator",
+    event_name: "What is in front of you right now?",
+    event_description:
+      "Take a picture of what is in front of you. Don't cheat!",
+    event_id: "photo-front-of-you",
+    date_end: 1650034800000,
   },
 ];
 

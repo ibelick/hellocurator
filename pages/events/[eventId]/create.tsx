@@ -14,7 +14,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { eventId } = context.params!;
 
   const isEventExist = EVENT_INIT.some(
-    (event) => event.event_id === eventId && event.date_start
+    (event) => event.event_id === eventId && event.date_end
   );
 
   if (!isEventExist) {

@@ -1,4 +1,4 @@
-import { castVote, loopclubStrategies } from "lib/snapshot";
+import { castVote, hellocuratorStrategies } from "lib/snapshot";
 import Button from "components/Button";
 import useVotingPower from "hooks/useVotingPower";
 import { useAccount, useEnsLookup } from "wagmi";
@@ -12,6 +12,7 @@ import VoteButton from "components/VoteButton";
 import { useState } from "react";
 import { truncateEthAddress } from "utils/ethereum";
 import Timer from "components/Timer";
+import { timeBetweenDates } from "utils/date";
 
 export interface MetadataProposalProps {
   description: string;
@@ -55,7 +56,9 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
         {!isClosed ? (
           <>
             <p>Voting ends in</p>
-            {dateVoteEnd ? <Timer dateEnd={dateVoteEnd} /> : null}
+            {dateVoteEnd
+              ? timeBetweenDates(new Date(dateVoteEnd!), new Date())
+              : null}
           </>
         ) : (
           <p>Voting closed</p>
@@ -84,7 +87,7 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
         <div>
           <p className="text-gray-400">Total votes</p>
           <p className="font-lg text-lg font-medium text-primary-800">
-            {totalVotingPower} {loopclubStrategies[0].params.symbol}
+            {totalVotingPower} {hellocuratorStrategies[0].params.symbol}
           </p>
         </div>
         {!isClosed && userVotingPower && data.proposal ? (
@@ -102,7 +105,7 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
           Your voting power :{" "}
           {accountData ? (
             <span className="font-bold text-primary-800">
-              {userVotingPower} {loopclubStrategies[0].params.symbol}
+              {userVotingPower} {hellocuratorStrategies[0].params.symbol}
             </span>
           ) : (
             <span className="font-bold text-primary-800">
