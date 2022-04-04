@@ -30,7 +30,7 @@ const ProposalGallery: React.FC<ProposalGalleryProps> = ({
 
   return (
     <div>
-      <ul className="columns-1 sm:columns-2 md:columns-4">
+      <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         {proposals?.map((proposal: Proposal) => {
           return (
             <Proposal
@@ -58,22 +58,25 @@ const Proposal: React.FC<{ proposal: Proposal; userVotingPower: number }> = ({
 
   return (
     <li className="mb-6 break-inside-avoid rounded-lg border border-gray-100 p-4">
-      <div className="flex flex-col items-start justify-between">
+      <div className="flex h-full flex-col items-start justify-between">
         <Item
           img={proposal.title}
           metadataUrl={proposal.body}
           authorAddress={proposal.author}
           id={proposal.id}
         />
-        <div className="flex w-full items-center justify-between">
-          <Votes choiceWithVotingPower={choiceWithVotingPower} />
-          <VoteButton
-            userVotingPower={userVotingPower}
-            proposalId={proposal.id}
-            choice={proposal.choices[0]}
-            setVoteReceiptId={setVoteReceiptId}
-            hasUserVoted={hasUserVoted}
-          />
+        <div className="flex w-full flex-col">
+          <div className="mt-4 mb-4 h-0.5 w-full bg-gray-100"></div>
+          <div className="flex w-full items-center justify-between">
+            <Votes choiceWithVotingPower={choiceWithVotingPower} />
+            <VoteButton
+              userVotingPower={userVotingPower}
+              proposalId={proposal.id}
+              choice={proposal.choices[0]}
+              setVoteReceiptId={setVoteReceiptId}
+              hasUserVoted={hasUserVoted}
+            />
+          </div>
         </div>
       </div>
     </li>
@@ -98,18 +101,23 @@ const Item: React.FC<{
   }
 
   return (
-    <>
+    <div>
       <Link href={`/events/${eventId}/${id}`}>
-        <a className="flex flex-col">
-          <img className="rounded-lg " src={img} alt={metadata.name} />
+        <a className="flex w-full flex-col">
+          <div className="">
+            <img
+              className="h-44 w-full rounded-lg object-cover"
+              src={img}
+              alt={metadata.name}
+            />
+          </div>
           <span className="mt-4 text-lg font-medium">{metadata.name}</span>
         </a>
       </Link>
       <span className=" text-gray-400">
         Submitted by {!dataEns ? truncateEthAddress(authorAddress) : dataEns}
       </span>
-      <div className="mt-4 mb-4 h-0.5 w-full bg-gray-100"></div>
-    </>
+    </div>
   );
 };
 
@@ -121,7 +129,7 @@ const Votes: React.FC<{
     Math.round(choiceWithVotingPower?.[0].votingPower * 10000) / 10000;
 
   return (
-    <div>
+    <div className="flex flex-col">
       <p className="text-sm text-gray-400">Votes</p>
       <span className="font-medium">
         {totalVotingPower} {loopclubStrategies[0].params.symbol}

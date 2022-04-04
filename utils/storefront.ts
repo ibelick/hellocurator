@@ -6,7 +6,7 @@ export const EVENT_INIT = [
     creator_name: "LOOP CLUB",
     event_name: "Share the last photo you took",
     event_id: "share-photo-took",
-    date_start: 12,
+    date_start: null,
   },
 ];
 
