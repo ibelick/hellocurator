@@ -108,7 +108,7 @@ const Create: React.FC<CreateProps> = ({ minScore, symbol }) => {
       <div>
         <div className="mb-6 inline-block rounded-full bg-white px-4 py-2 text-gray-400 transition hover:bg-gray-100 lg:mb-12">
           <Link href={`/events/${eventId}`}>
-            <a>← Back to gallery</a>
+            <a>← Back to event</a>
           </Link>
         </div>
         {!isImageSubmited ? (
@@ -118,9 +118,9 @@ const Create: React.FC<CreateProps> = ({ minScore, symbol }) => {
                 🚨 An error occured when uploading your image
               </div>
             ) : null}
-            <div className="mb-10 rounded-md border p-2 text-center">
-              You need to have a minimum of {minScore} {symbol} in order to
-              submit an image.
+            <div className="mb-16 rounded-full border p-2 text-center text-sm">
+              You only need an active wallet (holding min. 0.0001 ETH) to submit
+              an image
             </div>
             <div className="flex flex-col lg:flex-row">
               <div className="mb-4 w-full flex-1 cursor-pointer pl-0 lg:mb-0 ">
@@ -148,7 +148,7 @@ const Create: React.FC<CreateProps> = ({ minScore, symbol }) => {
                   <TextInput
                     id="name"
                     label="Name"
-                    placeholder={`e.g. "photo of my cat"`}
+                    placeholder={`e.g. "View from my window"`}
                     register={register}
                     required
                   />
@@ -157,7 +157,7 @@ const Create: React.FC<CreateProps> = ({ minScore, symbol }) => {
                   <Textarea
                     id="description"
                     label="Description (Optional)"
-                    placeholder={`e.g. "my cat name is Marcel, I love him"`}
+                    placeholder={`e.g. "The first thing I see in the morning when I wake up"`}
                     register={register}
                   />
                 </div>

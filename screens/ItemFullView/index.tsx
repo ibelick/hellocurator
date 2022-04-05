@@ -35,7 +35,7 @@ const ItemFullView: React.FC<ItemFullViewProps> = ({ item, isNFT }) => {
     <div>
       <div className="mb-6 inline-block rounded-full bg-white px-4 py-2 text-gray-400 transition hover:bg-gray-100 lg:mb-12">
         <Link href={`/events/${eventId}`}>
-          <a>← Back to gallery</a>
+          <a>← Back to event</a>
         </Link>
       </div>
       <div className="flex flex-col pb-12 lg:flex-row">

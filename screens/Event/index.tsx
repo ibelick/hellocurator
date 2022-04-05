@@ -77,9 +77,9 @@ const Proposals: React.FC = () => {
             </p>
           </li>
           <li className="border-r-1 mb-4 border-gray-100 lg:mb-0">
-            <p className="text-sm text-gray-400">Supporting</p>
+            <p className="text-sm text-gray-400">Event by</p>
             <p className="text-xl ">
-              {"TBA"}
+              {"hellocurator"}
               {isEventStarted ? null : `-`}
             </p>
           </li>
