@@ -41,7 +41,7 @@ const ItemFullView: React.FC<ItemFullViewProps> = ({ item, isNFT }) => {
       <div className="flex flex-col pb-12 lg:flex-row">
         <div className="flex flex-1 items-start justify-center">
           <img
-            className="max-h-screen w-full max-w-xl object-contain"
+            className="h-full max-h-screen w-full max-w-xl object-contain"
             src={img.url}
             alt={img.alt}
           />
