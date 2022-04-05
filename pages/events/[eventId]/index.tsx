@@ -3,7 +3,6 @@ import { apolloClient } from "lib/apollo";
 import { SNAPSHOT_GET_SPACE } from "lib/queries";
 import { Space } from "types/snapshot";
 import Event from "screens/Event";
-import type { EventProps } from "screens/Event";
 import { ParsedUrlQuery } from "querystring";
 import { EVENT_INIT, WHITELISTED_STOREFRONTS } from "utils/storefront";
 
@@ -15,9 +14,7 @@ interface Params extends ParsedUrlQuery {
   uid: string;
 }
 
-export const getStaticProps: GetStaticProps<EventProps, Params> = async (
-  context
-) => {
+export const getStaticProps: GetStaticProps<any, Params> = async (context) => {
   const { eventId } = context.params!;
 
   const isEventExist = EVENT_INIT.some(
