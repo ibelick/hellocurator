@@ -39,9 +39,9 @@ const Proposals: React.FC = () => {
   if (error) return <p>Error :(</p>;
 
   // @todo: filter with date ends + title + body IPFS
-  const proposals = data.proposals.filter(
-    (proposal: Proposal) => !proposal.title.startsWith("Add the NFT")
-  );
+  const proposals = data.proposals.filter((proposal: Proposal) => {
+    return proposal.title.startsWith("https://ipfs.infura.io/ipfs");
+  });
 
   const isEventStarted = true;
   const isMintStarted = false;
@@ -79,7 +79,7 @@ const Proposals: React.FC = () => {
           <li className="border-r-1 mb-4 border-gray-100 lg:mb-0">
             <p className="text-sm text-gray-400">Supporting</p>
             <p className="text-xl ">
-              {"UkraineDAO"}
+              {"TBA"}
               {isEventStarted ? null : `-`}
             </p>
           </li>

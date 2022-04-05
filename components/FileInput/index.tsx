@@ -49,10 +49,10 @@ const FileInput: React.FC<FileInputProps> = ({
           image ? `hover:opacity-50` : ``
         }`}
       >
-        <div className="absolute">
+        <div className="absolute flex h-full items-center">
           {!image ? (
             <div className="flex flex-col items-center">
-              <img src="/upload.svg" className="mb-4 h-12 w-12"></img>
+              <img src="/upload.svg" className="mb-4 h-12 w-12" />
               <h1 className="text-lg font-bold">
                 Click to upload or Drag and Drop
               </h1>
@@ -62,11 +62,7 @@ const FileInput: React.FC<FileInputProps> = ({
               </span>
             </div>
           ) : (
-            <img
-              className="h-full w-full object-cover"
-              src={image}
-              alt="preview image"
-            />
+            <img className="max-h-72" src={image} alt="preview image" />
           )}
         </div>
         <input

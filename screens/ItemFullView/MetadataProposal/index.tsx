@@ -1,4 +1,4 @@
-import { castVote, hellocuratorStrategies } from "lib/snapshot";
+import { hellocuratorStrategies } from "lib/snapshot";
 import Button from "components/Button";
 import useVotingPower from "hooks/useVotingPower";
 import { useAccount, useEnsLookup } from "wagmi";
@@ -11,7 +11,6 @@ import { SPACE_INIT } from "utils/storefront";
 import VoteButton from "components/VoteButton";
 import { useState } from "react";
 import { truncateEthAddress } from "utils/ethereum";
-import Timer from "components/Timer";
 import { timeBetweenDates } from "utils/date";
 
 export interface MetadataProposalProps {
@@ -105,12 +104,7 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
           Your voting power :{" "}
           {accountData ? (
             <span className="font-bold text-primary-800">
-<<<<<<< HEAD
-              {userVotingPower} {hellocuratorStrategies[0].params.symbol}
-=======
-              {/* {userVotingPower} {loopclubStrategies[0].params.symbol} */}1
-              wallet = 1 vote
->>>>>>> update banner event
+              1 wallet = 1 vote
             </span>
           ) : (
             <span className="font-bold text-primary-800">
