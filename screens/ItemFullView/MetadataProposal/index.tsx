@@ -114,7 +114,12 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
         </p>
       </div>
       <div className="mt-8 flex items-center justify-between">
-        <Button variant="secondary">Share the image</Button>
+        <Button
+          variant="secondary"
+          onClick={() => navigator.clipboard.writeText(window.location.href)}
+        >
+          Copy the link
+        </Button>
         <Link href={`/events`}>
           <a>
             <Button variant="primary">See all submissions</Button>
