@@ -55,8 +55,8 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
         {!isClosed ? (
           <>
             <p>Voting ends in</p>
-            {dateVoteEnd
-              ? timeBetweenDates(new Date(dateVoteEnd!), new Date())
+            {data?.proposal?.end && dateVoteEnd
+              ? timeBetweenDates(new Date(dateVoteEnd), new Date())
               : null}
           </>
         ) : (
@@ -68,8 +68,6 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
         <h1 className="text-2xl font-bold">{meta.name}</h1>
         <p className="mb-8">
           for <span className="text-primary-800">{SPACE_INIT?.event_name}</span>{" "}
-          by{" "}
-          <span className="text-primary-800">{SPACE_INIT?.creator_name}</span>
         </p>
         <div className="mb-8 flex items-center">
           <div className="mr-2 h-6 w-6 rounded-full bg-gradient-to-r from-blue-700 to-red-200"></div>
@@ -86,7 +84,7 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
         <div>
           <p className="text-gray-400">Total votes</p>
           <p className="font-lg text-lg font-medium text-primary-800">
-            {totalVotingPower} {hellocuratorStrategies[0].params.symbol}
+            {totalVotingPower}
           </p>
         </div>
         {!isClosed && userVotingPower && data?.proposal ? (
