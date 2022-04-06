@@ -17,6 +17,7 @@
     "@rarible/web3-ethereum": "^0.12.40-hotfix.3",
     "@snapshot-labs/snapshot.js": "^0.3.40",
     "@tailwindcss/typography": "^0.5.2",
+    "compressorjs": "^1.1.1",
     "ethers": "^5.5.4",
     "graphql": "^16.3.0",
     "ipfs-http-client": "^56.0.1",

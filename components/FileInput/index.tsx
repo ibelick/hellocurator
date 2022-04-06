@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Compressor from "compressorjs";
 
 interface FileInputProps {
   label?: string;
@@ -20,18 +21,29 @@ const FileInput: React.FC<FileInputProps> = ({
   const [image, setImage] = useState<null | string>(null);
 
   useEffect(() => {
-    if (!Boolean(value?.length)) {
-      setImage(null);
-      return;
-    }
+    const processImage = async () => {
+      if (!Boolean(value?.length)) {
+        setImage(null);
+        return;
+      }
 
-    const file = value?.[0];
+      const file = value?.[0];
 
-    if (!file) {
-      return;
-    }
+      if (!file) {
+        return;
+      }
 
-    setImage(URL.createObjectURL(file));
+      new Compressor(file, {
+        quality: 0.7,
+        maxHeight: 2000,
+        maxWidth: 2000,
+        success: (compressedResult) => {
+          setImage(URL.createObjectURL(compressedResult));
+        },
+      });
+    };
+
+    processImage();
   }, [value]);
 
   return (
