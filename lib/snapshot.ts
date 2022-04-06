@@ -11,7 +11,7 @@ export const hellocuratorStrategies = [
     name: "eth-with-balance",
     params: {
       symbol: "HELLO",
-      minBalance: 0.001,
+      minBalance: 0.0001,
     },
   },
 ];

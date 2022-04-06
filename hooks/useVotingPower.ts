@@ -14,7 +14,6 @@ const useVotingPower = () => {
 
     const fetchVotingPower = async () => {
       const votingPower = await getVotingPower([accountData.address]);
-
       const userVotingPower = votingPower?.[0][accountData.address];
 
       if (!userVotingPower) {
