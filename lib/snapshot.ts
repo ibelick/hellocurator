@@ -29,7 +29,7 @@ export const createProposal = async (imageUrl: string, metadataUrl: string) => {
     body: `${metadataUrl}`,
     choices: ["+1"],
     start: Math.floor(Date.now() / 1000),
-    end: Math.floor((SPACE_INIT?.date_end! + 86400000) / 1000),
+    end: Math.floor(SPACE_INIT?.date_end! / 1000),
     snapshot: 14300331,
     network: "1",
     // @todo: params

@@ -89,7 +89,7 @@ const MetadataProposal: React.FC<MetaProposalProps> = ({ meta }) => {
             {totalVotingPower} {hellocuratorStrategies[0].params.symbol}
           </p>
         </div>
-        {!isClosed && userVotingPower && data.proposal ? (
+        {!isClosed && userVotingPower && data?.proposal ? (
           <VoteButton
             userVotingPower={userVotingPower}
             proposalId={proposalId as string}
