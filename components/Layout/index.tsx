@@ -1,14 +1,21 @@
 import ButtonConnectWallet from "./ButtonConnectWallet";
+import Head from "next/head";
 import Link from "next/link";
 
 const Layout: React.FC = ({ children }) => {
   return (
-    <div className="font-display">
-      <Header />
-      <main className="mx-auto max-w-screen-2xl px-6 pb-12 md:px-24 ">
-        {children}
-      </main>
-    </div>
+    <>
+      <Head>
+        <title>hellocurator</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+      <div className="font-display">
+        <Header />
+        <main className="mx-auto max-w-screen-2xl px-6 pb-12 md:px-24 ">
+          {children}
+        </main>
+      </div>
+    </>
   );
 };
 
