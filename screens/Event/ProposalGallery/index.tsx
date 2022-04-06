@@ -128,10 +128,8 @@ const Votes: React.FC<{
 
   return (
     <div className="flex flex-col">
+      <span className="font-medium">{totalVotingPower}</span>
       <p className="text-sm text-gray-400">Votes</p>
-      <span className="font-medium">
-        {totalVotingPower} {hellocuratorStrategies[0].params.symbol}
-      </span>
     </div>
   );
 };

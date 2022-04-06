@@ -51,6 +51,9 @@ const Proposals: React.FC = () => {
       <div className="mb-8 w-full rounded-xl border border-gray-100 bg-white py-8 px-8 shadow-xl transition   lg:px-12">
         <div className="mb-8 mt-4 flex flex-col items-start justify-between md:flex-row md:items-center">
           <div>
+            <span className="text-sm font-bold text-primary-800">
+              1ST EDITION
+            </span>
             <h1 className="text-2xl font-medium">{SPACE_INIT?.event_name}</h1>
             <p className="pb-4 text-gray-400">
               {SPACE_INIT?.event_description}
@@ -77,9 +80,9 @@ const Proposals: React.FC = () => {
             </p>
           </li>
           <li className="border-r-1 mb-4 border-gray-100 lg:mb-0">
-            <p className="text-sm text-gray-400">Event by</p>
+            <p className="text-sm text-gray-400">Winner gets</p>
             <p className="text-xl ">
-              {"hellocurator"}
+              {"95% of proceeds"}
               {isEventStarted ? null : `-`}
             </p>
           </li>
@@ -122,8 +125,7 @@ const Proposals: React.FC = () => {
           <div className="ml-4">
             <h3 className="font-medium">Upvote the images you like the most</h3>
             <p className="text-gray-400">
-              Most upvoted image will get minted collectively at the end of the
-              event
+              Most upvoted image will be put on sale at the end of the event
             </p>
           </div>
         </div>

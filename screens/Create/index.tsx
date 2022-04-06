@@ -139,10 +139,6 @@ const Create: React.FC<CreateProps> = ({ minScore, symbol }) => {
                   <span className="text-primary-800">
                     {SPACE_INIT?.event_name}
                   </span>{" "}
-                  by{" "}
-                  <span className="text-primary-800">
-                    {SPACE_INIT?.creator_name}
-                  </span>
                 </p>
                 <div className="mb-4">
                   <TextInput
