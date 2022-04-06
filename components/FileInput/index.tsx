@@ -37,6 +37,7 @@ const FileInput: React.FC<FileInputProps> = ({
         quality: 0.7,
         maxHeight: 2000,
         maxWidth: 2000,
+        convertSize: 1000,
         success: (compressedResult) => {
           setImage(URL.createObjectURL(compressedResult));
         },

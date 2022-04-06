@@ -30,7 +30,7 @@ const ProposalGallery: React.FC<ProposalGalleryProps> = ({
 
   return (
     <div>
-      <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {proposals?.map((proposal: Proposal) => {
           return (
             <Proposal
@@ -105,7 +105,7 @@ const Item: React.FC<{
       <Link href={`/events/${eventId}/${id}`}>
         <a className="flex w-full flex-col">
           <img
-            className="h-44 w-full rounded-lg object-cover"
+            className="h-56 w-full rounded-lg object-cover"
             src={img}
             alt={metadata.name}
           />
