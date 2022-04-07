@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Compressor from "compressorjs";
+import { compress } from "utils/image";
 
 interface FileInputProps {
   label?: string;
@@ -33,15 +33,8 @@ const FileInput: React.FC<FileInputProps> = ({
         return;
       }
 
-      new Compressor(file, {
-        quality: 0.7,
-        maxHeight: 2000,
-        maxWidth: 2000,
-        convertSize: 1000,
-        success: (compressedResult) => {
-          setImage(URL.createObjectURL(compressedResult));
-        },
-      });
+      const compressedFile = await compress(file, 0.6, 2000, 2000, 1000);
+      setImage(URL.createObjectURL(compressedFile));
     };
 
     processImage();

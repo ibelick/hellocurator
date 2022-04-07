@@ -13,7 +13,7 @@ import Dialog from "components/Dialog";
 import Spinner from "components/Spinner";
 import { SPACE_INIT } from "utils/storefront";
 import useVotingPower from "hooks/useVotingPower";
-import Compressor from "compressorjs";
+import { compress } from "utils/image";
 
 export interface CreateProps {
   minScore: number;
@@ -50,57 +50,45 @@ const Create: React.FC<CreateProps> = ({ minScore, symbol }) => {
     setIsError(false);
     setReceipt(null);
     const file = data.image[0];
+    const compressedFile = await compress(file, 0.6, 2000, 2000, 1000);
 
-    new Compressor(file, {
-      quality: 0.6,
-      maxHeight: 2000,
-      maxWidth: 2000,
-      convertSize: 1000,
-      success: async (compressedFile) => {
-        try {
-          const imageUploaded = await upload(compressedFile);
+    try {
+      const imageUploaded = await upload(compressedFile);
 
-          if (!imageUploaded) {
-            setIsError(true);
-            return;
-          }
-
-          const jsonMetadata = JSON.stringify({
-            name: data.name,
-            description: data.description,
-            image: `ipfs://ipfs/${imageUploaded.hash}`,
-            external_url: "",
-            animation_url: `ipfs://ipfs/${imageUploaded.hash}`,
-          });
-
-          const metadata = await upload(jsonMetadata);
-
-          if (!metadata) {
-            setIsError(true);
-            return;
-          }
-
-          const receipt = await createProposal(imageUploaded.url, metadata.url);
-
-          if (!receipt) {
-            setIsError(true);
-            return;
-          }
-
-          // @ts-ignore
-          setReceipt(receipt);
-          setIsImageSubmited(true);
-        } catch (err) {
-          console.error(err);
-          setIsError(true);
-        }
-      },
-      error(err) {
-        console.error(err.message);
+      if (!imageUploaded) {
         setIsError(true);
-      },
-    });
+        return;
+      }
 
+      const jsonMetadata = JSON.stringify({
+        name: data.name,
+        description: data.description,
+        image: `ipfs://ipfs/${imageUploaded.hash}`,
+        external_url: "",
+        animation_url: `ipfs://ipfs/${imageUploaded.hash}`,
+      });
+
+      const metadata = await upload(jsonMetadata);
+
+      if (!metadata) {
+        setIsError(true);
+        return;
+      }
+
+      const receipt = await createProposal(imageUploaded.url, metadata.url);
+
+      if (!receipt) {
+        setIsError(true);
+        return;
+      }
+
+      // @ts-ignore
+      setReceipt(receipt);
+      setIsImageSubmited(true);
+    } catch (err) {
+      console.error(err);
+      setIsError(true);
+    }
     setIsLoading(false);
   };
 
