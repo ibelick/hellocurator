@@ -23,11 +23,11 @@ export type ItemFullViewProps = {
 
 const ItemFullView: React.FC<ItemFullViewProps> = ({ item, isNFT }) => {
   const router = useRouter();
-  const { uid, eventId } = router.query;
+  const { eventId } = router.query;
   const img = isNFT
     ? { url: item.meta?.content[0].url, alt: item.meta.name }
     : {
-        url: item.image.replace("ipfs://", "https://ipfs.io/"),
+        url: item.image.replace("ipfs://", "https://ipfs.infura.io/"),
         alt: item.name,
       };
 

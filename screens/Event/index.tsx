@@ -1,4 +1,3 @@
-import { hellocuratorStrategies } from "lib/snapshot";
 import { Proposal } from "types/snapshot";
 import Button from "components/Button";
 import { useQuery } from "@apollo/client";

@@ -1,4 +1,3 @@
-import { hellocuratorStrategies } from "lib/snapshot";
 import { Proposal } from "types/snapshot";
 import useVote from "hooks/useVote";
 import type { ChoiceWithVotingPower } from "hooks/useVote";
