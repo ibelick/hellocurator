@@ -7,8 +7,7 @@ export const EVENT_INIT = [
     event_name: "Hellocurator Photography Contest",
     event_description: "Enter by submitting one or more images",
     event_id: "photo-contest-1",
-    // date_end: null,
-    date_end: 1650549600000,
+    date_end: null,
   },
 ];
 
